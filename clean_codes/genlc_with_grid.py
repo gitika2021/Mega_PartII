@@ -7,7 +7,7 @@ from tqdm import tqdm
 import os
 import sys
 import random
-
+from itertools import repeat
 # --- EightBitTransit Import ---
 from EightBitTransit.TransitingImage import TransitingImage as TransitingImage
 
@@ -77,14 +77,16 @@ def init_worker(maps_path, param_sets):
     global_maps = np.load(maps_path, mmap_mode='r') 
     global_param_sets = param_sets
 
-def process_mask_batch(mask_idx):
+def process_mask_batch(mask_idx, N, path):
     """
     Process ALL simulations for a single mask index in one go.
     """
     # FIX 1: COPY=TRUE is required to make the array writable for Numba
     current_map = np.array(global_maps[mask_idx], copy=True)
-    
+    #print('mask_idx',mask_idx)
+    #print('path',path)
     params_for_mask = global_param_sets[mask_idx]
+    #print('params_for_mask',params_for_mask)
     batch_results = []
     # times = []
     # fluxes = []
@@ -108,6 +110,14 @@ def process_mask_batch(mask_idx):
             start_pad = (200 - L) // 2
             padded_flux[start_pad:start_pad + L] = flux[:L]
             flux_error = np.zeros(len(flux), dtype=np.float32)
+        
+            np.savez_compressed(
+                f"{path}{N}{mask_idx}.npz",
+                time=time,
+                flux=flux,
+                flux_err=flux_error
+            )
+            
             batch_results.append((final_idx, padded_flux, [a, b, ratio],time,flux,flux_error))
             # times.append(time)
             # fluxes.append(flux)
@@ -125,10 +135,10 @@ def process_mask_batch(mask_idx):
 
 # --- Main Runner ---
 
-def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, total_masks=0, ldcr_grid_path=''):
+def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path=""):
     total_lc = total_masks * num_simulations
     ldcr_grid = np.load(ldcr_grid_path)
-    
+    #print('org_lc_path',org_lc_path)
     print(f"Generating parameter sets for {total_masks} masks x {num_simulations} sims...")
     param_sets = []
     for _ in range(total_masks):
@@ -152,7 +162,7 @@ def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, to
         param_sets.append(mask_params)
 
     task_indices = list(range(total_masks))
-
+    #print('task_indices',task_indices)
     all_lcs_padded = np.zeros((total_lc, 200), dtype=np.float32)
     all_ld_params = np.zeros((total_lc, 3), dtype=np.float32)
 
@@ -160,10 +170,10 @@ def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, to
     time_list = []
     flux_list = []
     flux_err_list = []
-    with ProcessPoolExecutor(max_workers=62, initializer=init_worker, initargs=(maps_path, param_sets)) as executor:
+    with ProcessPoolExecutor(max_workers=32, initializer=init_worker, initargs=(maps_path, param_sets)) as executor:
         
         print(f"🚀 Starting batched simulation...")
-        results_generator = tqdm(executor.map(process_mask_batch, task_indices, chunksize=1), total=len(task_indices))
+        results_generator = tqdm(executor.map(process_mask_batch, task_indices, repeat(N), repeat(org_lc_path),chunksize=1), total=len(task_indices))
         
         for batch_result in results_generator:
             for final_idx, flux, ld_params, time_raw, flux_raw,flux_raw_err in batch_result:
@@ -172,11 +182,13 @@ def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, to
                 time_list.append(time_raw)
                 flux_list.append(flux_raw)
                 flux_err_list.append(flux_raw_err)
+
+
     end = time.time()
     print(f"⏱️ Time taken: {end - start:.2f} seconds")
     
-    save_dir = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/useless_data/"
-    save_batch_npz(save_dir, time_list, flux_list, flux_err_list)
+    # save_dir = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/useless_data/"
+    # save_batch_npz(save_dir, time_list, flux_list, flux_err_list)
 
     end = time.time()
     print(f"⏱️ Time taken: {end - start:.2f} seconds")
@@ -197,6 +209,10 @@ if __name__ == "__main__":
             N = str(sys.argv[1])
             # n = int(sys.argv[2])
             # rsrp=int(sys.argv[3])
+            # maps_path = str(sys.argv[2])
+            # ldc_ratio_path = str(sys.argv[3])
+            # out_dir = str(sys.argv[4])
+            
             n = 1
             rsrp = 10
             maps_path = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{N}.npy"
@@ -205,8 +221,11 @@ if __name__ == "__main__":
             temp_map = np.load(maps_path, mmap_mode='r')
             total_masks = temp_map.shape[0]
             print(f"Detected {total_masks} masks in {maps_path}")
+
+            out_dir_org_lc =   f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/Org_LC/"
+            os.makedirs(out_dir_org_lc, exist_ok=True)
             
-            run_simulation_for_masks(maps_path, f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/{N}",inrat=rsrp, num_simulations=n, total_masks=total_masks, ldcr_grid_path = ldc_ratio_path)
+            run_simulation_for_masks(maps_path, f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/{N}",inrat=rsrp, num_simulations=n, total_masks=total_masks, ldcr_grid_path = ldc_ratio_path,N=N,org_lc_path=out_dir_org_lc)
         else:
             print('give arg: python3 genlc.py [N] [n]')
     except Exception as e:
