@@ -384,7 +384,7 @@ if __name__ == "__main__":
     run_ldc_ratio_generator(loc_cut_rprs=0.05, high_cut_rprs=0.1, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set2.npy")
     plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set2.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set2.png")
 
-    run_ldc_ratio_generator(loc_cut_rprs=0.09, high_cut_rprs=0.11, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy")
+    run_ldc_ratio_generator(loc_cut_rprs=0.05, high_cut_rprs=0.11, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy")
     plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set3.png")
 
     outfile = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy"
