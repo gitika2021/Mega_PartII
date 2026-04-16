@@ -174,6 +174,9 @@ def add_noise_to_lcs(lc_file ="/home/iit-t/Gitika/Github-Repositories/Abraham_Me
         )
     return 
 
+
+
+
 if __name__ == "__main__":
     start = time.time()
     kepler_lcs_error_file1="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_folded_lcs_snr50_all_binned_err.npy"

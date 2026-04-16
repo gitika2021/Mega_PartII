@@ -105,10 +105,14 @@ def process_mask_batch(mask_idx, N, path):
                 n_times=2000
             )
 
+            
+            
             padded_flux = np.zeros(200, dtype=np.float32)
             L = min(len(flux), 200)
             start_pad = (200 - L) // 2
             padded_flux[start_pad:start_pad + L] = flux[:L]
+
+            padded_flux = extract_and_interpolate(flux, target_length=200)
             flux_error = np.zeros(len(flux), dtype=np.float32)
         
             np.savez_compressed(

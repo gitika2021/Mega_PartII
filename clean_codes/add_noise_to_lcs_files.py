@@ -1,3 +1,16 @@
+import numpy as np
+import os
+import sys
+from pathlib import Path
+from multiprocessing import Pool, cpu_count
+
+import numpy as np
+import os
+from pathlib import Path
+from concurrent.futures import ProcessPoolExecutor
+from itertools import repeat
+from tqdm import tqdm
+
 
 import sys
 sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/pyscripts")
@@ -11,6 +24,11 @@ import time
 from lightkurve import LightCurve, LightCurveCollection, read, search_lightcurve
 from pathlib import Path
 import os 
+
+# -------- GLOBALS (set inside workers) --------
+kepler_lcs_error = None
+median_error = None
+bins = None
 
 def create_noise_bins_Kepler(lc_err_arr, n=10,
                              figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/kepler_error_dist_binned.png"):
@@ -96,94 +114,113 @@ def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
   
         cnt += 1
     return errors,noise_multigauss,noise_singlgauss
+    
 
-def add_noise_to_lcs(lc_file ="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/1LC.npy",
-                    kepler_lcs_error_file="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_folded_lcs_snr50_all_binned_err.npy"):
-   
-    kepler_lcs_error = np.load(kepler_lcs_error_file)
-    median_error = np.sqrt(np.median(kepler_lcs_error**2,axis=1))
+# -------- INITIALIZER (runs once per worker) --------
+def init_worker(kepler_file):
+    global kepler_lcs_error, median_error, bins
+
+    kepler_lcs_error = np.load(kepler_file, mmap_mode='r')
+    median_error = np.sqrt(np.median(kepler_lcs_error**2, axis=1))
     bins = create_noise_bins_Kepler(kepler_lcs_error, n=30)
-    
+
+
+# -------- WORKER FUNCTION --------
+def process_lc_file(lc_file, N_dummy, org_lc_path):
+
     train_lcs = np.load(lc_file)
-    depths = 1- np.min(train_lcs,axis=1)
-    
-    rng = np.random.default_rng(seed=60) 
-    snr = np.random.uniform(100, 500, size= len(train_lcs))
-    sigma_vals = depths/snr
-    
-    errors,noise_multigauss,noise_singlgauss = get_err_array(sigma_vals, median_error, kepler_lcs_error,bins,show = False);
-    #print('train_lcs.shape,noise_multigauss.shape',train_lcs.shape,noise_multigauss.shape)
+
+    depths = 1 - np.min(train_lcs, axis=1)
+
+    rng = np.random.default_rng()
+    snr = rng.uniform(100, 500, size=len(train_lcs))
+    sigma_vals = depths / snr
+
+    errors, noise_multigauss, _ = get_err_array(
+        sigma_vals, median_error, kepler_lcs_error, bins, show=False
+    )
+
     lcs_noisy_multi = train_lcs + noise_multigauss
 
-    N = train_lcs.shape[0]
- 
     original_path = Path(lc_file)
-    stem = original_path.stem  
-    #print('stem',stem)
-    new_folder = original_path.parent   
-    print('new_folder',new_folder)
+    stem = original_path.stem
+    new_folder = original_path.parent
 
-    time_gen = np.linspace(-1,1,train_lcs.shape[1])
+    time_gen = np.linspace(-1, 1, train_lcs.shape[1])
+    time_gen_ext = np.linspace(-1, 1, train_lcs.shape[1] + 40)
 
-    # add extra ones on both sides on lc before saving
-    time_gen_ext = np.linspace(-1,1,train_lcs.shape[1]+40)
-    
-    for i in range(N):
-        new_filename = f"{stem}{i}.npz"
-        new_folder_path = os.path.join(new_folder, "Org_LC")
-        os.makedirs(new_folder_path, exist_ok=True)
-        
-        #new_path = new_folder_path / new_filename
-        new_path = new_folder /"Org_LC" / new_filename
-        #print('new_path',new_path)
-        # orginal lcs 
+    org_folder = new_folder / "Org_LC"
+    bin_folder = new_folder / "Binned_LC"
+    #os.makedirs(org_folder, exist_ok=True)
+    #os.makedirs(bin_folder, exist_ok=True)
+
+    if not os.path.exists(org_folder):
+               os.mkdir(org_folder)
+
+    if not os.path.exists(bin_folder):
+               os.mkdir(bin_folder)
+
+    for i in range(train_lcs.shape[0]):
+
         np.savez_compressed(
-            new_path,
+            org_folder / f"{stem}{i}.npz",
             time=time_gen,
             flux=train_lcs[i],
-            flux_err=np.zeros((len(train_lcs[i])))
+            flux_err=np.zeros(len(train_lcs[i]))
         )
-    
-        # new_filename = f"{stem}{i}_binned.npz"
-        # new_path = new_folder /"TEST_Folder" /"Binned_LC" / new_filename
-        # #save_path = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/TEST_Folder/{}"
-        # np.savez_compressed(
-        #     new_path,
-        #     time=time_gen,
-        #     flux=lcs_noisy_multi[i],
-        #     flux_err=noise_multigauss[i]
-        # )
 
-        # extended lc files to be used for transit selection
-        new_filename = f"{stem}{i}_binned.npz"
-        new_folder_path = os.path.join(new_folder, "Binned_LC")
-        os.makedirs(new_folder_path, exist_ok=True)
-        #new_path = new_folder_path / new_filename
-        
-        new_path = new_folder /"Binned_LC" / new_filename
-        train_lcs_ext = np.concatenate((np.ones(20)+noise_multigauss[i,0:20],lcs_noisy_multi[i],np.ones(20)+noise_multigauss[i,-20:]))
-        flux_err_ext = np.concatenate((errors[i,0:20],errors[i],errors[i,-40:-20]))
-        # print('train_lcs_ext.shape',train_lcs_ext.shape)
-        # print('flux_err_ext.shape',flux_err_ext.shape)
-        # print('time_gen_ext.shape',time_gen_ext.shape)
+        train_lcs_ext = np.concatenate((
+            np.ones(20) + noise_multigauss[i, 0:20],
+            lcs_noisy_multi[i],
+            np.ones(20) + noise_multigauss[i, -20:]
+        ))
+
+        flux_err_ext = np.concatenate((
+            errors[i, 0:20],
+            errors[i],
+            errors[i, -40:-20]
+        ))
+
         np.savez_compressed(
-            new_path,
+            bin_folder / f"{stem}{i}_binned.npz",
             time=time_gen_ext,
             flux=train_lcs_ext,
             flux_err=flux_err_ext
         )
-    return 
+
+    return lc_file  # useful for logging
 
 
+# -------- DRIVER --------
+def run_parallel(lc_files, kepler_file, max_workers=32):
 
+    with ProcessPoolExecutor(
+        max_workers=max_workers,
+        initializer=init_worker,
+        initargs=(kepler_file,)
+    ) as executor:
 
+        results = list(
+            tqdm(
+                executor.map(
+                    process_lc_file,
+                    lc_files,
+                    repeat(None),
+                    repeat(None),
+                    chunksize=1
+                ),
+                total=len(lc_files)
+            )
+        )
+
+    return results
+    
 if __name__ == "__main__":
-    start = time.time()
-    kepler_lcs_error_file1="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_folded_lcs_snr50_all_binned_err.npy"
-    lc_file1 ="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/1LC.npy"
-    add_noise_to_lcs(lc_file=lc_file1, kepler_lcs_error_file=kepler_lcs_error_file1)
-    end = time.time()
-    print(f"time taken is: {(end-start)/60} minutes")
+    lc_files = np.loadtxt("lc_files.txt", dtype=str)
 
-
+    run_parallel(
+        lc_files,
+        kepler_file="kepler_folded_lcs_snr50_all_binned_err.npy",
+        max_workers=32
+    )
 

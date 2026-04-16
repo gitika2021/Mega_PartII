@@ -175,6 +175,70 @@ def add_noise_to_lcs(lc_file ="/home/iit-t/Gitika/Github-Repositories/Abraham_Me
     return 
 
 
+def main_runner(lcs_path, save_prefix,inrat, num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path=""):
+    total_lc = total_masks * num_simulations
+    ldcr_grid = np.load(ldcr_grid_path)
+    #print('org_lc_path',org_lc_path)
+    print(f"Generating parameter sets for {total_masks} masks x {num_simulations} sims...")
+    param_sets = []
+    for _ in range(total_masks):
+        mask_params = []
+        #ratio = 10 #np.random.uniform(9, 10)
+        for _ in range(num_simulations):
+            ids = np.random.randint(0, ldcr_grid.shape[0], size=1)
+            #ids = 734
+            a = ldcr_grid[ids,0][0]
+            b = ldcr_grid[ids,1][0]
+            ratio = ldcr_grid[ids,3][0]
+            #print('ids, a,b,ratio',ids,a,b,ratio)
+            
+            # a = np.random.uniform(0.2, 0.7)
+            # b = np.random.uniform(0.05, 0.55)
+            # ratio = inrat
+            # a = 0.6676121
+            # b = 0.03934647
+            # ratio = 2.
+            mask_params.append([a, b, ratio])
+        param_sets.append(mask_params)
+
+    task_indices = list(range(total_masks))
+    #print('task_indices',task_indices)
+    all_lcs_padded = np.zeros((total_lc, 200), dtype=np.float32)
+    all_ld_params = np.zeros((total_lc, 3), dtype=np.float32)
+
+    start = time.time()
+    time_list = []
+    flux_list = []
+    flux_err_list = []
+    with ProcessPoolExecutor(max_workers=32, initializer=init_worker, initargs=(maps_path, param_sets)) as executor:
+        
+        print(f"🚀 Starting batched simulation...")
+        results_generator = tqdm(executor.map(process_mask_batch, task_indices, repeat(N), repeat(org_lc_path),chunksize=1), total=len(task_indices))
+        
+        for batch_result in results_generator:
+            for final_idx, flux, ld_params, time_raw, flux_raw,flux_raw_err in batch_result:
+                all_lcs_padded[final_idx] = flux
+                all_ld_params[final_idx] = ld_params
+                time_list.append(time_raw)
+                flux_list.append(flux_raw)
+                flux_err_list.append(flux_raw_err)
+
+
+    end = time.time()
+    print(f"⏱️ Time taken: {end - start:.2f} seconds")
+    
+    # save_dir = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/useless_data/"
+    # save_batch_npz(save_dir, time_list, flux_list, flux_err_list)
+
+    end = time.time()
+    print(f"⏱️ Time taken: {end - start:.2f} seconds")
+
+    print("Interpolating final results...")
+    processed_lightcurves = process_all_lightcurves(all_lcs_padded, target_length=120)
+    
+    np.save(f"{save_prefix}LC.npy", processed_lightcurves)
+    np.save(f"{save_prefix}_meta.npy", all_ld_params)
+    print("✅ Saved LCs and Meta.")
 
 
 if __name__ == "__main__":
