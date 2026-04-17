@@ -13,9 +13,9 @@ from tqdm import tqdm
 
 
 import sys
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/pyscripts")
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git")
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Python-Scripts")
+# sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/pyscripts")
+# sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git")
+# sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Python-Scripts")
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -82,7 +82,8 @@ def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
     errors = np.zeros((len(sigma_val),error_arr.shape[1]))
     noise_multigauss = np.zeros((len(sigma_val),error_arr.shape[1]))
     noise_singlgauss = np.zeros((len(sigma_val),error_arr.shape[1]))
-
+    noise_gaussian = np.zeros((len(sigma_val),error_arr.shape[1]))
+    
     rng = np.random.default_rng(42)
     for bin_index in bin_indices:
         #print('bins[bin_index]',bins[bin_index])
@@ -99,6 +100,7 @@ def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
         
         noise_multigauss[cnt,:] = noise * errors[cnt,:] #generate_rowwise_gaussian_noise(errors[cnt,:], seed= 40)
         noise_singlgauss[cnt,:] = noise * np.median(errors[cnt,:])
+        noise_gaussian[cnt,:] = noise * sigma_val[cnt]
 
         if show:
             plt.plot(err_samples[0],label=f'bin_index={bin_index}, med_err= {np.median(err_samples[0])}'+'\n'+f'val={sigma_val[cnt]}')
@@ -126,7 +128,7 @@ def init_worker(kepler_file):
 
 
 # -------- WORKER FUNCTION --------
-def process_lc_file(lc_file, N_dummy, org_lc_path):
+def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real'):
 
     train_lcs = np.load(lc_file)
 
@@ -136,12 +138,14 @@ def process_lc_file(lc_file, N_dummy, org_lc_path):
     snr = rng.uniform(100, 500, size=len(train_lcs))
     sigma_vals = depths / snr
 
-    errors, noise_multigauss, _ = get_err_array(
+    errors, noise_multigauss, noise_gaussian = get_err_array(
         sigma_vals, median_error, kepler_lcs_error, bins, show=False
     )
-
-    lcs_noisy_multi = train_lcs + noise_multigauss
-
+    if noise_flag == "real":
+        lcs_noisy_multi = train_lcs + noise_multigauss
+    elif noise_flag == "gaussian":
+        lcs_noisy_multi = train_lcs + noise_gaussian
+    
     original_path = Path(lc_file)
     stem = original_path.stem
     new_folder = original_path.parent
@@ -192,7 +196,7 @@ def process_lc_file(lc_file, N_dummy, org_lc_path):
 
 
 # -------- DRIVER --------
-def run_parallel(lc_files, kepler_file, max_workers=32):
+def run_parallel(lc_files, kepler_file, max_workers=32, noise='real'):
 
     with ProcessPoolExecutor(
         max_workers=max_workers,
@@ -207,6 +211,7 @@ def run_parallel(lc_files, kepler_file, max_workers=32):
                     lc_files,
                     repeat(None),
                     repeat(None),
+                    repeat(noise),
                     chunksize=1
                 ),
                 total=len(lc_files)
@@ -216,11 +221,18 @@ def run_parallel(lc_files, kepler_file, max_workers=32):
     return results
     
 if __name__ == "__main__":
-    lc_files = np.loadtxt("lc_files.txt", dtype=str)
+    #lc_files = np.loadtxt("lc_files.txt", dtype=str)
+    basepath = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/"
 
+    
+    file1 = f"{basepath}test1/1LC.npy"
+    file2 = f"{basepath}test2/10LC.npy"
+    print('file1',file1)
+    lc_files = np.array([file1,file2], dtype=str)
     run_parallel(
         lc_files,
-        kepler_file="kepler_folded_lcs_snr50_all_binned_err.npy",
-        max_workers=32
+        kepler_file="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_folded_lcs_snr50_all_binned_err.npy",
+        noise='real',
+        max_workers=len(lc_files)
     )
 

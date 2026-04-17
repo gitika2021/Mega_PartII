@@ -2,10 +2,10 @@
 
 
 import sys
-sys.path.append("../pyscripts")
-sys.path.append("../Python-Scripts")
-sys.path.append("../../../Reanalysis_Git")
-sys.path.append("../../../Reanalysis_Git")
+# sys.path.append("../pyscripts")
+# sys.path.append("../Python-Scripts")
+# sys.path.append("../../../Reanalysis_Git")
+# sys.path.append("../../../Reanalysis_Git")
 
 import os
 from concurrent.futures import ProcessPoolExecutor
@@ -526,4 +526,15 @@ if __name__ == "__main__":
     # save the transit region lcs to single file
     combine_flux(folder, output_file="1LC_hscaled.npy",
              savefolder_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/")
+
+    #---------------------------------------------------------------------------------------------------------------------------------
+    start = time.time()
+    folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/Binned_LC/"
+    obj = TransitRegionSelector(ltcrv_files_folder=folder)
+    obj.find_transit_region_and_save_parallel()
+    end = time.time()
+    print(f"time taken is: {(end-start)/60} minutes")
+
+    combine_flux(folder, output_file="1LC_hscaled.npy",
+             savefolder_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/")
     
