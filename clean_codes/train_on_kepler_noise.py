@@ -152,7 +152,7 @@ if __name__ == "__main__":
     parser.add_argument("--batch-size", type=int, default=32, help="Batch size for training")
     parser.add_argument("--n", type=int, default=2, help="scaling controll")
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu", help="Training device")
-    parser.add_argument("--modelpath", type=str, required=True, help=f'/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/models/mo4{args.n}.pth')
+
     args = parser.parse_args()
     print("args.data",args.data)
     traindataset = LightCurveDataset(args.data, 'train',device=args.device)
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     latent_dim = 120
     n = args.n
-
+    parser.add_argument("--modelpath", type=str, required=True, help=f'/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/models/mo4{n}.pth')
     generator = HybridConvNet(n=n)
     generator.to(args.device)
     #modelpath=f'models/mo4{n}.pth
