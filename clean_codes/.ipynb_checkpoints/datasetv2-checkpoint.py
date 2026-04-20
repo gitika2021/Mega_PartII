@@ -26,7 +26,7 @@ class LightCurveDataset(Dataset):
 
         self.lc_paths = [os.path.join(self.lc_folder, f"{name}LC.npy") for name in self.base_names]
         #self.depth_paths = [os.path.join(self.lc_folder, f"{name}_meta.npy") for name in self.base_names]
-        print("self.lc_files_paths",self.lc_files_paths)
+        print("self.lc_paths",self.lc_paths)
         
         self.img_paths = [os.path.join(self.img_folder, f"{name.strip()}.npy") for name in self.base_names]
         print("self.img_paths",self.img_paths)
