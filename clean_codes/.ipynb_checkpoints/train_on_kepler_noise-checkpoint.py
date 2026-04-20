@@ -17,7 +17,7 @@ criterionb = symmetry_aware_bce
 
 criterion = symmetry_aware_dice_loss
 rng = np.random.default_rng(seed=42) # Optional: provide a seed for reproducibility
-figpath = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/plots/debug_sigmoid_epoch"
+figpath = f"/data/project/hpc2601012/Gitika/plots/debug_sigmoid_epoch"
 def train_gan(generator, traindataloader, valdataloader, snr, num_epochs=50, device="cuda",modelpath='Linear',n=1):
     optimizer_G = optim.AdamW(generator.parameters(), lr=1e-3, weight_decay=1e-8)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer_G, 'min', patience=15, factor=0.5)
