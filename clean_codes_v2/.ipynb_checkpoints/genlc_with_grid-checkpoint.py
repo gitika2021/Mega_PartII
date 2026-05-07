@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
@@ -72,9 +73,9 @@ def simulate_one_lc(opacity_map, v=0.4, t_ref=0.0, LDlaw='quadratic', LDCs=[0.3,
 global_maps = None
 global_param_sets = None
 
-def init_worker(maps_path, param_sets):
+def init_worker(shape_file, param_sets):
     global global_maps, global_param_sets
-    global_maps = np.load(maps_path, mmap_mode='r') 
+    global_maps = np.load(shape_file, mmap_mode='r') 
     global_param_sets = param_sets
 
 def process_mask_batch(mask_idx, N, path):
@@ -105,10 +106,14 @@ def process_mask_batch(mask_idx, N, path):
                 n_times=2000
             )
 
+            
+            
             padded_flux = np.zeros(200, dtype=np.float32)
             L = min(len(flux), 200)
             start_pad = (200 - L) // 2
             padded_flux[start_pad:start_pad + L] = flux[:L]
+
+            padded_flux = extract_and_interpolate(flux, target_length=200)
             flux_error = np.zeros(len(flux), dtype=np.float32)
         
             np.savez_compressed(
@@ -135,7 +140,8 @@ def process_mask_batch(mask_idx, N, path):
 
 # --- Main Runner ---
 
-def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path=""):
+def run_simulation_for_masks(shape_file, save_prefix, #inrat,
+                             num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path=""):
     total_lc = total_masks * num_simulations
     ldcr_grid = np.load(ldcr_grid_path)
     #print('org_lc_path',org_lc_path)
@@ -170,7 +176,7 @@ def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, to
     time_list = []
     flux_list = []
     flux_err_list = []
-    with ProcessPoolExecutor(max_workers=32, initializer=init_worker, initargs=(maps_path, param_sets)) as executor:
+    with ProcessPoolExecutor(max_workers=32, initializer=init_worker, initargs=(shape_file, param_sets)) as executor:
         
         print(f"🚀 Starting batched simulation...")
         results_generator = tqdm(executor.map(process_mask_batch, task_indices, repeat(N), repeat(org_lc_path),chunksize=1), total=len(task_indices))
@@ -202,29 +208,102 @@ def run_simulation_for_masks(maps_path, save_prefix,inrat, num_simulations=2, to
 
 
 
-    
-if __name__ == "__main__":
-    try:
-        if len(sys.argv) > 1:
-            N = str(sys.argv[1])
-            # n = int(sys.argv[2])
-            # rsrp=int(sys.argv[3])
-            # maps_path = str(sys.argv[2])
-            # ldc_ratio_path = str(sys.argv[3])
-            # out_dir = str(sys.argv[4])
-            
-            n = 1
-            rsrp = 10
-            maps_path = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{N}.npy"
-            ldc_ratio_path = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy"
-            
-            temp_map = np.load(maps_path, mmap_mode='r')
-            total_masks = temp_map.shape[0]
-            print(f"Detected {total_masks} masks in {maps_path}")
 
-            org_lc_path0 = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC_ORG/"
-            run_simulation_for_masks(maps_path, f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/{N}",inrat=rsrp, num_simulations=n, total_masks=total_masks, ldcr_grid_path = ldc_ratio_path,N=N,org_lc_path=org_lc_path0)
-        else:
-            print('give arg: python3 genlc.py [N] [n]')
-    except Exception as e:
-        print(f"Main Execution Error: {e}")
+def main(
+    N,
+    n,
+    #rsrp=10,
+    base_dir,
+    shape_dir,
+    #shape_file=None,
+    ldc_ratio_path,
+    out_dir_lc=None,
+    rsrp_low = None,
+    rsrp_high = None,
+):
+    # Use provided base_dir or fallback to current working directory
+    #base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
+
+    # OM10 directory
+    # shape_dir = base_dir / "OM10"
+    # shape_dir.mkdir(parents=True, exist_ok=True)
+
+    # Paths with override support
+    # if shape_file is None:
+    #     shape_file = shape_dir / f"{N}.npy"
+    # else:
+    #     shape_file = Path(shape_file)
+
+    shape_file = shape_dir / f"{N}.npy"
+    
+    # if ldc_ratio_path is None:
+    #     ldc_ratio_path = base_dir / "ldc_ratio_grid_set.npy"
+    # else:
+    #     ldc_ratio_path = Path(ldc_ratio_path)
+
+    # if out_dir_lc is None:
+    #     out_dir_lc = base_dir / "LC10"
+    # else:
+    #     out_dir_lc = Path(out_dir_lc)
+    # out_dir_lc.mkdir(parents=True, exist_ok=True)
+
+    # out_dir_orig_lc = out_dir_lc / "orig"
+    # out_dir_orig_lc.mkdir(parents=True, exist_ok=True)
+    
+    # out_dir_proc_lc = out_dir_lc / "proc"
+    # out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
+    
+    # Load data
+    temp_map = np.load(shape_file, mmap_mode='r')
+    total_masks = temp_map.shape[0]
+    print(f"Detected {total_masks} masks in {shape_file}")
+
+    run_simulation_for_masks(
+        str(shape_file),
+        str(out_dir_proc_lc / f"{N}"),
+        #inrat=rsrp,
+        num_simulations=n,
+        total_masks=total_masks,
+        ldcr_grid_path=str(ldc_ratio_path),
+        N=N,
+        org_lc_path=str(out_dir_orig_lc)
+    )
+
+if __name__ == "__main__":
+    N = sys.argv[1]
+
+    shape_file = sys.argv[2] if len(sys.argv) > 2 else None
+    ldc_ratio_path = sys.argv[3] if len(sys.argv) > 3 else None
+    out_dir_org_lc = sys.argv[4] if len(sys.argv) > 4 else None
+
+    main(N, shape_file=shape_file,
+         ldc_ratio_path=ldc_ratio_path,
+         out_dir_org_lc=out_dir_org_lc)
+    
+# if __name__ == "__main__":
+#     try:
+#         if len(sys.argv) > 1:
+#             N = str(sys.argv[1])
+#             # n = int(sys.argv[2])
+#             # rsrp=int(sys.argv[3])
+#             # shape_file = str(sys.argv[2])
+#             # ldc_ratio_path = str(sys.argv[3])
+#             # out_dir = str(sys.argv[4])
+            
+#             n = 1
+#             rsrp = 10
+#             shape_file = f"Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{N}.npy"
+#             ldc_ratio_path = f"Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy"
+            
+#             temp_map = np.load(shape_file, mmap_mode='r')
+#             total_masks = temp_map.shape[0]
+#             print(f"Detected {total_masks} masks in {shape_file}")
+
+#             out_dir_org_lc =   f"Reanalysis_Git/Mega_PartII_Kepler/Data/Org_LC/"
+#             os.makedirs(out_dir_org_lc, exist_ok=True)
+            
+#             run_simulation_for_masks(shape_file, f"Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/{N}",inrat=rsrp, num_simulations=n, total_masks=total_masks, ldcr_grid_path = ldc_ratio_path,N=N,org_lc_path=out_dir_org_lc)
+#         else:
+#             print('give arg: python3 genlc.py [N] [n]')
+#     except Exception as e:
+#         print(f"Main Execution Error: {e}")

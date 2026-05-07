@@ -236,6 +236,8 @@ def main(
         print("No shapes were generated.")
         
     print("\n----------------------------------")
+
+    return om10_dir
     
 if __name__ == "__main__":
     Num = int(sys.argv[1])
