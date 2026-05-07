@@ -218,13 +218,12 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     loc_cut_rprs = np.round(1/rsrp2,4)
     high_cut_rprs = np.round(1/rsrp1,4)
     
-    base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
+    base_dir = base_dir if base_dir is not None else Path.cwd()
 
 
     ldc_ratio_folder = base_dir / "LDC_RSRP_GRIDS"
     ldc_ratio_folder.mkdir(parents=True, exist_ok=True)
     outfile = f"{ldc_ratio_folder}/ldc_rsrp_{rsrp1}_{rsrp2}.npy"
-
     
     kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
     planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
@@ -335,50 +334,53 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
         
         print('radius ratio (Rs/Rp)',pairs[:,3],pairs[:,3].min(),pairs[:,3].max())
         print(np.any(pairs[:,3] == 0))
-    return outfile
+    # return outfile
+    return outfile,planet_ldc_file # changed to allow downstream use of planet_ldc_file
 
-def plot_grid(outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png"):
-        planet_ldc_file = save_kepler_ldc_ratio()
-        ldcs_coeffs = np.load(planet_ldc_file)
-        
-        ldca = ldcs_coeffs[:,0] #kepler_lcs_ldca
-        ldcb = ldcs_coeffs[:,1] #kepler_lcs_ldcb
-        rprs = ldcs_coeffs[:,2]
 
-        train_meta = np.load(outfile)
+def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png"):
+    
+    # planet_ldc_file = save_kepler_ldc_ratio()
+    ldcs_coeffs = np.load(planet_ldc_file)
 
-        fontsize = 24
-        # check distribution of median error
-        fig, ax = plt.subplots(1,2,figsize=(10,5))
-        ax[0].set_xlabel("LDC coeff a")
-        ax[0].set_ylabel("LDC coeff b")
-        
-        ax[1].set_xlabel(r"$R_p/R_s$")
-        ax[1].set_ylabel("Counts")
-        
-        ax[0].scatter(ldca, ldcb, s=2, color='r', label = 'Kepler KOI', alpha=0.9, zorder=2)
-        ax[0].scatter(train_meta[:,0], train_meta[:,1], s=2, color="gray", label = 'Generated Grid', alpha=0.3, zorder=1)
-        
-        #ax[1].hist(rprs_grid,label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-        
-        ax[1].hist(rprs,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-        ax[1].hist(train_meta[:,2],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-        ax[1].set_yscale('log')
-        #ax[1].set_xscale('log')
-        # ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-        #ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-        # ax[2].hist(train_meta[:,3],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-        # ax[2].set_yscale('log')
-        
-        ax[0].legend()
-        ax[1].legend()
-        plt.savefig(
-            figure_path,
-            dpi=500,
-            bbox_inches='tight',
-            pad_inches=0.2
-        )
-        plt.show()
+    ldca = ldcs_coeffs[:,0] #kepler_lcs_ldca
+    ldcb = ldcs_coeffs[:,1] #kepler_lcs_ldcb
+    rprs = ldcs_coeffs[:,2]
+
+    train_meta = np.load(outfile)
+
+    fontsize = 24
+    # check distribution of median error
+    fig, ax = plt.subplots(1,2,figsize=(10,5))
+    ax[0].set_xlabel("LDC coeff a")
+    ax[0].set_ylabel("LDC coeff b")
+
+    ax[1].set_xlabel(r"$R_p/R_s$")
+    ax[1].set_ylabel("Counts")
+
+    ax[0].scatter(ldca, ldcb, s=2, color='r', label = 'Kepler KOI', alpha=0.9, zorder=2)
+    ax[0].scatter(train_meta[:,0], train_meta[:,1], s=2, color="gray", label = 'Generated Grid', alpha=0.3, zorder=1)
+
+    #ax[1].hist(rprs_grid,label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+
+    ax[1].hist(rprs,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
+    ax[1].hist(train_meta[:,2],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    ax[1].set_yscale('log')
+    #ax[1].set_xscale('log')
+    # ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
+    #ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
+    # ax[2].hist(train_meta[:,3],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    # ax[2].set_yscale('log')
+
+    ax[0].legend()
+    ax[1].legend()
+    plt.savefig(
+        figure_path,
+        dpi=500,
+        bbox_inches='tight',
+        pad_inches=0.2
+    )
+    plt.show()
 
 def main(
     rsrp1=5,
@@ -387,14 +389,18 @@ def main(
     koi_table_filename=None,
     base_dir = None
 ):
+    outfile,planet_ldc_file = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
+                                                      koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
+                                                      base_dir = base_dir)
 
-    outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
-                                     base_dir = base_dir)
-
-    figure_path = Path.cwd()/ "figures"
+    figure_path = base_dir / "figures"
     figure_path.mkdir(parents=True, exist_ok=True)
     figure_path = f"{figure_path}/ldc_rsrp_{rsrp1}_{rsrp2}.png"
-    plot_grid(outfile,figure_path=figure_path)
+    ##################
+    # this is not nice
+    kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
+    ##################
+    plot_grid(planet_ldc_file,outfile=outfile,figure_path=figure_path)
 
     train_meta = np.load(outfile)
     
@@ -403,7 +409,7 @@ def main(
     negative_mask = check_negative_intensity(a, b, n_mu=1000)
     print("LDC giving negative intesnity", np.where(negative_mask==True))
 
-    
+    return outfile
 
 
     

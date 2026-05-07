@@ -2,36 +2,37 @@ import subprocess
 import shape_utils 
 import gen_ldc_ratio_grid
 from pathlib import Path
+from paths import *
 
 class MLTraining():
-    def __init__(self,Num=1000,N=1,base_dir=None,maps_path=None,koi_table_filename= "koi_cumulative_2025.06.28_01.24.15.csv", rsrp1=5, rsrp2=10):
+    def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10):
         self.Num = Num
         self.N = N
-        base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
-        base_dir = base_dir / "Data"
+        # base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
+        base_dir = Path(Base_Dir) / "Data"
         
         base_dir.mkdir(parents=True, exist_ok=True)
         self.base_dir = base_dir
         self.maps_path = maps_path
 
-        self.koi_table_folder = self.base_dir / "Kepler"
-        self.koi_table_filename = koi_table_filename
+        self.koi_table_folder = Kepler_Dir
+        self.koi_table_filename = KOI_Table_Filename
 
         self.rsrp1 = rsrp1
         self.rsrp2 = rsrp2        
 
-        self.ldc_ratio_grid_file = self.gen_ldc_grid()
+        self.ldc_ratio_grid_file = gen_ldc_ratio_grid.main(rsrp1=self.rsrp1, rsrp2=self.rsrp2,
+                                                           koi_table_folder=self.koi_table_folder,
+                                                           koi_table_filename=self.koi_table_filename,
+                                                           base_dir=self.base_dir)
 
     def gen_shapes(self):
         shape_utils.main(Num=self.Num,N=self.N,base_dir=self.base_dir,maps_path=self.maps_path) 
         # check if files created
-
-    def gen_ldc_grid(self):
-        gen_ldc_ratio_grid.main(rsrp1=self.rsrp1, rsrp2=self.rsrp2, koi_table_folder=self.koi_table_folder,koi_table_filename=self.koi_table_filename,base_dir=self.base_dir)    
+            
 
     def gen_ltcrvs(self):
         pass
-        # shape_utils.main(Num, N = N,base_dir = self.base_dir,maps_path=maps_path)    
 
 
     def execute(self):
