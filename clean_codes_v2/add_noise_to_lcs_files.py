@@ -219,7 +219,11 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real'):
         )
 
     return results
-    
+
+def main(lc_file,kepler_error_file):
+    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1)
+
+
 if __name__ == "__main__":
     #lc_files = np.loadtxt("lc_files.txt", dtype=str)
     basepath = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/"
