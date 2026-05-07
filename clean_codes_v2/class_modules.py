@@ -14,6 +14,9 @@ class MLTraining():
         base_dir.mkdir(parents=True, exist_ok=True)
         self.base_dir = base_dir
         self.maps_path = maps_path
+        
+        self.figure_path = self.base_dir / "figures"
+        self.figure_path.mkdir(parents=True, exist_ok=True)
 
         # shapes directory
         self.shape_dir = self.base_dir / "OM10"
@@ -24,12 +27,25 @@ class MLTraining():
         self.kepler_error_file = self.koi_table_folder + Kepler_Error_Filename
 
         self.rsrp1 = rsrp1
-        self.rsrp2 = rsrp2        
+        self.rsrp2 = rsrp2
+        
+        self.out_dir_lc = self.base_dir / "LC10"
+        self.out_dir_lc.mkdir(parents=True, exist_ok=True)
+        
+        self.out_dir_proc_lc = self.out_dir_lc / "proc/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
+        self.out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
+        self.out_stem_lc = self.out_dir_proc_lc / f"{self.N}"
+        self.out_file_lc = str(self.out_stem_lc) + 'LC.npy' # this is now a string
+    
+        self.out_dir_orig_lc = self.out_dir_lc / "orig/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
+        self.out_dir_orig_lc.mkdir(parents=True, exist_ok=True)
 
         self.ldc_ratio_grid_file = gen_ldc_ratio_grid.main(rsrp1=self.rsrp1,rsrp2=self.rsrp2,
                                                            koi_table_folder=self.koi_table_folder,
                                                            koi_table_filename=self.koi_table_filename,base_dir=self.base_dir)
         self.nproc = nproc
+
+        print("... initialization complete.")
 
     def gen_shapes(self):
         shape_utils.main(Num=self.Num,N=self.N,shape_dir=self.shape_dir,maps_path=self.maps_path) 
@@ -37,26 +53,14 @@ class MLTraining():
         return
     
                 
-    def gen_ltcrvs(self):
-        # if out_dir_lc is None:
-        out_dir_lc = self.base_dir / "LC10"
-        # else:
-        #     out_dir_lc = Path(out_dir_lc)
-        out_dir_lc.mkdir(parents=True, exist_ok=True)
-        
-        out_dir_proc_lc = out_dir_lc / "proc/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
-        out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
-    
-        out_dir_orig_lc = out_dir_lc / "orig/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
-        out_dir_orig_lc.mkdir(parents=True, exist_ok=True)
-        
-        genlc_with_grid.main(self.N,1,self.base_dir,self.shape_dir,self.ldc_ratio_grid_file,out_dir_proc_lc,out_dir_orig_lc,
+    def gen_ltcrvs(self):        
+        genlc_with_grid.main(self.N,1,self.base_dir,self.shape_dir,self.ldc_ratio_grid_file,self.out_stem_lc,self.out_dir_orig_lc,
                              nproc=self.nproc)
         return
 
 
     def add_noise(self):
-        add_noise_to_lcs_files.main()
+        add_noise_to_lcs_files.main(self.out_file_lc,self.kepler_error_file,self.figure_path)
         return
     
 
@@ -65,9 +69,12 @@ class MLTraining():
         # change this block to allow multiple batches of light curves
         if not (self.shape_dir / f"{self.N}.npy").is_file():
             self.gen_shapes()
-        else:
-            lc_file = self.gen_ltcrvs()
-            self.add_noise(lc_file,self.kepler_error_file)
+            
+        if not (self.out_dir_proc_lc / f"{self.N}LC.npy").is_file():
+            self.gen_ltcrvs()
+
+        if Path(self.out_file_lc).is_file():
+            self.add_noise()
             
         return
 

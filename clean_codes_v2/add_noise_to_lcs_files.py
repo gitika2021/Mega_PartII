@@ -56,21 +56,20 @@ def create_noise_bins_Kepler(lc_err_arr, n=10,
     x16 = np.percentile(median_err, 16)
     x84 = np.percentile(median_err, 84)
 
-    fig, ax = plt.subplots(figsize=(7, 4))
-    plot_binned_histogram(median_err, bins, ax=ax)
-    #highlight_bin(ax, bins, bin_index, x0=x0)
+    # fig, ax = plt.subplots(figsize=(7, 4))
+    # plot_binned_histogram(median_err, bins, ax=ax)
+    # #highlight_bin(ax, bins, bin_index, x0=x0)
     
-    ax.axvline(x16,ls='--',color='yellow')
-    ax.axvline(x84,ls='--',color='yellow')
-    ax.tick_params(labelsize=12, length=6, width=1.5)
-    plt.savefig(
-    figure_path,
-    dpi=500,
-    bbox_inches='tight',
-    pad_inches=0.2
-)
+    # ax.axvline(x16,ls='--',color='yellow')
+    # ax.axvline(x84,ls='--',color='yellow')
+    # ax.tick_params(labelsize=12, length=6, width=1.5)
+    # plt.savefig(
+    # figure_path,
+    # dpi=500,
+    # bbox_inches='tight',
+    # pad_inches=0.2)
     
-    plt.show()
+    # plt.show()
 
     return bins
 
@@ -102,29 +101,29 @@ def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
         noise_singlgauss[cnt,:] = noise * np.median(errors[cnt,:])
         noise_gaussian[cnt,:] = noise * sigma_val[cnt]
 
-        if show:
-            plt.plot(err_samples[0],label=f'bin_index={bin_index}, med_err= {np.median(err_samples[0])}'+'\n'+f'val={sigma_val[cnt]}')
-            #plt.axhline(np.median(err_samples[0]), ls='--',color='k')
-            plt.legend()
-            plt.show()
+        # if show:
+        #     plt.plot(err_samples[0],label=f'bin_index={bin_index}, med_err= {np.median(err_samples[0])}'+'\n'+f'val={sigma_val[cnt]}')
+        #     #plt.axhline(np.median(err_samples[0]), ls='--',color='k')
+        #     plt.legend()
+        #     plt.show()
 
-            plt.plot(noise_multigauss[cnt,:],label=f'multivariate gauss')
-            plt.plot(noise_singlgauss[cnt,:],label=f'univariate gauss')
-            #plt.axhline(np.median(err_samples[0]), ls='--',color='k')
-            plt.legend()
-            plt.show()
+        #     plt.plot(noise_multigauss[cnt,:],label=f'multivariate gauss')
+        #     plt.plot(noise_singlgauss[cnt,:],label=f'univariate gauss')
+        #     #plt.axhline(np.median(err_samples[0]), ls='--',color='k')
+        #     plt.legend()
+        #     plt.show()
   
         cnt += 1
     return errors,noise_multigauss,noise_singlgauss
     
 
 # -------- INITIALIZER (runs once per worker) --------
-def init_worker(kepler_file):
+def init_worker(kepler_file,figure_path):
     global kepler_lcs_error, median_error, bins
 
     kepler_lcs_error = np.load(kepler_file, mmap_mode='r')
     median_error = np.sqrt(np.median(kepler_lcs_error**2, axis=1))
-    bins = create_noise_bins_Kepler(kepler_lcs_error, n=30)
+    bins = create_noise_bins_Kepler(kepler_lcs_error, n=30,figure_path=figure_path)
 
 
 # -------- WORKER FUNCTION --------
@@ -153,25 +152,25 @@ def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real'):
     time_gen = np.linspace(-1, 1, train_lcs.shape[1])
     time_gen_ext = np.linspace(-1, 1, train_lcs.shape[1] + 40)
 
-    org_folder = new_folder / "Org_LC"
+    # org_folder = new_folder / "Org_LC"
     bin_folder = new_folder / "Binned_LC"
     #os.makedirs(org_folder, exist_ok=True)
     #os.makedirs(bin_folder, exist_ok=True)
 
-    if not os.path.exists(org_folder):
-               os.mkdir(org_folder)
+    # if not os.path.exists(org_folder):
+    #            os.mkdir(org_folder)
 
     if not os.path.exists(bin_folder):
                os.mkdir(bin_folder)
 
     for i in range(train_lcs.shape[0]):
 
-        np.savez_compressed(
-            org_folder / f"{stem}{i}.npz",
-            time=time_gen,
-            flux=train_lcs[i],
-            flux_err=np.zeros(len(train_lcs[i]))
-        )
+        # np.savez_compressed(
+        #     org_folder / f"{stem}{i}.npz",
+        #     time=time_gen,
+        #     flux=train_lcs[i],
+        #     flux_err=np.zeros(len(train_lcs[i]))
+        # )
 
         train_lcs_ext = np.concatenate((
             np.ones(20) + noise_multigauss[i, 0:20],
@@ -196,12 +195,12 @@ def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real'):
 
 
 # -------- DRIVER --------
-def run_parallel(lc_files, kepler_file, max_workers=32, noise='real'):
+def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path=None):
 
     with ProcessPoolExecutor(
         max_workers=max_workers,
         initializer=init_worker,
-        initargs=(kepler_file,)
+        initargs=(kepler_file,figure_path)
     ) as executor:
 
         results = list(
@@ -220,8 +219,9 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real'):
 
     return results
 
-def main(lc_file,kepler_error_file):
-    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1)
+def main(lc_file,kepler_error_file,figure_path):
+    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1,figure_path=figure_path)
+    return
 
 
 if __name__ == "__main__":

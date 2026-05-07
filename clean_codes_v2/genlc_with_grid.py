@@ -213,59 +213,24 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
 def main(
     N,
     n,
-    #rsrp=10,
     base_dir,
     shape_dir,
-    #shape_file=None,
     ldc_ratio_path,
-    out_dir_proc_lc,
+        out_stem_lc,
     out_dir_orig_lc,
     nproc=32
-    # rsrp_low = None,
-    # rsrp_high = None,
 ):
-    # Use provided base_dir or fallback to current working directory
-    #base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
-
-    # OM10 directory
-    # shape_dir = base_dir / "OM10"
-    # shape_dir.mkdir(parents=True, exist_ok=True)
-
-    # Paths with override support
-    # if shape_file is None:
-    #     shape_file = shape_dir / f"{N}.npy"
-    # else:
-    #     shape_file = Path(shape_file)
-
     shape_file = shape_dir / f"{N}.npy"
-    
-    # if ldc_ratio_path is None:
-    #     ldc_ratio_path = base_dir / "ldc_ratio_grid_set.npy"
-    # else:
-    #     ldc_ratio_path = Path(ldc_ratio_path)
-
-    # if out_dir_lc is None:
-    #     out_dir_lc = base_dir / "LC10"
-    # else:
-    #     out_dir_lc = Path(out_dir_lc)
-    # out_dir_lc.mkdir(parents=True, exist_ok=True)
-
-    # out_dir_orig_lc = out_dir_lc / "orig"
-    # out_dir_orig_lc.mkdir(parents=True, exist_ok=True)
-    
-    # out_dir_proc_lc = out_dir_lc / "proc"
-    # out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
     
     # Load data
     temp_map = np.load(shape_file, mmap_mode='r')
     total_masks = temp_map.shape[0]
     print(f"Detected {total_masks} masks in {shape_file}")
 
-    out_stem = out_dir_proc_lc / f"{N}"
+    # out_stem = out_dir_proc_lc / f"{N}"
     run_simulation_for_masks(
         str(shape_file),
-        str(out_stem),
-        #inrat=rsrp,
+        str(out_stem_lc),
         num_simulations=n,
         total_masks=total_masks,
         ldcr_grid_path=str(ldc_ratio_path),
@@ -274,8 +239,7 @@ def main(
         nproc=nproc
     )
 
-    out_stem = str(out_stem) + 'LC.npy' # this is now a string
-    return out_stem
+    return 
 
 if __name__ == "__main__":
     N = sys.argv[1]
