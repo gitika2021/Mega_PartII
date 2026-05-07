@@ -1,33 +1,26 @@
 
 import sys
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/pyscripts")
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git")
-sys.path.append("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Python-Scripts")
-
-
+from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.interpolate import interp1d
 import pandas as pd
-from plotting_utils import *
 
-# my modules
+# custom modules
 from koi_table import KoiTableObjs as koitab
-from lightkurve_singlev2 import LightkurveAnalysisSingleObjV2
-from lightkurve_batchv2 import LcDownloadBatchInParallelV2
 from plotting_utils import *
-from noise_utils_kepler import *
 from scipy.stats import gaussian_kde
 
        
-def save_kepler_ldc_ratio(koi_table_file = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
+def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
+                          koi_table_filename = "koi_cumulative_2025.06.28_01.24.15.csv",
                          ldc_ratio_outfile = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_ldc_coeffs_conf_planets.npy"):
     """
-    kepler koi table file: koi_cumulative_2025.06.28_01.24.15.csv should be downloaded first and saved in files_dir
+    kepler koi table file: koi_cumulative_2025.06.28_01.24.15.csv should be downloaded first and saved in 'koi_table_file' directory
     ldc_ratio_outfile: (N,a,b,rp/rs) from kepler koi table after removing nans etc.
     """
-    koi = koitab(files_dir = koi_table_file,verbose=False)
+    koi = koitab(files_dir = koi_table_folder,koi_file_name = koi_table_filename,verbose=False)
     koi_table = koi.koi_table
     #print(koi_table)
     koi.get_koi_confirmed()
@@ -212,13 +205,29 @@ def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=T
 
 # --- Main Runner ---
 
-def run_ldc_ratio_generator(loc_cut_rprs=0.2, high_cut_rprs=0.5, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy"):
+def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
+                            koi_table_folder= "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
+                            koi_table_filename="koi_cumulative_2025.06.28_01.24.15.csv",
+                            base_dir = None):
     """
     sampling = 'kde'/'uni'
     kde: choose when want to generate same distribution as Kepler
     loc_cut_rprs, high_cut_rprs = float : generates uniform numbers between this
     """
-    planet_ldc_file = save_kepler_ldc_ratio()
+
+    loc_cut_rprs = np.round(1/rsrp2,4)
+    high_cut_rprs = np.round(1/rsrp1,4)
+    
+    base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
+
+
+    ldc_ratio_folder = base_dir / "LDC_RSRP_GRIDS"
+    ldc_ratio_folder.mkdir(parents=True, exist_ok=True)
+    outfile = f"{ldc_ratio_folder}/ldc_rsrp_{rsrp1}_{rsrp2}.npy"
+
+    
+    kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
+    planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
     ldcs_coeffs = np.load(planet_ldc_file)
     
     a = ldcs_coeffs[:,0] #kepler_lcs_ldca
@@ -326,6 +335,7 @@ def run_ldc_ratio_generator(loc_cut_rprs=0.2, high_cut_rprs=0.5, sampling = 'kde
         
         print('radius ratio (Rs/Rp)',pairs[:,3],pairs[:,3].min(),pairs[:,3].max())
         print(np.any(pairs[:,3] == 0))
+    return outfile
 
 def plot_grid(outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png"):
         planet_ldc_file = save_kepler_ldc_ratio()
@@ -369,62 +379,53 @@ def plot_grid(outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reana
             pad_inches=0.2
         )
         plt.show()
+
+def main(
+    rsrp1=5,
+    rsrp2=10,
+    koi_table_folder =None,
+    koi_table_filename=None,
+    base_dir = None
+):
+
+    outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
+                                     base_dir = base_dir)
+
+    figure_path = Path.cwd()/ "figures"
+    figure_path.mkdir(parents=True, exist_ok=True)
+    figure_path = f"{figure_path}/ldc_rsrp_{rsrp1}_{rsrp2}.png"
+    plot_grid(outfile,figure_path=figure_path)
+
+    train_meta = np.load(outfile)
+    
+    a = train_meta[:,0]
+    b = train_meta[:,1]
+    negative_mask = check_negative_intensity(a, b, n_mu=1000)
+    print("LDC giving negative intesnity", np.where(negative_mask==True))
+
+    
+
+
     
 if __name__ == "__main__":
-    run_ldc_ratio_generator(sampling = 'uni')
-    plot_grid()
-
-
-    # run_ldc_ratio_generator(loc_cut_rprs=0.05, high_cut_rprs=0.1, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set_train1.npy")
-    # plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set_train1.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_train1.png")
-
-    # run_ldc_ratio_generator(loc_cut_rprs=0.2, high_cut_rprs=0.5, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set1.npy")
-    # plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set1.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set1.png")
+    rsrp1 = int(sys.argv[1])
+    rsrp2 = int(sys.argv[2])
     
-    # rs/rp = 5-10
-    run_ldc_ratio_generator(loc_cut_rprs=0.10, high_cut_rprs=0.20, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set1.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set1.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set1.png")
+    koi_table_folder = sys.argv[3] if len(sys.argv) > 3 else None
+    koi_table_filename = sys.argv[4] if len(sys.argv) > 4 else None
 
-    # rs/rp = 10-15
-    # run_ldc_ratio_generator(loc_cut_rprs=0.0667, high_cut_rprs=0.10, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set2.npy")
-    # plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set2.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set2.png")
+    base_dir = sys.argv[5] if len(sys.argv) > 5 else None
     
-    # rs/rp = 15-20
-    run_ldc_ratio_generator(loc_cut_rprs=0.05, high_cut_rprs=0.0667, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set3.png")
+    print(f"Generating radius ratio grid (Rs/Rp): [{rsrp1}:{rsrp2}]")
 
-    # rs/rp = 20-25
-    run_ldc_ratio_generator(loc_cut_rprs=0.04, high_cut_rprs=0.05, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set4.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set4.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set4.png")
 
-    # rs/rp = 25-30
-    run_ldc_ratio_generator(loc_cut_rprs=0.033, high_cut_rprs=0.04, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set5.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set5.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set5.png")
+    outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename)
 
-    # rs/rp = 30-35
-    run_ldc_ratio_generator(loc_cut_rprs=0.0286, high_cut_rprs=0.033, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set6.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set6.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set6.png")
+    figure_path = Path.cwd()/ "figures"
+    figure_path.mkdir(parents=True, exist_ok=True)
+    figure_path = f"{figure_path}/ldc_rsrp_{rsrp1}_{rsrp2}.png"
+    plot_grid(outfile,figure_path=figure_path)
 
-    # rs/rp = 35-40
-    run_ldc_ratio_generator(loc_cut_rprs=0.025, high_cut_rprs=0.0286, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set7.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set7.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set7.png")
-
-    # rs/rp = 40-45
-    run_ldc_ratio_generator(loc_cut_rprs=0.022, high_cut_rprs=0.025, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set8.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set8.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set8.png")
-
-    # rs/rp = 45-50
-    run_ldc_ratio_generator(loc_cut_rprs=0.02, high_cut_rprs=0.022, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set9.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set9.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set9.png")
-
-    # rs/rp = 50-55
-    run_ldc_ratio_generator(loc_cut_rprs=0.018, high_cut_rprs=0.02, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set10.npy")
-    plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set10.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set10.png")
-    
-    # run_ldc_ratio_generator(loc_cut_rprs=0.05, high_cut_rprs=0.11, sampling = 'kde', outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy")
-    # plot_grid("/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set3.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid_set3.png")
-
-    outfile = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy"
     train_meta = np.load(outfile)
     
     a = train_meta[:,0]

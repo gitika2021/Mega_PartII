@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 from scipy.special import comb
 import sys
@@ -191,65 +192,39 @@ def generate_circles(num_maps=1000, size=SHAPE_SIZE):
     single_circle[mask] = 1
 
     return np.repeat(single_circle[np.newaxis, :, :], num_maps, axis=0)
-    
-# --- Main Execution ---
 
-if __name__ == '__main__':
-    # this is for PBS script
-    # try:
-    #     if len(sys.argv) >= 4:
-    #         N = int(sys.argv[1])
-    #         na = str(sys.argv[2])
-    #         out_dir = str(sys.argv[3])
-    #     else:
-    #         N = 3
-    #         na = "default"
-    #         out_dir = "."
-    # except ValueError:
-    #     print("Invalid input. Defaulting to N=3.")
-    #     N = 3
-    #     na = "default"
-    #     out_dir = "."
 
-    # # Create directory if it doesn't exist
-    # os.makedirs(out_dir, exist_ok=True)
 
-    # shapes_data_masks = generate_n_random_bezier_shapes(N, SHAPE_SIZE)
-    # shapes_circle = generate_circles(num_maps=int(1*N/100), size=SHAPE_SIZE)
 
-    # shapes_all = np.copy(shapes_data_masks)
-    # shapes_data_masks = np.copy(shapes_all)
+def main(
+    Num,
+    N=1,
+    base_dir=None,
+    maps_path=None,
+):
+    # Use provided base_dir or fallback to current working directory
+    base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
 
-    # if shapes_data_masks.size > 0:
-    #     save_path = os.path.join(out_dir, f"{na}.npy")
-    #     np.save(save_path, shapes_data_masks)
+    # OM10 directory
+    om10_dir = base_dir / "OM10"
+    om10_dir.mkdir(parents=True, exist_ok=True)
 
-    #     print(f"Saved file to: {save_path}")
-    # else:
-    #     print("No shapes were generated.")
-    # Set a default value for N (number of shapes) if not provided by the user
-    try:
-        if len(sys.argv) > 2:
-            N = int(sys.argv[1])
-            na=str(sys.argv[2])
-        else:
-            N = 3 # Default to 3 shapes for demonstration
-    except ValueError:
-        print("Invalid number of shapes provided. Defaulting to 3.")
-        N = 3
+    # Paths with override support
+    if maps_path is None:
+        maps_path = om10_dir / f"{N}.npy"
+    else:
+        maps_path = Path(maps_path)
 
     # Generate the rasterized masks for all shapes
-    shapes_data_masks = generate_n_random_bezier_shapes(N, SHAPE_SIZE)
-    shapes_circle = generate_circles(num_maps=int(1*N/100), size=SHAPE_SIZE)
+    shapes_data_masks = generate_n_random_bezier_shapes(Num, SHAPE_SIZE)
+    shapes_circle = generate_circles(num_maps=int(1*Num/100), size=SHAPE_SIZE)
     
     #shapes_all = np.concatenate((shapes_data_masks,shapes_circle))
     shapes_all = np.copy(shapes_data_masks)
     shapes_data_masks = np.copy(shapes_all)
     if shapes_data_masks.size > 0:
         # Save the rasterized shapes to a file
-        #np.save(f'OM10/{na}.npy', shapes_data_masks)
-        #np.save(f'{na}.npy', shapes_data_masks)
-        np.save(f'/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{na}.npy', shapes_data_masks)
+        np.save(maps_path, shapes_data_masks)
         print("\n--- Output Summary (Filled Shapes) ---")
         print(f"Successfully generated and rasterized {N} FILLED shapes.")
         print(f"Saved NumPy array 'randomshapes.npy' with shape: {shapes_data_masks.shape}")
@@ -261,3 +236,93 @@ if __name__ == '__main__':
         print("No shapes were generated.")
         
     print("\n----------------------------------")
+    
+if __name__ == "__main__":
+    Num = int(sys.argv[1])
+    N = sys.argv[2] if len(sys.argv) > 2 else 1
+    base_dir = sys.argv[3] if len(sys.argv) > 3 else None
+    maps_path = sys.argv[4] if len(sys.argv) > 4 else None
+    
+
+    main(Num, N = N, base_dir=base_dir, maps_path=maps_path)
+    
+# if __name__ == "__main__":
+#     try:
+#         if len(sys.argv) > 1:
+#             N = str(sys.argv[1])
+#             n = int(sys.argv[2]) if len(sys.argv) > 2 else 1
+#             rsrp = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+
+#             main(N, n, rsrp)
+#         else:
+#             print('Usage: python myscript.py [N] [n] [rsrp]')
+#     except Exception as e:
+#         print(f"Main Execution Error: {e}")
+
+# if __name__ == '__main__':
+#     # this is for PBS script
+#     # try:
+#     #     if len(sys.argv) >= 4:
+#     #         N = int(sys.argv[1])
+#     #         na = str(sys.argv[2])
+#     #         out_dir = str(sys.argv[3])
+#     #     else:
+#     #         N = 3
+#     #         na = "default"
+#     #         out_dir = "."
+#     # except ValueError:
+#     #     print("Invalid input. Defaulting to N=3.")
+#     #     N = 3
+#     #     na = "default"
+#     #     out_dir = "."
+
+#     # # Create directory if it doesn't exist
+#     # os.makedirs(out_dir, exist_ok=True)
+
+#     # shapes_data_masks = generate_n_random_bezier_shapes(N, SHAPE_SIZE)
+#     # shapes_circle = generate_circles(num_maps=int(1*N/100), size=SHAPE_SIZE)
+
+#     # shapes_all = np.copy(shapes_data_masks)
+#     # shapes_data_masks = np.copy(shapes_all)
+
+#     # if shapes_data_masks.size > 0:
+#     #     save_path = os.path.join(out_dir, f"{na}.npy")
+#     #     np.save(save_path, shapes_data_masks)
+
+#     #     print(f"Saved file to: {save_path}")
+#     # else:
+#     #     print("No shapes were generated.")
+#     # Set a default value for N (number of shapes) if not provided by the user
+#     try:
+#         if len(sys.argv) > 2:
+#             N = int(sys.argv[1])
+#             na=str(sys.argv[2])
+#         else:
+#             N = 3 # Default to 3 shapes for demonstration
+#     except ValueError:
+#         print("Invalid number of shapes provided. Defaulting to 3.")
+#         N = 3
+
+#     # Generate the rasterized masks for all shapes
+#     shapes_data_masks = generate_n_random_bezier_shapes(N, SHAPE_SIZE)
+#     shapes_circle = generate_circles(num_maps=int(1*N/100), size=SHAPE_SIZE)
+    
+#     #shapes_all = np.concatenate((shapes_data_masks,shapes_circle))
+#     shapes_all = np.copy(shapes_data_masks)
+#     shapes_data_masks = np.copy(shapes_all)
+#     if shapes_data_masks.size > 0:
+#         # Save the rasterized shapes to a file
+#         #np.save(f'OM10/{na}.npy', shapes_data_masks)
+#         #np.save(f'{na}.npy', shapes_data_masks)
+#         np.save(f'/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{na}.npy', shapes_data_masks)
+#         print("\n--- Output Summary (Filled Shapes) ---")
+#         print(f"Successfully generated and rasterized {N} FILLED shapes.")
+#         print(f"Saved NumPy array 'randomshapes.npy' with shape: {shapes_data_masks.shape}")
+#         print("This array now contains the binary masks of the SOLID Bezier shapes.")
+#         print("\nExample of the first 10 rows of the first shape's mask (1s now represent the solid area):")
+#         # Display a small section of the mask for demonstration
+#         print(shapes_data_masks[0][:10])
+#     else:
+#         print("No shapes were generated.")
+        
+#     print("\n----------------------------------")
