@@ -73,6 +73,23 @@ def pt_find_transit_regions(lcs, threshold=0.99):
             results.append(torch.tensor([-1, -1, 0], dtype=torch.int32))
     return torch.stack(results).to(device)
 
+
+def main(lc_hscaled_path):
+    LCs_arr = np.load(lc_hscaled_path + ".npy")
+    
+    lcs_tensor = torch.tensor(LCs_arr, dtype=torch.float32)
+    ver_scaled = pt_scale_vertically(lcs_tensor)
+    
+    print('ver scaled')
+    ver_scaled_np = ver_scaled.detach().cpu().numpy()
+
+    outfile = f"{lc_hscaled_path}_processed.npy"
+    np.save(outfile,ver_scaled_np)
+
+    print(f"Processed tensor shape: {ver_scaled.shape}")
+    
+    return outfile
+
 if __name__ == "__main__":
     try:
         if len(sys.argv) > 1:

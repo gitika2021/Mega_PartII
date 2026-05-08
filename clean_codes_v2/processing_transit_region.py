@@ -26,8 +26,9 @@ import re
 
 class TransitRegionSelector():
 
-    def __init__(self,ltcrv_files_folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/"):
+    def __init__(self,ltcrv_files_folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/",max_workers=1):
         self.filesfolder = Path(ltcrv_files_folder)
+        self.max_workers = max_workers
         
 
     def find_main_dip_with_expansion(self,x, y,
@@ -269,10 +270,9 @@ class TransitRegionSelector():
     def find_transit_region_and_save_parallel(self):
     
         ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
-        print(f'Number of files found is{len(ltcrv_npz_files)}')
+        print(f'Number of files found is {len(ltcrv_npz_files)}')
         rows = [filepath for filepath in ltcrv_npz_files]
     
-        self.max_workers = 24
         print(f"Using {self.max_workers} CPU cores")
     
         tic = time.time()
@@ -428,11 +428,12 @@ def extract_index(filepath):
         return int(match.group(1))
     return -1  # fallback if something unexpected
 
-def combine_flux(folder_path, output_file="combined_flux.npy", savefolder_path=""):
+def combine_flux(folder_path,N, output_file="combined_flux.npy", savefolder_path=""):
     folder = Path(folder_path)
     savefolder = Path(savefolder_path)
     # Get all matching files
-    files = list(folder.glob("*_binned_transit_interp.npz"))
+    # files = list(folder.glob("*_binned_transit_interp.npz"))
+    files = list(folder.glob(f"{N}LC*_binned_transit_interp.npz"))
 
     if not files:
         print("No files found!")
@@ -440,7 +441,7 @@ def combine_flux(folder_path, output_file="combined_flux.npy", savefolder_path="
 
     # Sort files based on LC index
     files_sorted = sorted(files, key=extract_index)
-
+    print(files_sorted)
     print(f"Found {len(files_sorted)} files")
 
     all_flux = []

@@ -7,7 +7,7 @@ if __name__ == "__main__":
     N = int(sys.argv[2]) if len(sys.argv) > 2 else 1
     # base_dir = sys.argv[3] if len(sys.argv) > 3 else None
     maps_path = sys.argv[3] if len(sys.argv) > 3 else None
-    nproc = int(sys.argv[4]) if len(sys.argv) > 4 else 1
+    nproc = int(sys.argv[4]) if len(sys.argv) > 4 else 4
 
     # rsrp1 = int(sys.argv[4])
     # rsrp2 = int(sys.argv[5])
