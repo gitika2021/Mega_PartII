@@ -347,6 +347,10 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     ldcb = ldcs_coeffs[:,1] #kepler_lcs_ldcb
     rprs = ldcs_coeffs[:,2]
 
+    percentiles = np.zeros(20)
+    for p in range(20):
+        percentiles[p] = np.percentile(rprs,(100/len(percentiles))*(p+1))
+    
     train_meta = np.load(outfile)
 
     fontsize = 24
@@ -365,7 +369,11 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
 
     ax[1].hist(rprs,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
     ax[1].hist(train_meta[:,2],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    for p in range(len(percentiles)):
+        ax[1].axvline(percentiles[p], color='k',ls='-',lw=0.5)
     ax[1].set_yscale('log')
+    ax[1].set_xscale('log')
+    ax[1].set_xlim(2e-3,8e-1)
     #ax[1].set_xscale('log')
     # ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
     #ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
