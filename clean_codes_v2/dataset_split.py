@@ -7,7 +7,7 @@ def split_train_vald(
     train_frac=0.8,
     seed=42,
     out_prefix="",
-    out_sufix=""
+    out_suffix=""
 ):
     """
     Split paired LC and image datasets into train and vald .npy files.
@@ -50,15 +50,20 @@ def split_train_vald(
     vald_img  = img_data[vald_idx]
 
     # save
-    np.save(f"{out_prefix}/LC10/train_{out_sufix}LC.npy", train_lc)
-    np.save(f"{out_prefix}/LC10/val_{out_sufix}LC.npy",  vald_lc)
+    np.save(f"{out_prefix}/train_{out_suffix}LC.npy", train_lc)
+    np.save(f"{out_prefix}/val_{out_suffix}LC.npy",  vald_lc)
 
-    np.save(f"{out_prefix}/OM10/train_{out_sufix}.npy", train_img)
-    np.save(f"{out_prefix}/OM10/val_{out_sufix}.npy",  vald_img)
+    np.save(f"{out_prefix}/train_{out_suffix}.npy", train_img)
+    np.save(f"{out_prefix}/val_{out_suffix}.npy",  vald_img)
 
     print(f"Saved train samples: {len(train_lc)}")
     print(f"Saved vald samples:  {len(vald_lc)}")
 
+
+def main(N,lc_path,img_path,train_dir,train_frac,seed=None):
+    split_train_vald(lc_path,img_path,train_frac=train_frac,seed=seed,out_prefix=train_dir,out_suffix=N)
+    return
+    
 if __name__ == "__main__":
     try:
         if len(sys.argv) > 1:
@@ -70,7 +75,7 @@ if __name__ == "__main__":
             img_path = f"/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/OM10/{N}.npy"
             
             split_train_vald( lc_path,img_path,train_frac=0.8,seed=42,out_prefix="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/",
-                            out_sufix=N)
+                            out_suffix=N)
         else:
             print('give arg: python3 genlc.py [N] [n]')
     except Exception as e:

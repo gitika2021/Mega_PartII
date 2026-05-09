@@ -390,20 +390,13 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     )
     plt.show()
 
-def main(
-    rsrp1=5,
-    rsrp2=10,
-    koi_table_folder =None,
-    koi_table_filename=None,
-    base_dir = None
-):
+def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
+         koi_table_filename=None,base_dir=None,fig_dir=None):
     outfile,planet_ldc_file = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
                                                       koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
                                                       base_dir = base_dir)
 
-    figure_path = base_dir / "figures"
-    figure_path.mkdir(parents=True, exist_ok=True)
-    figure_path = f"{figure_path}/ldc_rsrp_{rsrp1}_{rsrp2}.png"
+    figure_path = fig_dir / f"ldc_rsrp_{rsrp1}_{rsrp2}.png"
     ##################
     # this is not nice
     kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
