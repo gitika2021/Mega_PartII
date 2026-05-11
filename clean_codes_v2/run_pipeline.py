@@ -26,18 +26,20 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Lightcurve generation and model training.")
     parser.add_argument("--config-file",type=str,required=True, help="name of config file (e.g., example_config.json)")
-    parser.add_argument("--train",type=bool,help="whether to implement training (True) or pre-processing (False).")
+    parser.add_argument("--train",type=int,help="whether to implement training (True) or pre-processing (False).")
     parser.add_argument("--N",type=int,help="index number for pre-processing batch.")
+    parser.add_argument("--Num",type=int,help="number of shapes to generate")
     args = parser.parse_args()
 
     config_file = args.config_file
     with open(Config_Dir+config_file,'r') as f:
         config = json.load(f)
     
-    train = args.train if args.train is not None else config['train']
+    train = bool(args.train) if args.train is not None else config['train']
     N = args.N if args.N is not None else config['N']
-
-    Num = config.get('Num',10)
+    Num = args.Num if args.Num is not None else config.get('Num',10)
+    
+    #Num = config.get('Num',10)
     maps_path = config.get('maps_path',None)
     nproc = config.get('nproc',4)
     rsrp1 = config.get('rsrp1',5)
@@ -57,5 +59,6 @@ if __name__ == "__main__":
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
                                    epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
     else:
+        print("Preprocessing")
         obj.execute()
     

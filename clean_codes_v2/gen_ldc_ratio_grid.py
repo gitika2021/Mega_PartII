@@ -438,6 +438,6 @@ if __name__ == "__main__":
     a = train_meta[:,0]
     b = train_meta[:,1]
     negative_mask = check_negative_intensity(a, b, n_mu=1000)
-    print("LDC giving negative intesnity", np.where(negative_mask==True))
+    print("LDC giving negative intensity", np.where(negative_mask==True))
     # a_neg = a[np.where(negative_mask==True)]
     # b_neg = b[np.where(negative_mask==True)]

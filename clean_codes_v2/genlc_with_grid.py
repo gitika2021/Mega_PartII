@@ -221,6 +221,7 @@ def main(
     nproc=32
 ):
     shape_file = shape_dir / f"{N}.npy"
+    #print("loaded shape_file",shape_file)
     
     # Load data
     temp_map = np.load(shape_file, mmap_mode='r')

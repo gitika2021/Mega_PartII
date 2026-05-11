@@ -117,7 +117,7 @@ def process_mask_batch(mask_idx, N, path):
             flux_error = np.zeros(len(flux), dtype=np.float32)
         
             np.savez_compressed(
-                f"{path}{N}{mask_idx}.npz",
+                f"{path}/{N}_{mask_idx}.npz",
                 time=time,
                 flux=flux,
                 flux_err=flux_error
@@ -141,7 +141,7 @@ def process_mask_batch(mask_idx, N, path):
 # --- Main Runner ---
 
 def run_simulation_for_masks(shape_file, save_prefix, #inrat,
-                             num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path=""):
+                             num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path="",nproc=32):
     total_lc = total_masks * num_simulations
     ldcr_grid = np.load(ldcr_grid_path)
     #print('org_lc_path',org_lc_path)
@@ -176,10 +176,11 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
     time_list = []
     flux_list = []
     flux_err_list = []
-    with ProcessPoolExecutor(max_workers=32, initializer=init_worker, initargs=(shape_file, param_sets)) as executor:
+    with ProcessPoolExecutor(max_workers=nproc, initializer=init_worker, initargs=(shape_file, param_sets)) as executor:
         
-        print(f"🚀 Starting batched simulation...")
-        results_generator = tqdm(executor.map(process_mask_batch, task_indices, repeat(N), repeat(org_lc_path),chunksize=1), total=len(task_indices))
+        print(f"Starting batched simulation...")
+        results_generator = tqdm(executor.map(process_mask_batch, task_indices, repeat(N), repeat(org_lc_path),chunksize=1),
+                                 total=len(task_indices))
         
         for batch_result in results_generator:
             for final_idx, flux, ld_params, time_raw, flux_raw,flux_raw_err in batch_result:
@@ -212,62 +213,34 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
 def main(
     N,
     n,
-    #rsrp=10,
     base_dir,
     shape_dir,
-    #shape_file=None,
     ldc_ratio_path,
-    out_dir_lc=None,
-    rsrp_low = None,
-    rsrp_high = None,
+        out_stem_lc,
+    out_dir_orig_lc,
+    nproc=32
 ):
-    # Use provided base_dir or fallback to current working directory
-    #base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
-
-    # OM10 directory
-    # shape_dir = base_dir / "OM10"
-    # shape_dir.mkdir(parents=True, exist_ok=True)
-
-    # Paths with override support
-    # if shape_file is None:
-    #     shape_file = shape_dir / f"{N}.npy"
-    # else:
-    #     shape_file = Path(shape_file)
-
     shape_file = shape_dir / f"{N}.npy"
-    
-    # if ldc_ratio_path is None:
-    #     ldc_ratio_path = base_dir / "ldc_ratio_grid_set.npy"
-    # else:
-    #     ldc_ratio_path = Path(ldc_ratio_path)
-
-    # if out_dir_lc is None:
-    #     out_dir_lc = base_dir / "LC10"
-    # else:
-    #     out_dir_lc = Path(out_dir_lc)
-    # out_dir_lc.mkdir(parents=True, exist_ok=True)
-
-    # out_dir_orig_lc = out_dir_lc / "orig"
-    # out_dir_orig_lc.mkdir(parents=True, exist_ok=True)
-    
-    # out_dir_proc_lc = out_dir_lc / "proc"
-    # out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
+    #print("loaded shape_file",shape_file)
     
     # Load data
     temp_map = np.load(shape_file, mmap_mode='r')
     total_masks = temp_map.shape[0]
     print(f"Detected {total_masks} masks in {shape_file}")
 
+    # out_stem = out_dir_proc_lc / f"{N}"
     run_simulation_for_masks(
         str(shape_file),
-        str(out_dir_proc_lc / f"{N}"),
-        #inrat=rsrp,
+        str(out_stem_lc),
         num_simulations=n,
         total_masks=total_masks,
         ldcr_grid_path=str(ldc_ratio_path),
         N=N,
-        org_lc_path=str(out_dir_orig_lc)
+        org_lc_path=str(out_dir_orig_lc),
+        nproc=nproc
     )
+
+    return 
 
 if __name__ == "__main__":
     N = sys.argv[1]

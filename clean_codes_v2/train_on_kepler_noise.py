@@ -64,6 +64,13 @@ def train_gan(generator, traindataloader, valdataloader, snr,
     elif resume:
         print(f"⚠ No checkpoint found at {checkpoint_path}. Starting from scratch.")
 
+    train_loss_bce = []
+    train_loss_mse = []
+
+    val_loss_bce = []
+    val_loss_mse = []
+
+    epochs_arr = []
     # ── Training loop ───────────────────────────────────────────────────────────
     for epoch in range(start_epoch, num_epochs):
         generator.train()
@@ -120,6 +127,9 @@ def train_gan(generator, traindataloader, valdataloader, snr,
         avg_train_bce = gbce_total / len(traindataloader)
         avg_train_mse = gmse_total / len(traindataloader)
 
+        train_loss_bce.append(avg_train_bce)
+        train_loss_mse.append(avg_train_mse)
+        epochs_arr.append(epoch)
         # ── Validation ──────────────────────────────────────────────────────────
         val_bce_losses   = []
         val_mse_losses   = []
@@ -142,6 +152,9 @@ def train_gan(generator, traindataloader, valdataloader, snr,
         avg_val_mse  = np.mean(val_mse_losses)
         avg_val_loss = np.mean(val_total_losses)
 
+        val_loss_bce.append(avg_val_bce)
+        val_loss_mse.append(avg_val_mse)
+        
         old_lr = optimizer_G.param_groups[0]['lr']
         scheduler.step(avg_val_loss)
         new_lr = optimizer_G.param_groups[0]['lr']
@@ -175,8 +188,33 @@ def train_gan(generator, traindataloader, valdataloader, snr,
                   f"Train BCE: {avg_train_bce:.4f}, Train MSE: {avg_train_mse:.4f} | "
                   f"Val BCE: {avg_val_bce:.4f}, Val MSE: {avg_val_mse:.4f}")
 
+
+            # plot training and validation loss
+        plt.figure(figsize=(5, 5))
+    
+        plt.subplot(1, 1, 1)
+        plt.title("")
+        plt.plot(epochs_arr, train_loss_mse, '.-k',label='train mse' )
+        plt.plot(epochs_arr, train_loss_bce, '.--k',label='train bce' )
+    
+        plt.plot(epochs_arr, val_loss_mse, '.-b',label='val mse' )
+        plt.plot(epochs_arr, val_loss_bce, '.--b',label='val bce' )
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Loss")
+        plt.legend()
+       
+    
+        if figpath is not None:
+            plt.savefig(f"{figpath}/loss_vs_epoch.png")
+        else:
+            plt.show()
+        plt.close()
+        
     print(f"✔ Finished training for SNR={snr}, best val loss={best_val_loss:.4f}")
 
+    
+    
 
 def main(data_dir,model_dir,epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=None):
     traindataset = LightCurveDataset(data_dir, 'train', device=device)

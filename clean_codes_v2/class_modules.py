@@ -14,7 +14,7 @@ class MLPreProcessing():
         self.seed = seed
         # base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
         base_dir = Path(Base_Dir) / "Data" # this is actually data directory
-        
+        print("base_dir",base_dir)
         base_dir.mkdir(parents=True, exist_ok=True)
         self.base_dir = base_dir
         self.maps_path = maps_path
@@ -94,21 +94,27 @@ class MLPreProcessing():
     def split_dataset(self,hscaled_processed_file):
         dataset_split.main(N=self.N,lc_path=hscaled_processed_file,img_path=str(self.shape_file),
                            train_dir=self.train_dir,train_frac=self.train_frac,seed=self.seed)
+        return 
     
     def execute(self):
         if not self.shape_file.is_file():
+            print("Generating Shapes")
             self.gen_shapes()
             
         if not (self.out_dir_proc_lc / f"{self.N}LC.npy").is_file():
+            print("Generating light curves")
             self.gen_ltcrvs()
 
         if Path(self.out_file_lc).is_file():
+            print("Adding noise to light curves")
             self.add_noise()
 
         if not self.lc_hscaled_file.is_file():
+            print("Select Transit region")
             self.select_transit_region()
 
         if self.lc_hscaled_file.is_file():
+            print("Preprocess light curves")
             hscaled_processed_file = self.preprocess_ltcrvs()
         else:
             hscaled_processed_file = None

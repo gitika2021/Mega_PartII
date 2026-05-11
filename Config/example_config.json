@@ -1,13 +1,13 @@
 {
-    "train": true,
-    "Num": 10,
+    "train": false,
+    "Num": 12,
     "N": 1,
     "maps_path": null,
     "nproc": 4,
     "rsrp1": 5,
     "rsrp2": 10,
     "train_frac": 0.8,
-    "seed": null
+    "seed": null,
 
     "epochs": 3,
     "batch_size": 10,
