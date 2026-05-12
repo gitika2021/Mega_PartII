@@ -147,57 +147,57 @@ class TransitRegionSelector():
         }
 
 
-    def find_transit_region_and_save_serial(self, target_ltcrv_length = 120):
-        ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
-        for file_path in ltcrv_npz_files:
-            #print(f"Loading {file_path.name}")
-            data = np.load(file_path)
-            self.lc_fold_load = LightCurve(time=data['time'], flux=data['flux'], flux_err=data['flux_err'])
+    # def find_transit_region_and_save_serial(self, target_ltcrv_length = 120):
+    #     ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
+    #     for file_path in ltcrv_npz_files:
+    #         #print(f"Loading {file_path.name}")
+    #         data = np.load(file_path)
+    #         self.lc_fold_load = LightCurve(time=data['time'], flux=data['flux'], flux_err=data['flux_err'])
         
-            x = lc_fold_load.time.value
-            y = lc_fold_load.flux.value
-            yerr = lc_fold_load.flux.value   
-            #print('type',type(lc_fold_load.time.value))
+    #         x = lc_fold_load.time.value
+    #         y = lc_fold_load.flux.value
+    #         yerr = lc_fold_load.flux.value   
+    #         #print('type',type(lc_fold_load.time.value))
 
-            self.result = self.find_main_dip_with_expansion(x, y,
-                                     smooth_window=9,
-                                     polyorder=2,
-                                     sigma=2,
-                                     min_width=0.0,
-                                     expand_fraction=1.2)
+    #         self.result = self.find_main_dip_with_expansion(x, y,
+    #                                  smooth_window=9,
+    #                                  polyorder=2,
+    #                                  sigma=2,
+    #                                  min_width=0.0,
+    #                                  expand_fraction=1.2)
 
-            interp_func = interp1d(self.result["x_curve"], self.result["y_curve"], kind='linear', fill_value='extrapolate')
-            self.xnew = np.linspace(self.result["x_curve"].min(),self.result["x_curve"].max(),target_ltcrv_length)
-            self.ynew = interp_func(self.xnew)
+    #         interp_func = interp1d(self.result["x_curve"], self.result["y_curve"], kind='linear', fill_value='extrapolate')
+    #         self.xnew = np.linspace(self.result["x_curve"].min(),self.result["x_curve"].max(),target_ltcrv_length)
+    #         self.ynew = interp_func(self.xnew)
 
-            interp_func_err = interp1d(result["x_curve"], yerr[result["start_index"]:result["end_index"]+1], kind='linear', fill_value='extrapolate')
-            ynewerr = interp_func_err(xnew)
+    #         interp_func_err = interp1d(result["x_curve"], yerr[result["start_index"]:result["end_index"]+1], kind='linear', fill_value='extrapolate')
+    #         ynewerr = interp_func_err(xnew)
             
-            original_path = Path(file_path)
-            # Extract filename without extension
-            stem = original_path.stem  
-            #print('stem',stem)
-            new_filename = f"{stem}_transit.npz"
-            new_folder = original_path.parent   
-            new_path = new_folder / new_filename
-            #print('new_path',new_path)
-            np.savez_compressed(new_path,
-                                    time=result["x_curve"],
-                                    flux=result["y_curve"],
-                                    flux_err=yerr[result["start_index"]:result["end_index"]+1])
+    #         original_path = Path(file_path)
+    #         # Extract filename without extension
+    #         stem = original_path.stem  
+    #         #print('stem',stem)
+    #         new_filename = f"{stem}_transit.npz"
+    #         new_folder = original_path.parent   
+    #         new_path = new_folder / new_filename
+    #         #print('new_path',new_path)
+    #         np.savez_compressed(new_path,
+    #                                 time=result["x_curve"],
+    #                                 flux=result["y_curve"],
+    #                                 flux_err=yerr[result["start_index"]:result["end_index"]+1])
         
-            # original_path = Path(file_path)
-            # # Extract filename without extension
-            # stem = original_path.stem  
-            # print('stem',stem)
-            new_filename = f"{stem}_transit_interp.npz"
-            new_folder = original_path.parent   
-            new_path = new_folder / new_filename
-           # print('new_path',new_path)
-            np.savez_compressed(new_path,
-                                    time=xnew,
-                                    flux=ynew,
-                                    flux_err=ynewerr)
+    #         # original_path = Path(file_path)
+    #         # # Extract filename without extension
+    #         # stem = original_path.stem  
+    #         # print('stem',stem)
+    #         new_filename = f"{stem}_transit_interp.npz"
+    #         new_folder = original_path.parent   
+    #         new_path = new_folder / new_filename
+    #        # print('new_path',new_path)
+    #         np.savez_compressed(new_path,
+    #                                 time=xnew,
+    #                                 flux=ynew,
+    #                                 flux_err=ynewerr)
 
     def process_one_target(self, file_path, target_ltcrv_length=120):
         #print(f"Loaded {file_path}"+"\n")
@@ -299,7 +299,7 @@ class TransitRegionSelector():
         folder2,
         folder3,
         folder4,
-        pattern="kplr*.npz",
+        pattern="kplr*",
         x_key="x",
         y_key="y",
         show_plot=True,
@@ -333,17 +333,17 @@ class TransitRegionSelector():
             #filename.split("_binned.npz")[0]
             return filename.split(split_str)[0]
     
-        files1 = glob.glob(os.path.join(folder1, pattern))
-        files2 = glob.glob(os.path.join(folder2, pattern))
-        files3 = glob.glob(os.path.join(folder3, pattern))
-        files4 = glob.glob(os.path.join(folder3, pattern))
+        files1 = glob.glob(os.path.join(folder1, pattern+".npz"))
+        files2 = glob.glob(os.path.join(folder2, pattern+"_binned.npz"))
+        files3 = glob.glob(os.path.join(folder3, pattern+"_binned_transit.npz"))
+        files4 = glob.glob(os.path.join(folder3, pattern+"_binned_transit_interp.npz"))
         grouped = defaultdict(dict)
-        print('files1',files1,len(files1))
-        print('files2',files2,len(files2))
-        print('files3',files3,len(files3))
-        print('files4',files4,len(files4))
-        for f in files1:
-            grouped[extract_key(f,split_str=".npz")]["folder1"] = f #extract_key(f,split_str=".npz")
+        # print('files1',files1,len(files1))
+        # print('files2',files2,len(files2))
+        # print('files3',files3,len(files3))
+        # print('files4',files4,len(files4))
+        # for f in files1:
+        #     grouped[extract_key(f,split_str=".npz")]["folder1"] = f #extract_key(f,split_str=".npz")
     
         for f in files2:
             grouped[extract_key(f,split_str="_binned.npz")]["folder2"] = f #extract_key(f,split_str="_binned.npz")
@@ -353,7 +353,7 @@ class TransitRegionSelector():
     
         for f in files4:
             grouped[extract_key(f,split_str="_binned_transit_interp.npz")]["folder4"] = f #extract_key(f,split_str="_binned.npz")        
-        print('grouped',list(grouped.items())[0:2])
+        print('matched objects',list(grouped.items())[0:2])
         for i, (key, filepair ) in enumerate(grouped.items()):
             # if i >= N_plots and N_plots is not None:
             #     break
@@ -362,21 +362,22 @@ class TransitRegionSelector():
         #for key, filepair in grouped.items():
             #print('filepair',filepair)
             #print(H)
-            if "folder1" in filepair and "folder2" in filepair and "folder3" in filepair and "folder4" in filepair:
+#            if "folder1" in filepair and "folder2" in filepair and "folder3" in filepair and "folder4" in filepair:
+            if "folder2" in filepair and "folder3" in filepair and "folder4" in filepair:
     
-                data1 = np.load(filepair["folder1"])
+                #data1 = np.load(filepair["folder1"])
                 data2 = np.load(filepair["folder2"])
     
                 data3 = np.load(filepair["folder3"])
                 data4 = np.load(filepair["folder4"])
                 
-                data1_load = LightCurve(time=data1['time'], flux=data1['flux'], flux_err=data1['flux_err'])
+                #data1_load = LightCurve(time=data1['time'], flux=data1['flux'], flux_err=data1['flux_err'])
                 data2_load = LightCurve(time=data2['time'], flux=data2['flux'], flux_err=data2['flux_err'])
     
                 data3_load = LightCurve(time=data3['time'], flux=data3['flux'], flux_err=data3['flux_err'])
                 data4_load = LightCurve(time=data4['time'], flux=data4['flux'], flux_err=data4['flux_err'])
                 
-                x1, y1 = data1_load.time.value, data1_load.flux.value#data1[x_key], data1[y_key]
+                #x1, y1 = data1_load.time.value, data1_load.flux.value#data1[x_key], data1[y_key]
                 x2, y2 = data2_load.time.value, data2_load.flux.value #data2[x_key], data2[y_key]
     
                 x3, y3 = data3_load.time.value, data3_load.flux.value#data1[x_key], data1[y_key]
@@ -389,7 +390,7 @@ class TransitRegionSelector():
                 # plt.legend()
                 fontsize=6
                 fig, ax = plt.subplots(3, 1, figsize=(8,6))
-                ax[0].scatter(x1, y1, color='k',s=1, label='Folded LC')
+                #ax[0].scatter(x1, y1, color='k',s=1, label='Folded LC')
                 ax[0].scatter(x2, y2, color='r',s=1, label='Binned LC')
                 ax[0].set_title(f'{key}')
                 ax[0].legend(fontsize=fontsize,loc="lower left")
@@ -408,9 +409,7 @@ class TransitRegionSelector():
                 plt.tight_layout()
             
                 if save_dir:
-                    os.makedirs(save_dir, exist_ok=True)
-                    save_path = os.path.join(save_dir, f"{key}.png")
-                    plt.savefig(save_path)
+                    plt.savefig(save_dir/ f"{key}.png")
     
                 if show_plot:
                     plt.show()
@@ -474,29 +473,6 @@ def combine_flux(folder_path,N, output_file="combined_flux.npy", savefolder_path
     print(f"Saved to {output_file}")
     
 if __name__ == "__main__":
-    # folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/"
-    # obj = TransitRegionSelector(ltcrv_files_folder=folder)
-    # obj.find_transit_region_and_save_parallel()
-    # #trans = TransitRegionSelector()
-    # folder1 = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/"
-    # folder2 = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/"
-    # folder3 = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/"
-    # folder4 = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/phase_folded_lcs/Binned_LC/"
-    
-    # # #trans.find_transit_region_and_save(target_ltcrv_length = 120)
-    # # trans.find_transit_region_and_save_parallel()
-    # obj.load_and_plot_matched_ltcrvs(
-    #     folder1=folder1,
-    #     folder2=folder2,
-    #     folder3=folder3,
-    #     folder4=folder4,
-    #     x_key="time",
-    #     y_key="flux",
-    #     save_dir="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/kepler_data/lightcurve_plots/",
-    #     show_plot=True,
-    #     N_plots = 10
-    # )
-
     start = time.time()
     folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/Binned_LC/"
     obj = TransitRegionSelector(ltcrv_files_folder=folder)
@@ -528,14 +504,4 @@ if __name__ == "__main__":
     combine_flux(folder, output_file="1LC_hscaled.npy",
              savefolder_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC10/")
 
-    #---------------------------------------------------------------------------------------------------------------------------------
-    start = time.time()
-    folder="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/Binned_LC/"
-    obj = TransitRegionSelector(ltcrv_files_folder=folder)
-    obj.find_transit_region_and_save_parallel()
-    end = time.time()
-    print(f"time taken is: {(end-start)/60} minutes")
-
-    combine_flux(folder, output_file="1LC_hscaled.npy",
-             savefolder_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LC20/")
     

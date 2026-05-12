@@ -208,7 +208,7 @@ def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=T
 def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
                             koi_table_folder= "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
                             koi_table_filename="koi_cumulative_2025.06.28_01.24.15.csv",
-                            base_dir = None):
+                            outfile=None):
     """
     sampling = 'kde'/'uni'
     kde: choose when want to generate same distribution as Kepler
@@ -218,12 +218,12 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     loc_cut_rprs = np.round(1/rsrp2,4)
     high_cut_rprs = np.round(1/rsrp1,4)
     
-    base_dir = base_dir if base_dir is not None else Path.cwd()
+    #base_dir = base_dir if base_dir is not None else Path.cwd()
 
 
-    ldc_ratio_folder = base_dir / "LDC_RSRP_GRIDS"
-    ldc_ratio_folder.mkdir(parents=True, exist_ok=True)
-    outfile = f"{ldc_ratio_folder}/ldc_rsrp_{rsrp1}_{rsrp2}.npy"
+    # ldc_ratio_folder = base_dir / "LDC_RSRP_GRIDS"
+    # ldc_ratio_folder.mkdir(parents=True, exist_ok=True)
+    # outfile = f"{ldc_ratio_folder}/ldc_rsrp_{rsrp1}_{rsrp2}.npy"
     
     kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
     planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
@@ -391,10 +391,10 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     plt.show()
 
 def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
-         koi_table_filename=None,base_dir=None,fig_dir=None):
+         koi_table_filename=None,outfile=None,fig_dir=None):
     outfile,planet_ldc_file = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
                                                       koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
-                                                      base_dir = base_dir)
+                                                      outfile= outfile)
 
     figure_path = fig_dir / f"ldc_rsrp_{rsrp1}_{rsrp2}.png"
     ##################

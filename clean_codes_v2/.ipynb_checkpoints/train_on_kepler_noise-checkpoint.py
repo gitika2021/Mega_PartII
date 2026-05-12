@@ -11,6 +11,7 @@ import pstats
 from utils import *
 import matplotlib.pyplot as plt
 import os
+from pathlib import Path
 
 criterionb = symmetry_aware_bce
 criterion = symmetry_aware_dice_loss
@@ -206,7 +207,16 @@ def train_gan(generator, traindataloader, valdataloader, snr,
        
     
         if figpath is not None:
-            plt.savefig(f"{figpath}/loss_vs_epoch.png")
+            dygnostic_dir = Path(figpath) / "dygnostics"
+            dygnostic_dir.mkdir(parents=True, exist_ok=True)
+            losses = np.zeros((len(train_loss_mse),5))
+            losses[:,0] = epochs_arr
+            losses[:,1] = train_loss_mse
+            losses[:,2] = train_loss_bce
+            losses[:,3] = val_loss_mse
+            losses[:,4] = val_loss_bce
+            np.save(f"{str(dygnostic_dir)}/epoch_vs_loss.npy",losses)
+            plt.savefig(f"{figpath}/epoch_vs_loss.png")
         else:
             plt.show()
         plt.close()

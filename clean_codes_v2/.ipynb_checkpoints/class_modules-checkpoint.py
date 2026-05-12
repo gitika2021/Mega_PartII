@@ -19,6 +19,7 @@ class MLPreProcessing():
         self.base_dir = base_dir
         self.maps_path = maps_path
 
+      
         # shapes directory
         self.shape_dir = self.base_dir / "OM10"
         self.shape_dir.mkdir(parents=True, exist_ok=True)
@@ -54,14 +55,28 @@ class MLPreProcessing():
         
         self.figure_dir = Path(Base_Dir + "Figures/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2))
         self.figure_dir.mkdir(parents=True, exist_ok=True)
-        
-        self.ldc_ratio_grid_file = gen_ldc_ratio_grid.main(rsrp1=self.rsrp1,rsrp2=self.rsrp2,
-                                                           koi_table_folder=self.koi_table_folder,
-                                                           koi_table_filename=self.koi_table_filename,
-                                                           base_dir=self.base_dir,fig_dir=self.figure_dir)
+
+        # LDC and radius ratio directory
+        self.ldc_dir = self.base_dir / "LDC_RSRP_GRIDS"
+        self.ldc_dir.mkdir(parents=True, exist_ok=True)
+
+        self.ldc_dir_bin = self.ldc_dir / "RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
+        self.ldc_ratio_grid_file = self.ldc_dir_bin / f"ldc_rsrp_{self.rsrp1}_{self.rsrp2}.npy"
+  
+        #self.ldc_ratio_grid_file = 
+        # self.ldc_ratio_grid_file = gen_ldc_ratio_grid.main(rsrp1=self.rsrp1,rsrp2=self.rsrp2,
+        #                                                    koi_table_folder=self.koi_table_folder,
+        #                                                    koi_table_filename=self.koi_table_filename,
+        #                                                    base_dir=self.base_dir,fig_dir=self.figure_dir)
         
         print("... initialization complete.")
 
+    def gen_ltcrv_ldc_grid_file(self):
+        self.ldc_ratio_grid_file = gen_ldc_ratio_grid.main(rsrp1=self.rsrp1,rsrp2=self.rsrp2,
+                                                           koi_table_folder=self.koi_table_folder,
+                                                           koi_table_filename=self.koi_table_filename,
+                                                           outfile=self.ldc_ratio_grid_file,fig_dir=self.figure_dir)
+                
     def gen_shapes(self):
         shape_utils.main(Num=self.Num,N=self.N,shape_dir=self.shape_dir,maps_path=self.maps_path) 
         # check if files created
@@ -95,10 +110,13 @@ class MLPreProcessing():
         dataset_split.main(N=self.N,lc_path=hscaled_processed_file,img_path=str(self.shape_file),
                            train_dir=self.train_dir,train_frac=self.train_frac,seed=self.seed)
         return 
-    
+
+        
     def execute(self):
-        # self.gen_shapes()
-        # self.gen_ltcrvs()
+        if not Path(self.ldc_ratio_grid_file).is_file():
+            print("Generating ldc ratio grid")
+            self.gen_ltcrv_ldc_grid_file()        
+        
         if not self.shape_file.is_file():
             print("Generating Shapes")
             self.gen_shapes()
@@ -127,5 +145,39 @@ class MLPreProcessing():
         
         return
 
+
+class MLInference():
+    def __init__(self,maps_dir=None, nproc=4, rsrp1=5, rsrp2=10):
+        self.maps_dir = maps_dir
+        self.nproc = nproc
+        self.rsrp1 = rsrp1
+        self.rsrp2 = rsrp2
+        
+        self.figure_dir = Path(Base_Dir + "Figures/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2))
+        self.figure_dir.mkdir(parents=True, exist_ok=True)
+        return
+
+    def process_orig_ltcrvs(self):
+        trs=processing_transit_region.TransitRegionSelector(ltcrv_files_folder=self.maps_dir,max_workers=self.nproc)
+        trs.find_transit_region_and_save_parallel()
+        return
+        
+    def read_processed_ltcrvs(self):
+        trs=processing_transit_region.TransitRegionSelector()
+        trs.load_and_plot_matched_ltcrvs(self.maps_dir,self.maps_dir,self.maps_dir,self.maps_dir,
+            pattern="kplr*",x_key="time",y_key="flux",show_plot=False,
+            save_dir=self.figure_dir, N_plots = None)
+        return
+        
+    def infer_shape(self):
+        return
+
+    def execute(self):
+        if self.maps_dir is not None:
+            self.process_orig_ltcrvs()
+            self.read_processed_ltcrvs()
+
+        return
+        
         
         
