@@ -46,8 +46,9 @@ if __name__ == "__main__":
     rsrp2 = config.get('rsrp2',10)
     train_frac = config.get('train_frac',0.8)
     seed = config.get('seed',None)
+    maps_folder_str = config.get('maps_folder_str',10)
     
-    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed)
+    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, maps_folder_str = maps_folder_str)
     if train:
         import torch
         epochs = config.get('epochs',3)

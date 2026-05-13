@@ -8,6 +8,7 @@
     "rsrp2": 10,
     "train_frac": 0.8,
     "seed": null,
+    "maps_folder_str": "Test",
 
     "epochs": 3,
     "batch_size": 10,

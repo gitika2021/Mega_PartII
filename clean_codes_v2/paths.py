@@ -9,5 +9,5 @@ Config_Dir = '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git
 KOI_Table_Filename = 'koi_cumulative_2025.06.28_01.24.15.csv'
 Kepler_Error_Filename = 'kepler_folded_lcs_snr50_all_binned_err.npy'
 
-infer_lc_dir = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Raw_LC/"
+Infer_LC_Dir = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Raw_LC/"
 

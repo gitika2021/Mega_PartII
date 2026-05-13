@@ -337,6 +337,75 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     # return outfile
     return outfile,planet_ldc_file # changed to allow downstream use of planet_ldc_file
 
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+def plot_percentile_bins(rsrp, nbins=10, cumulative=False):
+    """
+    Plot source counts versus percentile bins.
+
+    Parameters
+    ----------
+    rsrp : array-like
+        Input data.
+    nbins : int
+        Number of percentile bins.
+    cumulative : bool
+        If True, plot cumulative counts above percentile thresholds.
+        If False, plot counts inside each percentile bin.
+
+    Returns
+    -------
+    percentiles : ndarray
+        Percentile values used.
+    counts : ndarray
+        Counts corresponding to each percentile/bin.
+    """
+
+    rsrp = np.asarray(rsrp)
+
+    if cumulative:
+        # Percentile thresholds
+        percentiles = np.linspace(0, 100, nbins + 1)
+        thresholds = np.percentile(rsrp, percentiles)
+
+        # Count values above each threshold
+        counts = np.array([
+            np.sum(rsrp >= t)
+            for t in thresholds
+        ])
+
+        # Plot
+        plt.figure(figsize=(6, 4))
+        plt.plot(percentiles, counts, marker='o')
+
+        plt.xlabel("Percentile Threshold")
+        plt.ylabel("Number of Sources Above Threshold")
+        plt.title("Cumulative Distribution")
+        plt.grid(True)
+
+        return thresholds, counts
+
+    else:
+        # Percentile bin edges
+        percentile_edges = np.percentile(
+            rsrp,
+            np.linspace(0, 100, nbins + 1)
+        )
+
+        # Counts in each bin
+        counts, _ = np.histogram(rsrp, bins=percentile_edges)
+
+        # Bin midpoint labels
+        percentiles = (
+            np.linspace(0, 100, nbins + 1)[:-1]
+            + 50 / nbins
+        )
+
+
+
+        return percentile_edges, counts
 
 def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png"):
     
@@ -347,9 +416,11 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     ldcb = ldcs_coeffs[:,1] #kepler_lcs_ldcb
     rprs = ldcs_coeffs[:,2]
 
-    percentiles = np.zeros(20)
-    for p in range(20):
+    rprs_nbins = 10
+    percentiles = np.zeros(rprs_nbins)
+    for p in range(rprs_nbins):
         percentiles[p] = np.percentile(rprs,(100/len(percentiles))*(p+1))
+    
     
     train_meta = np.load(outfile)
 
@@ -374,11 +445,6 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     ax[1].set_yscale('log')
     ax[1].set_xscale('log')
     ax[1].set_xlim(2e-3,8e-1)
-    #ax[1].set_xscale('log')
-    # ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-    #ax[2].hist(np.round(1/rprs,0),label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-    # ax[2].hist(train_meta[:,3],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-    # ax[2].set_yscale('log')
 
     ax[0].legend()
     ax[1].legend()
@@ -387,6 +453,65 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
         dpi=500,
         bbox_inches='tight',
         pad_inches=0.2
+    )
+    plt.show()
+
+    rsrp = 1.0/rprs
+    min_rsrp = np.min(rsrp)
+    max_rsrp = np.max(rsrp)
+    print('min_rsrp,max_rsrp',min_rsrp,max_rsrp)
+    # rsrp
+    rsrp_nbins = 10
+    percentiles = np.zeros(rsrp_nbins)
+    for p in range(rsrp_nbins):
+        percentiles[p] = np.percentile(rsrp,(100/len(percentiles))*(p+1))
+
+    fontsize = 24
+    # check distribution of median error
+    fig, ax = plt.subplots(1,2,figsize=(10,5))
+    ax[0].set_xlabel("LDC coeff a")
+    ax[0].set_ylabel("LDC coeff b")
+
+    ax[1].set_xlabel(r"$R_s/R_p$")
+    ax[1].set_ylabel("Counts")
+
+    ax[0].scatter(ldca, ldcb, s=2, color='r', label = 'Kepler KOI', alpha=0.9, zorder=2)
+    ax[0].scatter(train_meta[:,0], train_meta[:,1], s=2, color="gray", label = 'Generated Grid', alpha=0.3, zorder=1)
+
+    #ax[1].hist(rprs_grid,label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+
+    ax[1].hist(rsrp,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
+    ax[1].hist(train_meta[:,3],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    for p in range(len(percentiles)):
+        ax[1].axvline(percentiles[p], color='k',ls='-',lw=0.5)
+    ax[1].set_yscale('log')
+    ax[1].set_xscale('log')
+    #ax[1].set_xlim(2e-3,8e-1)
+
+    ax[0].legend()
+    ax[1].legend()
+    plt.savefig(
+        figure_path,
+        dpi=500,
+        bbox_inches='tight',
+        pad_inches=0.2
+    )
+    plt.show()
+
+    percentiles, counts = plot_percentile_bins(rsrp, nbins=10, cumulative=False)
+            # Plot
+    plt.figure(figsize=(6, 4))
+    plt.plot(percentiles, counts, marker='o')
+
+    plt.xlabel(r"Percentile Bin ($R_s/R_p$)")
+    plt.ylabel("Number of Sources")
+    plt.title("Sources per Percentile Bin")
+    plt.grid(True)
+    plt.savefig(
+    figure_path,
+    dpi=500,
+    bbox_inches='tight',
+    pad_inches=0.2
     )
     plt.show()
 

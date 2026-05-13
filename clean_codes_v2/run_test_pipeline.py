@@ -1,28 +1,11 @@
 import numpy as np
 import sys
-from class_modules import MLPreProcessing
+from class_modules import MLPreProcessing, MLInference
 import train_on_kepler_noise
 from paths import Config_Dir
 import argparse,json
 
 if __name__ == "__main__":
-    # train = True
-    # Num = 10
-    # N = 1
-    # maps_path = None
-    # nproc = 4
-    # rsrp1 = 5
-    # rsrp2 = 10
-    # train_frac = 0.8
-    # seed = None
-
-    # # only needed for actual training
-    # epochs = 3
-    # batch_size = 10 # 32
-    # n_scale = 2
-    # device = 'cpu' # "cuda" if torch.cuda.is_available() else "cpu"
-    # resume = False
-    # checkpoint_freq = 3
 
     parser = argparse.ArgumentParser(description="Lightcurve generation and model training.")
     parser.add_argument("--config-file",type=str,required=True, help="name of config file (e.g., example_config.json)")
@@ -46,20 +29,31 @@ if __name__ == "__main__":
     rsrp2 = config.get('rsrp2',10)
     train_frac = config.get('train_frac',0.8)
     seed = config.get('seed',None)
-    maps_folder_str = config.get('maps_folder_str',10)
-    
-    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, maps_folder_str = maps_folder_str)
+
+    n_scale = config.get('n_scale',2)
+    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, test=True)
     if train:
-        import torch
-        epochs = config.get('epochs',3)
-        batch_size = config.get('batch_size',10)
-        n_scale = config.get('n_scale',2)
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        resume = config.get('resume',False)
-        checkpoint_freq = config.get('checkpoint_freq',3)
-        train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
-                                   epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
+        # import torch
+        # epochs = config.get('epochs',3)
+        # batch_size = config.get('batch_size',10)
+        # n_scale = config.get('n_scale',2)
+        # device = "cuda" if torch.cuda.is_available() else "cpu"
+        # resume = config.get('resume',False)
+        # checkpoint_freq = config.get('checkpoint_freq',3)
+        # train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
+        #                            epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
+
+
+        infer = MLInference(maps_dir=obj.noisy_ltcrv_folder,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
+                     n_scale=n_scale, N=N)
+        infer.execute()
     else:
         print("Preprocessing")
         obj.execute()
+        # binnd_lc_dir = obj.noisy_ltcrv_folder
+
+        # infer = MLInference(maps_dir=binnd_lc_dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
+        #              n_scale=n_scale, N=N)
+        # infer.execute()
+        
     
