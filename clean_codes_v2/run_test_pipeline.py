@@ -33,27 +33,13 @@ if __name__ == "__main__":
     n_scale = config.get('n_scale',2)
     obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, test=True)
     if train:
-        # import torch
-        # epochs = config.get('epochs',3)
-        # batch_size = config.get('batch_size',10)
-        # n_scale = config.get('n_scale',2)
-        # device = "cuda" if torch.cuda.is_available() else "cpu"
-        # resume = config.get('resume',False)
-        # checkpoint_freq = config.get('checkpoint_freq',3)
-        # train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
-        #                            epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
-
-
-        infer = MLInference(maps_dir=obj.noisy_ltcrv_folder,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
+        print("Infer shape from LC")
+        infer = MLInference(lc_dir=obj.noisy_ltcrv_folder,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
                      n_scale=n_scale, N=N)
         infer.execute()
+        infer.plot_prediction_orig_maps()
     else:
-        print("Preprocessing")
+        print("Generating shapes, LC and Preprocessing")
         obj.execute()
-        # binnd_lc_dir = obj.noisy_ltcrv_folder
-
-        # infer = MLInference(maps_dir=binnd_lc_dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
-        #              n_scale=n_scale, N=N)
-        # infer.execute()
         
     

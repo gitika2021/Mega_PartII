@@ -15,7 +15,8 @@ from scipy.stats import gaussian_kde
        
 def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
                           koi_table_filename = "koi_cumulative_2025.06.28_01.24.15.csv",
-                         ldc_ratio_outfile = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_ldc_coeffs_conf_planets.npy"):
+                         ldc_ratio_outfile = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/kepler_ldc_coeffs_conf_planets.npy",
+                         snr_cut=50):
     """
     kepler koi table file: koi_cumulative_2025.06.28_01.24.15.csv should be downloaded first and saved in 'koi_table_file' directory
     ldc_ratio_outfile: (N,a,b,rp/rs) from kepler koi table after removing nans etc.
@@ -40,6 +41,25 @@ def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Reposito
     LDC_coeffs[:,2] = rprs
     
     np.save(ldc_ratio_outfile,LDC_coeffs)
+
+    # Choose subset of targets with SNR > snr_cut
+    df_new =koi_conf_plans_tabl[koi_conf_plans_tabl['koi_model_snr']>= snr_cut]
+    print(f'Number of planets with SNR >= {snr_cut} is {len(df_new)}')
+
+    kepler_lcs_rprs = df_new["koi_ror"].to_numpy()
+    kepler_lcs_ldca = df_new["koi_ldm_coeff1"].to_numpy()
+    kepler_lcs_ldcb = df_new["koi_ldm_coeff2"].to_numpy()
+    
+    ldca, ldcb, rprs = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
+    print('Number of valid values in Kepler KOI for LDC and Rp/Rs',len(ldca))
+    #np.isnan(a).any(),np.isnan(a).sum()
+    LDC_coeffs = np.zeros((len(ldca),3))
+    LDC_coeffs[:,0] = ldca
+    LDC_coeffs[:,1] = ldcb
+    LDC_coeffs[:,2] = rprs    
+    np.save(ldc_ratio_outfile[:-4]+f'_snr{snr_cut}.npy',LDC_coeffs)
+
+    
     return ldc_ratio_outfile
 
 def generate_band(a, b, method="constant", value=1.0, size=2000, show=False):
@@ -226,8 +246,11 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     # outfile = f"{ldc_ratio_folder}/ldc_rsrp_{rsrp1}_{rsrp2}.npy"
     
     kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
-    planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
-    ldcs_coeffs = np.load(planet_ldc_file)
+    # planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
+    # ldcs_coeffs = np.load(planet_ldc_file)
+    
+    #planet_ldc_file = kepler_ldc_ratio_outfile
+    ldcs_coeffs = np.load(kepler_ldc_ratio_outfile)
     
     a = ldcs_coeffs[:,0] #kepler_lcs_ldca
     b = ldcs_coeffs[:,1] #kepler_lcs_ldcb
@@ -335,92 +358,19 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
         print('radius ratio (Rs/Rp)',pairs[:,3],pairs[:,3].min(),pairs[:,3].max())
         print(np.any(pairs[:,3] == 0))
     # return outfile
-    return outfile,planet_ldc_file # changed to allow downstream use of planet_ldc_file
-
-import numpy as np
-import matplotlib.pyplot as plt
-
-
-def plot_percentile_bins(rsrp, nbins=10, cumulative=False):
-    """
-    Plot source counts versus percentile bins.
-
-    Parameters
-    ----------
-    rsrp : array-like
-        Input data.
-    nbins : int
-        Number of percentile bins.
-    cumulative : bool
-        If True, plot cumulative counts above percentile thresholds.
-        If False, plot counts inside each percentile bin.
-
-    Returns
-    -------
-    percentiles : ndarray
-        Percentile values used.
-    counts : ndarray
-        Counts corresponding to each percentile/bin.
-    """
-
-    rsrp = np.asarray(rsrp)
-
-    if cumulative:
-        # Percentile thresholds
-        percentiles = np.linspace(0, 100, nbins + 1)
-        thresholds = np.percentile(rsrp, percentiles)
-
-        # Count values above each threshold
-        counts = np.array([
-            np.sum(rsrp >= t)
-            for t in thresholds
-        ])
-
-        # Plot
-        plt.figure(figsize=(6, 4))
-        plt.plot(percentiles, counts, marker='o')
-
-        plt.xlabel("Percentile Threshold")
-        plt.ylabel("Number of Sources Above Threshold")
-        plt.title("Cumulative Distribution")
-        plt.grid(True)
-
-        return thresholds, counts
-
-    else:
-        # Percentile bin edges
-        percentile_edges = np.percentile(
-            rsrp,
-            np.linspace(0, 100, nbins + 1)
-        )
-
-        # Counts in each bin
-        counts, _ = np.histogram(rsrp, bins=percentile_edges)
-
-        # Bin midpoint labels
-        percentiles = (
-            np.linspace(0, 100, nbins + 1)[:-1]
-            + 50 / nbins
-        )
+    return outfile # changed to allow downstream use of planet_ldc_file
 
 
 
-        return percentile_edges, counts
-
-def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png"):
+def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Data/LDC_RPRS/ldc_ratio_grid_set.npy",figure_path="/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/figures/ldc_rprs_grid.png",
+             snr_cut=50):
     
     # planet_ldc_file = save_kepler_ldc_ratio()
     ldcs_coeffs = np.load(planet_ldc_file)
 
     ldca = ldcs_coeffs[:,0] #kepler_lcs_ldca
     ldcb = ldcs_coeffs[:,1] #kepler_lcs_ldcb
-    rprs = ldcs_coeffs[:,2]
-
-    rprs_nbins = 10
-    percentiles = np.zeros(rprs_nbins)
-    for p in range(rprs_nbins):
-        percentiles[p] = np.percentile(rprs,(100/len(percentiles))*(p+1))
-    
+    rprs = ldcs_coeffs[:,2] 
     
     train_meta = np.load(outfile)
 
@@ -440,56 +390,87 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
 
     ax[1].hist(rprs,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
     ax[1].hist(train_meta[:,2],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-    for p in range(len(percentiles)):
-        ax[1].axvline(percentiles[p], color='k',ls='-',lw=0.5)
     ax[1].set_yscale('log')
     ax[1].set_xscale('log')
     ax[1].set_xlim(2e-3,8e-1)
 
     ax[0].legend()
     ax[1].legend()
-    plt.savefig(
-        figure_path,
-        dpi=500,
-        bbox_inches='tight',
-        pad_inches=0.2
-    )
+    # plt.savefig(
+    #     figure_path,
+    #     dpi=500,
+    #     bbox_inches='tight',
+    #     pad_inches=0.2
+    # )
     plt.show()
+    
+    def bin_ratio(rprs_vals, nbins = 21):     
+        ratio = np.asarray(1.0/rprs_vals)
+        rmin = np.min(ratio)
+        rmax = np.max(ratio)
+    
+        # Logarithmic bins
+        bin_edges = np.logspace(
+            np.log10(rmin),
+            np.log10(rmax),
+            nbins + 1
+        )
+        #print('bin_edges',bin_edges)
+        # Counts
+        counts, _ = np.histogram(ratio, bins=bin_edges)
+    
+        # ----- Rp/Rs plots -----
+    
+        # Geometric centers
+        bin_centers = np.sqrt(
+            bin_edges[:-1] * bin_edges[1:]
+        )
+    
+        # Linear widths
+        bin_widths = np.diff(bin_edges)
+        return bin_centers, counts, bin_widths
 
-    rsrp = 1.0/rprs
-    min_rsrp = np.min(rsrp)
-    max_rsrp = np.max(rsrp)
-    print('min_rsrp,max_rsrp',min_rsrp,max_rsrp)
-    # rsrp
-    rsrp_nbins = 10
-    percentiles = np.zeros(rsrp_nbins)
-    for p in range(rsrp_nbins):
-        percentiles[p] = np.percentile(rsrp,(100/len(percentiles))*(p+1))
+    bin_centers, counts, bin_widths = bin_ratio(rprs)
+    bin_centers_grid, counts_grid, bin_widths_grid = bin_ratio(train_meta[:,2],nbins=10)
 
-    fontsize = 24
-    # check distribution of median error
-    fig, ax = plt.subplots(1,2,figsize=(10,5))
+    fig_ratio, ax = plt.subplots(1,2,figsize=(10,5))
     ax[0].set_xlabel("LDC coeff a")
     ax[0].set_ylabel("LDC coeff b")
 
-    ax[1].set_xlabel(r"$R_s/R_p$")
-    ax[1].set_ylabel("Counts")
-
     ax[0].scatter(ldca, ldcb, s=2, color='r', label = 'Kepler KOI', alpha=0.9, zorder=2)
     ax[0].scatter(train_meta[:,0], train_meta[:,1], s=2, color="gray", label = 'Generated Grid', alpha=0.3, zorder=1)
+    ax_ratio = ax[1]
 
-    #ax[1].hist(rprs_grid,label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    #fig_ratio, ax_ratio = plt.subplots(figsize=(7,5))
 
-    ax[1].hist(rsrp,label = 'Kepler KOI', alpha=0.5, color="red", edgecolor="black")
-    ax[1].hist(train_meta[:,3],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
-    for p in range(len(percentiles)):
-        ax[1].axvline(percentiles[p], color='k',ls='-',lw=0.5)
-    ax[1].set_yscale('log')
-    ax[1].set_xscale('log')
-    #ax[1].set_xlim(2e-3,8e-1)
-
-    ax[0].legend()
-    ax[1].legend()
+    ax_ratio.set_xscale('log')
+    ax_ratio.set_xlabel("1/(Rp/Rs)")
+    ax_ratio.set_ylabel("Counts")
+    ax_ratio.grid(True, which='both', alpha=0.3)
+    ax_ratio.bar(
+                bin_centers,
+                counts,
+                width=bin_widths,
+                align='center',
+                edgecolor='black',
+                alpha=0.4,
+                color='blue',
+                label = 'Kepler planets'
+            )
+    ax_ratio.bar(
+                bin_centers_grid,
+                counts_grid,
+                width=bin_widths_grid,
+                align='center',
+                edgecolor='black',
+                alpha=0.4,
+                color='gray',
+                label = 'Generated Grid'
+            )
+    # ax_ratio.hist(1/train_meta[:,2],label = 'Generated Grid', alpha=0.5, color="gray", edgecolor="black")
+    
+    ax_ratio.legend()
+    fig_ratio.tight_layout()
     plt.savefig(
         figure_path,
         dpi=500,
@@ -498,26 +479,11 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     )
     plt.show()
 
-    percentiles, counts = plot_percentile_bins(rsrp, nbins=10, cumulative=False)
-            # Plot
-    plt.figure(figsize=(6, 4))
-    plt.plot(percentiles, counts, marker='o')
-
-    plt.xlabel(r"Percentile Bin ($R_s/R_p$)")
-    plt.ylabel("Number of Sources")
-    plt.title("Sources per Percentile Bin")
-    plt.grid(True)
-    plt.savefig(
-    figure_path,
-    dpi=500,
-    bbox_inches='tight',
-    pad_inches=0.2
-    )
-    plt.show()
 
 def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
          koi_table_filename=None,outfile=None,fig_dir=None):
-    outfile,planet_ldc_file = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
+    
+    outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
                                                       koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
                                                       outfile= outfile)
 
@@ -526,7 +492,7 @@ def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
     # this is not nice
     kepler_ldc_ratio_outfile = f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
     ##################
-    plot_grid(planet_ldc_file,outfile=outfile,figure_path=figure_path)
+    plot_grid(kepler_ldc_ratio_outfile,outfile=outfile,figure_path=figure_path)
 
     train_meta = np.load(outfile)
     

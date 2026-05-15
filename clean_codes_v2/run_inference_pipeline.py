@@ -20,6 +20,6 @@ if __name__ == "__main__":
     rsrp2 = config.get('rsrp2',10)
     
     nproc = 4
-    obj = MLInference(maps_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
+    obj = MLInference(lc_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
                      n_scale=n_scale)
     obj.execute()
