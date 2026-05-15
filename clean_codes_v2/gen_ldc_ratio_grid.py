@@ -211,7 +211,11 @@ def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=T
         high = np.percentile(data, hig_cut)
         
     data_cut = data[(data >= low) & (data <= high)]
-
+    #print('data_cut',data_cut)
+    if data_cut.size < 2:
+        samples = np.random.uniform(low, high, size=n_samples)
+        return samples
+        
     kde = gaussian_kde(data_cut, bw_method=0.05)
 
     samples = np.array([])

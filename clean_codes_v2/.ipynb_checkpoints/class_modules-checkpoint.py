@@ -154,6 +154,10 @@ class MLPreProcessing():
                     print("Split dataset into train and val")
                     self.split_dataset(hscaled_processed_file)
         else:
+            if not Path(self.ldc_ratio_grid_file).is_file():
+                print("Generating ldc ratio grid")
+                self.gen_ltcrv_ldc_grid_file() 
+                
             self.gen_shapes()
             SHAPE_SIZE = shape_utils.SHAPE_SIZE
             shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
@@ -171,7 +175,7 @@ class MLPreProcessing():
 
 ###################################
 class MLInference():
-    def __init__(self,lc_dir=None, maps_dir=None, nproc=4, rsrp1=5, rsrp2=10,n_scale=2, N=None, ):
+    def __init__(self,lc_dir=None, maps_dir=None, nproc=4, rsrp1=5, rsrp2=10,n_scale=2, N=None,nrpoc=4 ):
         self.lc_dir = lc_dir
         self.lc_dir_pthobj = Path(self.lc_dir) 
         self.N = N
@@ -192,7 +196,8 @@ class MLInference():
         self.lcs_filename = self.lc_dir_pthobj / "light_curves_all.npy"
         self.key_filename = self.lc_dir_pthobj / "keynames_all.npy"
         self.pre_filename = self.lc_dir_pthobj / "prediction_maps_all.npy"
-        return
+        self.map_filename = self.lc_dir_pthobj / "original_maps_all.npy" if N is not None else None
+
         
     def extract_key(self,filepath,split_str="_binned.npz"):
         filename = os.path.basename(filepath)
@@ -205,9 +210,10 @@ class MLInference():
             trs=processing_transit_region.TransitRegionSelector(ltcrv_files_folder=self.lc_dir,
                                                                 max_workers=self.nproc)
             trs.find_transit_region_and_save_parallel()
+            ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"*_binned_transit_interp.npz"))
+        else:
+            ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"{self.N}*_binned_transit_interp.npz"))
 
-        
-        ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"{self.N}*_binned_transit_interp.npz"))
         files_sorted = sorted(ltcrv_npz_files)
 
         data_temp = np.load(ltcrv_npz_files[0])
@@ -254,10 +260,12 @@ class MLInference():
         orig_shapes_file = self.mlprep.shape_file 
         pred_shapes_file = self.pre_filename
         inp_lcs_file = self.lcs_filename
+
         
         orig_shapes = np.load(orig_shapes_file)
         predicted_shape = np.load(pred_shapes_file)
         inp_lcs = np.load(inp_lcs_file)
+        np.save(self.map_filename,orig_shape)
         print('orig_shapes.shape, predicted_shape.shape',orig_shapes.shape, predicted_shape.shape)
         
         images = orig_shapes
@@ -299,6 +307,26 @@ class MLInference():
         return
         
 
+    # def run_binary_classifier(self):
+    #     self.flux_cutI = 0.94
+    #     self.dist_cutII = 0.10
+
+    #     org_shape = np.load(self.map_filename)
+    #     flags,acc,CI,CII,flags_str,rad_fit, fmaps = batch_predict_shape(images=org_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=32, show= False) 
+        
+    #     org_filename = f"shapes_lcs_test/set1/test_shapes_noncirc_circ_both_shapes.npy"
+    #     org_shape = np.load(org_filename)
+    #             predictions,accuracy,values_cutI,values_cutII,predictions_str,radius_fitted,final_maps  = batch_predict_shape(images=org_shape,deviation_estimator='flux',cut1=cutI, cut2=cutII,num_cpus=32, show= False) 
+        
+        
+    #     org_filename_pred = f"shapes_lcs_test/set1/test_shapes_noncirc_circ_both_{rsrp}_{lda}_{ldb}LC_processed_snr{snr}_PredctdShape.npy"
+    #     org_shape_pred = np.load(org_filename_pred)
+    #     predictions_pred,accuracy_pred,values_cutI_pred,values_cutII_pred,predictions_str_pred,radius_fitted_pred,final_maps_pred  =  batch_predict_shape(images=org_shape_pred,deviation_estimator='flux',cut1=cutI, cut2=cutII,num_cpus=32, show= False)
+        
+    #     results = estimate_ml_metrics_v2(predictions, predictions_pred, 
+    #                     savefig=None)
+
+    #     pass
     def execute(self):
         if self.lc_dir is not None:
             self.process_orig_ltcrvs()

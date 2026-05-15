@@ -18,8 +18,8 @@ if __name__ == "__main__":
     n_scale = config.get('n_scale',2)
     rsrp1 = config.get('rsrp1',5)
     rsrp2 = config.get('rsrp2',10)
+    nproc = config.get('nproc',4)
     
-    nproc = 4
     obj = MLInference(lc_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
-                     n_scale=n_scale)
+                     n_scale=n_scale,nproc=nproc)
     obj.execute()

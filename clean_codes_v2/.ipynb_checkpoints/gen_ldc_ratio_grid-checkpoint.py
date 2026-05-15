@@ -211,7 +211,11 @@ def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=T
         high = np.percentile(data, hig_cut)
         
     data_cut = data[(data >= low) & (data <= high)]
-
+    #print('data_cut',data_cut)
+    if data_cut.size < 2:
+        samples = np.random.uniform(low, high, size=n_samples)
+        return samples
+        
     kde = gaussian_kde(data_cut, bw_method=0.05)
 
     samples = np.array([])
@@ -249,7 +253,7 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     # planet_ldc_file = save_kepler_ldc_ratio(koi_table_folder, koi_table_filename,kepler_ldc_ratio_outfile)
     # ldcs_coeffs = np.load(planet_ldc_file)
     
-    planet_ldc_file = kepler_ldc_ratio_outfile
+    #planet_ldc_file = kepler_ldc_ratio_outfile
     ldcs_coeffs = np.load(kepler_ldc_ratio_outfile)
     
     a = ldcs_coeffs[:,0] #kepler_lcs_ldca
@@ -358,7 +362,7 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
         print('radius ratio (Rs/Rp)',pairs[:,3],pairs[:,3].min(),pairs[:,3].max())
         print(np.any(pairs[:,3] == 0))
     # return outfile
-    return outfile,kepler_ldc_ratio_outfile # changed to allow downstream use of planet_ldc_file
+    return outfile # changed to allow downstream use of planet_ldc_file
 
 
 
@@ -403,6 +407,7 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
     #     pad_inches=0.2
     # )
     plt.show()
+    
     def bin_ratio(rprs_vals, nbins = 21):     
         ratio = np.asarray(1.0/rprs_vals)
         rmin = np.min(ratio)
@@ -454,7 +459,7 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
                 edgecolor='black',
                 alpha=0.4,
                 color='blue',
-                label = 'Kepler KOI'
+                label = 'Kepler planets'
             )
     ax_ratio.bar(
                 bin_centers_grid,
@@ -482,7 +487,7 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
 def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
          koi_table_filename=None,outfile=None,fig_dir=None):
     
-    outfile,kepler_ldc_ratio_outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
+    outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
                                                       koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
                                                       outfile= outfile)
 
