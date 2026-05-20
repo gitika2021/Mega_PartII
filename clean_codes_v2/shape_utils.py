@@ -232,7 +232,7 @@ def main(
         print("This array now contains the binary masks of the SOLID Bezier shapes.")
         print("\nExample of the first 10 rows of the first shape's mask (1s now represent the solid area):")
         # Display a small section of the mask for demonstration
-        print(shapes_data_masks[0][:10])
+        #print(shapes_data_masks[0][:10])
     else:
         print("No shapes were generated.")
         

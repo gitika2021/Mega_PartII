@@ -18,7 +18,7 @@ def remove_nan_from_arrays(a, b, c):
     b_clean = b[mask]
     c_clean = c[mask]
     
-    return a_clean, b_clean, c_clean
+    return a_clean, b_clean, c_clean,mask
     
 def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
                           koi_table_filename = "koi_cumulative_2025.06.28_01.24.15.csv",
@@ -38,34 +38,39 @@ def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Reposito
     kepler_lcs_rprs = df_new["koi_ror"].to_numpy()
     kepler_lcs_ldca = df_new["koi_ldm_coeff1"].to_numpy()
     kepler_lcs_ldcb = df_new["koi_ldm_coeff2"].to_numpy()
+    kepler_snr = df_new["koi_model_snr"].to_numpy()
     
-    ldca, ldcb, rprs = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
+    ldca, ldcb, rprs,mask = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
+    kepler_snr = kepler_snr[mask]
     print('Number of valid values in Kepler KOI for LDC and Rp/Rs',len(ldca))
     #np.isnan(a).any(),np.isnan(a).sum()
-    LDC_coeffs = np.zeros((len(ldca),3))
+    LDC_coeffs = np.zeros((len(ldca),4))
     LDC_coeffs[:,0] = ldca
     LDC_coeffs[:,1] = ldcb
     LDC_coeffs[:,2] = rprs
-
+    LDC_coeffs[:,3] = kepler_snr
+    
     filename2 = ldc_ratio_outfile[:-4]+f'_all.npy'
     np.save(filename2,LDC_coeffs)
 
 
     df_new =koi_conf_plans_tabl[koi_conf_plans_tabl['koi_model_snr']>= snr_cut]
     print(f'Number of planets with SNR >= {snr_cut} is {len(df_new)}')
-
     kepler_lcs_rprs = df_new["koi_ror"].to_numpy()
     kepler_lcs_ldca = df_new["koi_ldm_coeff1"].to_numpy()
     kepler_lcs_ldcb = df_new["koi_ldm_coeff2"].to_numpy()
+    kepler_snr = df_new["koi_model_snr"].to_numpy()
     
-    ldca, ldcb, rprs = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
+    ldca, ldcb, rprs,mask = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
+    kepler_snr = kepler_snr[mask]
+    print('kepler_snr',kepler_snr)
     print('Number of valid values in Kepler KOI for LDC and Rp/Rs',len(ldca))
     #np.isnan(a).any(),np.isnan(a).sum()
-    LDC_coeffs = np.zeros((len(ldca),3))
+    LDC_coeffs = np.zeros((len(ldca),4))
     LDC_coeffs[:,0] = ldca
     LDC_coeffs[:,1] = ldcb
     LDC_coeffs[:,2] = rprs
-
+    LDC_coeffs[:,3] = kepler_snr
     
     np.save(ldc_ratio_outfile,LDC_coeffs)
 
@@ -121,21 +126,22 @@ def add_inverse_bins_as_input(df, bins, column='rprs',
 
     return df
 
+
+
+        
 def main(snr_cut = 50, n_rsrp_bins=15):
     obj = MLPreProcessing()
     figure_dir = Path(Base_Dir + "Figures/Kepler")
     figure_dir.mkdir(parents=True, exist_ok=True)
     
-    ldc_ratio_outfile_1 ="kepler_ldc_coeffs_conf_planets.npy"
+    ldc_ratio_outfile_1 =f"{obj.koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
     
     koi_conf_plans_tabl, ldc_ratio_outfile_2 = save_kepler_ldc_ratio(koi_table_folder =
                                                 obj.koi_table_folder,
                           koi_table_filename = obj.koi_table_filename,
-                          ldc_ratio_outfile = f"{obj.koi_table_folder}{ldc_ratio_outfile_1}",
+                          ldc_ratio_outfile = ldc_ratio_outfile_1,
                           snr_cut = snr_cut
                          )
-
-    
     
     ldcs_coeffs_1 = np.load(ldc_ratio_outfile_2) # all sample
     ldcs_coeffs_2 = np.load(ldc_ratio_outfile_1) # subsample
@@ -143,19 +149,25 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     rp_rs_1 = ldcs_coeffs_1[:,2] # all planets
     rp_rs_2 = ldcs_coeffs_2[:,2] # planets with snr>snr_cut
 
+    snr_1 = ldcs_coeffs_1[:,3] # all planets
+    snr_2 = ldcs_coeffs_2[:,3] # planets with snr>snr_cut
+    print('snr_2',snr_2)
+
     # bin log(rprs) into n_rsrp_bins 
     hist = LogBinHistogram(nbins=n_rsrp_bins,figure_dir= figure_dir)
     hist.add(
         rp_rs_1,
         label="Kepler Planets",
         color='blue',
-        alpha=0.4
+        alpha=0.4,
+        snr = snr_1
     )
-    inverse_bins, counts = hist.add(
+    inverse_bins, counts,snr_ranges = hist.add(
         rp_rs_2,
         label=f"Kepler Planets (SNR > {snr_cut}) ",
         color='red',
-        alpha=0.4
+        alpha=0.4,
+        snr = snr_2
     )    
     hist.show()
     print('Rs/Rp bins are',inverse_bins)
@@ -166,7 +178,46 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     mask = np.argsort(counts)[::-1] #(counts!=0)
     counts =counts[mask]
     inverse_bins = inverse_bins[mask]
+    snr_ranges = snr_ranges[mask]
 
+    rsrp_bins = np.zeros((len(counts),6))
+    rsrp_bins[:,0:2] = inverse_bins
+    rsrp_bins[:,2] = counts
+    rsrp_bins[:,3:6] = snr_ranges
+    np.save(obj.koi_table_folder+f'koi_rsrp_bin_info_snr{snr_cut}.csv',rsrp_bins)
+
+    array = rsrp_bins
+    # Save the table as png
+    bins_rsrp = [f"[{row[0]}, {row[1]}]" for row in array]
+    bins_snr = [f"[{row[3]}, {row[4]}, {row[5]}]" for row in array]
+    # Create DataFrame
+    df = pd.DataFrame({
+        "Kepler Rs/Rp Bins": bins_rsrp,
+        "No. of targets": array[:, 2],
+        "SNR Ranges": bins_snr
+    })
+    
+    print(df)
+    
+    # ---- Save table as PNG ----
+    fig, ax = plt.subplots(figsize=(5, 2))
+    ax.axis('off')
+    
+    table = ax.table(
+        cellText=df.values,
+        colLabels=df.columns,
+        loc='center',
+        cellLoc='center'
+    )
+    
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1.2, 1.5)
+    
+    plt.savefig(figure_dir/"kepler_radius_bins_table.png", bbox_inches='tight', dpi=300)
+    plt.close()
+    
+    print("Saved as table.png")
 
     
     # create new table containing extra columns with bin index and bin ranges added

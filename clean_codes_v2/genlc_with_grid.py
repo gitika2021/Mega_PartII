@@ -141,7 +141,10 @@ def process_mask_batch(mask_idx, N, path):
 # --- Main Runner ---
 
 def run_simulation_for_masks(shape_file, save_prefix, #inrat,
-                             num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path="",nproc=32):
+                             num_simulations=2, total_masks=0, ldcr_grid_path='',N=1, org_lc_path="",nproc=32, random_seed = None):
+
+    rng = np.random.default_rng(random_seed) 
+    
     total_lc = total_masks * num_simulations
     ldcr_grid = np.load(ldcr_grid_path)
     #print('org_lc_path',org_lc_path)
@@ -151,7 +154,8 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
         mask_params = []
         #ratio = 10 #np.random.uniform(9, 10)
         for _ in range(num_simulations):
-            ids = np.random.randint(0, ldcr_grid.shape[0], size=1)
+            #ids = np.random.randint(0, ldcr_grid.shape[0], size=1)
+            ids = rng.integers(0, ldcr_grid.shape[0], size=1)
             #ids = 734
             a = ldcr_grid[ids,0][0]
             b = ldcr_grid[ids,1][0]
@@ -166,7 +170,7 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
             # ratio = 2.
             mask_params.append([a, b, ratio])
         param_sets.append(mask_params)
-
+    #print('param_sets',param_sets[0:3])
     task_indices = list(range(total_masks))
     #print('task_indices',task_indices)
     all_lcs_padded = np.zeros((total_lc, 200), dtype=np.float32)
@@ -207,6 +211,8 @@ def run_simulation_for_masks(shape_file, save_prefix, #inrat,
     np.save(f"{save_prefix}_meta.npy", all_ld_params)
     print("✅ Saved LCs and Meta.")
 
+    print("processed_lightcurves[0,0:10]",processed_lightcurves[0,0:10])
+
 
 
 
@@ -218,7 +224,8 @@ def main(
     ldc_ratio_path,
         out_stem_lc,
     out_dir_orig_lc,
-    nproc=32
+    nproc=32,
+    random_seed = None
 ):
     shape_file = shape_dir / f"{N}.npy"
     #print("loaded shape_file",shape_file)
@@ -237,7 +244,8 @@ def main(
         ldcr_grid_path=str(ldc_ratio_path),
         N=N,
         org_lc_path=str(out_dir_orig_lc),
-        nproc=nproc
+        nproc=nproc,
+        random_seed = random_seed
     )
 
     return 

@@ -73,7 +73,7 @@ def create_noise_bins_Kepler(lc_err_arr, n=10,
 
     return bins
 
-def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
+def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=None):
     bin_indices = [find_nearest_bin_center(val, bins) for val in sigma_val]
     #print('bin_indices',bin_indices)
     
@@ -83,7 +83,7 @@ def get_err_array(sigma_val,median_err,error_arr,bins, show=False, seed=40):
     noise_singlgauss = np.zeros((len(sigma_val),error_arr.shape[1]))
     noise_gaussian = np.zeros((len(sigma_val),error_arr.shape[1]))
     
-    rng = np.random.default_rng(42)
+    rng = np.random.default_rng(seed)
     for bin_index in bin_indices:
         #print('bins[bin_index]',bins[bin_index])
         err_samples = sample_k_Y_from_bin(
@@ -127,19 +127,23 @@ def init_worker(kepler_file,figure_path):
 
 
 # -------- WORKER FUNCTION --------
-def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real'):
+def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real', seed=None):
 
     train_lcs = np.load(lc_file)
 
     depths = 1 - np.min(train_lcs, axis=1)
 
-    rng = np.random.default_rng()
+    rng = np.random.default_rng(seed)
     snr = rng.uniform(100, 500, size=len(train_lcs))
+    #print('snr[0:10]',snr[0:10])
     sigma_vals = depths / snr
-
+    #print('sigma_vals[0:10]',sigma_vals[0:10])
+    
     errors, noise_multigauss, noise_gaussian = get_err_array(
-        sigma_vals, median_error, kepler_lcs_error, bins, show=False
+        sigma_vals, median_error, kepler_lcs_error, bins, show=False, seed=seed
     )
+    # print('noise_multigauss[0,0:5]',noise_multigauss[0,0:5])
+    # print('noise_multigauss[1,0:5]',noise_multigauss[1,0:5])
     if noise_flag == "real":
         lcs_noisy_multi = train_lcs + noise_multigauss
     elif noise_flag == "gaussian":
@@ -195,7 +199,8 @@ def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real'):
 
 
 # -------- DRIVER --------
-def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path=None):
+def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path=None,
+                random_seed=None):
 
     with ProcessPoolExecutor(
         max_workers=max_workers,
@@ -211,6 +216,7 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path
                     repeat(None),
                     repeat(None),
                     repeat(noise),
+                    repeat(random_seed),
                     chunksize=1
                 ),
                 total=len(lc_files)
@@ -219,8 +225,9 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path
 
     return results
 
-def main(lc_file,kepler_error_file,figure_path):
-    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1,figure_path=figure_path)
+def main(lc_file,kepler_error_file,figure_path,random_seed=None):
+    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1,figure_path=figure_path,
+                random_seed=random_seed)
     return
 
 

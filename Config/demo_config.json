@@ -1,6 +1,7 @@
 {
     "train": false,
     "test": false,
+    "fresh_run": false,
     "Num": 10,
     "N": 1,
     "maps_path": null,
@@ -8,7 +9,7 @@
     "rsrp1": 2,
     "rsrp2": 3,
     "train_frac": 0.8,
-    "seed": null,
+    "seed": 50,
     "maps_folder_str": "_Demo",
 
     "epochs": 3,

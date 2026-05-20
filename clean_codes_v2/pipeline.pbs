@@ -1,8 +1,0 @@
-#PBS -N my_job
-#PBS -l select=1:ncpus=4:mem=8gb
-#PBS -l walltime=01:00:00
-
-cd $PBS_O_WORKDIR
-
-
-python clean_codes_v2/run_pipeline.py 1000 1 /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test_Dir/

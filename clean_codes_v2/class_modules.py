@@ -8,15 +8,19 @@ from pathlib import Path
 from paths import *
 from models import *
 import os
-
+from binary_classifier import *
+from rich import print as prcolor
+import re
 ###################################
 class MLPreProcessing():
-    def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None):
+    def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None,fresh_run=False):
         self.Num = Num
         self.N = N
         self.nproc = nproc
         self.train_frac = train_frac
         self.seed = seed
+        self.fresh_run = fresh_run
+        
         # base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
         base_dir = Path(Base_Dir) / "Data" # this is actually data directory
         print("base_dir",base_dir)
@@ -40,7 +44,7 @@ class MLPreProcessing():
         
         self.out_dir_lc = self.base_dir / f"LC{self.maps_folder_str}"
         self.out_dir_lc.mkdir(parents=True, exist_ok=True)
-        
+        #print('self.out_dir_lc',self.out_dir_lc)
         self.out_dir_proc_lc = self.out_dir_lc / "proc/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
         self.out_dir_proc_lc.mkdir(parents=True, exist_ok=True)
         self.out_stem_lc = self.out_dir_proc_lc / f"{self.N}"
@@ -53,7 +57,7 @@ class MLPreProcessing():
         self.noisy_ltcrv_folder = self.out_dir_proc_lc / "Binned_LC"
         self.lc_hscaled_filename = f"{self.N}LC_hscaled"
         self.lc_hscaled_file = self.out_dir_proc_lc / (self.lc_hscaled_filename + ".npy")
-
+        #print('self.lc_hscaled_file',self.lc_hscaled_file)
         self.train_dir = self.base_dir / "Train/RsRp_{0:d}_{1:d}".format(self.rsrp1,self.rsrp2)
         self.train_dir.mkdir(parents=True, exist_ok=True)
 
@@ -85,7 +89,7 @@ class MLPreProcessing():
                                 koi_table_folder=self.koi_table_folder,
                                 koi_table_filename=self.koi_table_filename,
                                 outfile=self.ldc_ratio_grid_file,
-                                fig_dir=self.figure_dir)
+                                fig_dir=self.figure_dir,random_seed=self.seed)
         return
                 
     def gen_shapes(self):
@@ -95,11 +99,12 @@ class MLPreProcessing():
     def gen_ltcrvs(self):        
         genlc_with_grid.main(self.N,1,self.base_dir,self.shape_dir,self.ldc_ratio_grid_file,
                              self.out_stem_lc,self.out_dir_orig_lc,
-                             nproc=self.nproc)
+                             nproc=self.nproc,random_seed=self.seed )
         return
 
-    def add_noise(self):
-        add_noise_to_lcs_files.main(self.out_file_lc,self.kepler_error_file,self.figure_dir)
+    def add_noise(self,seed =None):
+        add_noise_to_lcs_files.main(self.out_file_lc,self.kepler_error_file,self.figure_dir, 
+                                   random_seed=seed)
         return
 
     def select_transit_region(self):
@@ -122,70 +127,127 @@ class MLPreProcessing():
 
 
     def execute(self):
-        if self.test==None:
+        prcolor("[bold green]If testing pipeline set: --fresh_run = 1")
+        if self.fresh_run==True:
+            print("Running pipeline afresh")
+        
+            for file in Path(self.noisy_ltcrv_folder).glob(f"{self.N}LC*.npz"):
+                file.unlink()
+                #print(f"Deleted {file}")
+    
+            self.gen_ltcrv_ldc_grid_file()
+            self.gen_shapes()
+            prcolor("[bold green]Generated Bezier shapes")
+            if self.test == True:
+                SHAPE_SIZE = shape_utils.SHAPE_SIZE
+                shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
+                manual_shapes = np.load("weird_test_shapes_solid.npy")
+                test_shapes_all = np.concatenate((np.load(self.shape_file), 
+                                                      shape_circle,manual_shapes))
+                self.Num = self.Num+len(shape_circle)+len(manual_shapes)
+                np.save(self.shape_file,test_shapes_all)
+                prcolor("[bold green]Added manual generated shapes in case of test data")
+             
+            self.gen_ltcrvs()
+            prcolor("[bold green]Generated light curves")
+            self.add_noise(seed=self.seed)
+            prcolor("[bold green]Added noise")
+            self.select_transit_region()
+            prcolor("[bold green]Selected transit region")
+            hscaled_processed_file = self.preprocess_ltcrvs()
+            prcolor("[bold green]Final processed light curves generated")
+            #self.split_dataset(hscaled_processed_file)
+            
+        elif self.fresh_run==False:
+            print("Running pipeline")
+            prcolor("[bold red] fresh_run = False: Num arg on command line ignored in case shape and light curve files pre-exist. ")
+            # files = sorted(
+            #             [
+            #                 f for f in Path(self.noisy_ltcrv_folder).glob(f"{self.N}LC*.npz")
+            #                 if (m := re.search(rf"{self.N}LC(\d+)", f.stem)) and int(m.group(1)) >= self.Num
+            #             ],
+            #             key=lambda f: int(re.search(rf"{self.N}LC(\d+)", f.stem).group(1))
+            #         )
+            
+            # for file in files:
+            #     file.unlink()
+                
             if not Path(self.ldc_ratio_grid_file).is_file():
                 print("Generating ldc ratio grid")
                 self.gen_ltcrv_ldc_grid_file()        
             
-            if not self.shape_file.is_file():
+            if not self.shape_file.is_file():                
                 print("Generating Shapes")
-                self.gen_shapes()              
-                
-            if not (self.out_dir_proc_lc / f"{self.N}LC.npy").is_file():
-                print("Generating light curves")
+                self.gen_shapes()  
+                if self.test == True:
+                    SHAPE_SIZE = shape_utils.SHAPE_SIZE
+                    shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
+                    manual_shapes = np.load("weird_test_shapes_solid.npy")
+                    test_shapes_all = np.concatenate((np.load(self.shape_file), 
+                                                      shape_circle,manual_shapes))
+                    self.Num = self.Num+len(shape_circle)+len(manual_shapes)
+                    np.save(self.shape_file,test_shapes_all)
+                    prcolor("[bold green]Added manual generated shapes in case of test data")
+                    
+                files = sorted(
+                        [
+                            f for f in Path(self.noisy_ltcrv_folder).glob(f"{self.N}LC*.npz")
+                            if (m := re.search(rf"{self.N}LC(\d+)", f.stem)) and int(m.group(1)) >= self.Num
+                        ],
+                        key=lambda f: int(re.search(rf"{self.N}LC(\d+)", f.stem).group(1))
+                    )
+                            
+                for file in files:
+                    file.unlink()                
+                #since shapes are updated light curves have to be regenarated
                 self.gen_ltcrvs()
-    
-            if Path(self.out_file_lc).is_file():
-                print("Adding noise to light curves")
-                self.add_noise()
-    
-            if not self.lc_hscaled_file.is_file():
-                print("Select Transit region")
+                self.add_noise(seed=self.seed)
                 self.select_transit_region()
-    
-            if self.lc_hscaled_file.is_file():
-                print("Preprocess light curves")
                 hscaled_processed_file = self.preprocess_ltcrvs()
-            else:
-                hscaled_processed_file = None
-    
-            if hscaled_processed_file is not None and self.test==None :
-                if Path(hscaled_processed_file).is_file():
-                    print("Split dataset into train and val")
-                    self.split_dataset(hscaled_processed_file)
-        else:
-            if not Path(self.ldc_ratio_grid_file).is_file():
-                print("Generating ldc ratio grid")
-                self.gen_ltcrv_ldc_grid_file() 
+
+            else:                                    
+                if not (self.out_dir_proc_lc / f"{self.N}LC.npy").is_file():
+                    prcolor("[bold green]Generating light curves")
+                    self.gen_ltcrvs()
+                    
+                #self.add_noise()
+                if Path(self.out_file_lc).is_file():
+                    prcolor("[bold green]Adding noise to light curves")
+                    self.add_noise(seed=self.seed)
+        
+                if not self.lc_hscaled_file.is_file():
+                    prcolor("[bold green]Select Transit region")
+                    self.select_transit_region()
+        
+                if not self.lc_hscaled_file.is_file():
+                    prcolor("[bold green]Preprocess light curves")
+                    hscaled_processed_file = self.preprocess_ltcrvs()
+                else:
+                    hscaled_processed_file = None
+        
+        if hscaled_processed_file is not None and self.test==False:
+            if Path(hscaled_processed_file).is_file():
+                prcolor("[bold green]Split dataset into train and val")
+                self.split_dataset(hscaled_processed_file)
                 
-            self.gen_shapes()
-            SHAPE_SIZE = shape_utils.SHAPE_SIZE
-            shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
-            manual_shapes = np.load("weird_test_shapes_solid.npy")
-            test_shapes_all = np.concatenate((np.load(self.shape_file), shape_circle,manual_shapes))
-            np.save(self.shape_file,test_shapes_all)
-            self.gen_ltcrvs()
-            self.add_noise()
-            self.select_transit_region()
-            hscaled_processed_file = self.preprocess_ltcrvs()
-            
         return
 ###################################
 
 
 ###################################
 class MLInference():
-    def __init__(self,lc_dir=None, maps_dir=None, nproc=4, rsrp1=5, rsrp2=10,n_scale=2, N=None,nrpoc=4 ):
+    def __init__(self,lc_dir=None, maps_dir=None, nproc=4, rsrp1=5, rsrp2=10,n_scale=2, N=None,nrpoc=4, obj=None ):
         self.lc_dir = lc_dir
         self.lc_dir_pthobj = Path(self.lc_dir) 
         self.N = N
+        self.mlprep = obj
         
         self.nproc = nproc
         self.rsrp1 = rsrp1
         self.rsrp2 = rsrp2
         self.n_scale = n_scale
         
-        self.mlprep = MLPreProcessing(rsrp1=self.rsrp1, rsrp2=self.rsrp2, N=self.N)
+        #self.mlprep = MLPreProcessing(rsrp1=self.rsrp1, rsrp2=self.rsrp2, N=self.N)
         self.model = self.mlprep.model_dir / f"model_n{self.n_scale}.pth"
         print(f"Model used for inference: {self.model}")
 
@@ -202,7 +264,7 @@ class MLInference():
     def extract_key(self,filepath,split_str="_binned.npz"):
         filename = os.path.basename(filepath)
         #filename = filepath.stem
-        print('filename',filename)
+        #print('filename',filename)
         return filename.split(split_str)[0]
     
     def process_orig_ltcrvs(self):
@@ -212,6 +274,9 @@ class MLInference():
             trs.find_transit_region_and_save_parallel()
             ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"*_binned_transit_interp.npz"))
         else:
+                    
+            # for file in Path(self.lc_dir_pthobj).glob(f"{self.N}*_binned_transit_interp.npz"):
+            #     file.unlink()
             ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"{self.N}*_binned_transit_interp.npz"))
 
         files_sorted = sorted(ltcrv_npz_files)
@@ -231,10 +296,10 @@ class MLInference():
         np.save(self.key_filename,keys_sorted)     
         return
         
-    def read_processed_ltcrvs(self):
+    def read_processed_ltcrvs(self,pattern="kplr*"):
         trs=processing_transit_region.TransitRegionSelector()
         trs.load_and_plot_matched_ltcrvs(self.lc_dir,self.lc_dir,self.lc_dir,self.lc_dir,
-            pattern="kplr*",x_key="time",y_key="flux",show_plot=False,
+            pattern=pattern,x_key="time",y_key="flux",show_plot=False,
             save_dir=self.figure_dir, N_plots = None)
         return
                 
@@ -265,7 +330,7 @@ class MLInference():
         orig_shapes = np.load(orig_shapes_file)
         predicted_shape = np.load(pred_shapes_file)
         inp_lcs = np.load(inp_lcs_file)
-        np.save(self.map_filename,orig_shape)
+        np.save(self.map_filename,orig_shapes)
         print('orig_shapes.shape, predicted_shape.shape',orig_shapes.shape, predicted_shape.shape)
         
         images = orig_shapes
@@ -307,30 +372,29 @@ class MLInference():
         return
         
 
-    # def run_binary_classifier(self):
-    #     self.flux_cutI = 0.94
-    #     self.dist_cutII = 0.10
+    def run_binary_classifier(self):
+        self.flux_cutI = 0.94
+        self.dist_cutII = 0.10
 
-    #     org_shape = np.load(self.map_filename)
-    #     flags,acc,CI,CII,flags_str,rad_fit, fmaps = batch_predict_shape(images=org_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=32, show= False) 
-        
-    #     org_filename = f"shapes_lcs_test/set1/test_shapes_noncirc_circ_both_shapes.npy"
-    #     org_shape = np.load(org_filename)
-    #             predictions,accuracy,values_cutI,values_cutII,predictions_str,radius_fitted,final_maps  = batch_predict_shape(images=org_shape,deviation_estimator='flux',cut1=cutI, cut2=cutII,num_cpus=32, show= False) 
-        
-        
-    #     org_filename_pred = f"shapes_lcs_test/set1/test_shapes_noncirc_circ_both_{rsrp}_{lda}_{ldb}LC_processed_snr{snr}_PredctdShape.npy"
-    #     org_shape_pred = np.load(org_filename_pred)
-    #     predictions_pred,accuracy_pred,values_cutI_pred,values_cutII_pred,predictions_str_pred,radius_fitted_pred,final_maps_pred  =  batch_predict_shape(images=org_shape_pred,deviation_estimator='flux',cut1=cutI, cut2=cutII,num_cpus=32, show= False)
-        
-    #     results = estimate_ml_metrics_v2(predictions, predictions_pred, 
-    #                     savefig=None)
+        orig_shape = np.load(self.map_filename)
+        binclas_orig,acc,CI,CII,flags_str,rad_fit, fmaps = batch_predict_shape(images=orig_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=nrpoc, show= False) 
 
-    #     pass
+        pred_shape = np.load(self.pre_filename)
+        binclas_pred,acc_pred,CI_pred,CII_pred,flags_str_pred,rad_fit_pred, fmaps_pred = batch_predict_shape(images=orig_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=nrpoc, show= False)
+        
+
+        results = estimate_ml_metrics(binclas_orig, binclas_pred, 
+                        savefig=None)
+
+        return
     def execute(self):
         if self.lc_dir is not None:
             self.process_orig_ltcrvs()
-            self.read_processed_ltcrvs()
+            if self.N is not None:
+                pattern = f"{self.N}*"
+            else:
+                pattern =f"kplr*"
+            self.read_processed_ltcrvs(pattern=pattern)
             self.infer_2dshape()
 
         return
@@ -372,7 +436,8 @@ class LogBinHistogram():
         color=None,
         outfile=None,
         show_points=True,
-        show_bar=True
+        show_bar=True,
+        snr = None
     ):
         """
         Add histogram to existing plots.
@@ -406,6 +471,31 @@ class LogBinHistogram():
         # Counts
         counts, _ = np.histogram(ratio, bins=bin_edges)
 
+        # ---SNR sorting--------
+        # Bin index for each ratio value
+        # values are in [0, nbins-1]
+        bin_idx = np.digitize(ratio, bin_edges) - 1
+        
+        # Handle edge case where ratio == rmax
+        bin_idx[bin_idx == self.nbins] = self.nbins - 1
+        
+        # Store [min_snr, max_snr] for each bin
+        snr_ranges = np.zeros((self.nbins, 3))
+        
+        for i in range(self.nbins):
+        
+            # SNR values belonging to this ratio bin
+            snr_in_bin = snr[bin_idx == i]
+        
+            if len(snr_in_bin) > 0 and counts[i]!=0:
+        
+                snr_ranges[i, 0] = np.min(snr_in_bin)
+                snr_ranges[i, 1] = np.max(snr_in_bin)
+                snr_ranges[i, 2] = int(np.percentile(snr_in_bin,50))
+        
+            else:
+                snr_ranges[i] = [np.nan, np.nan,np.nan]
+        
         # ----- Rp/Rs plots -----
 
         # Geometric centers
@@ -469,7 +559,7 @@ class LogBinHistogram():
 
         inverse_bins = inverse_bins[order]
         counts = counts[order]
-
+        snr_ranges = snr_ranges[order]
         # Save if requested
         if outfile is not None:
 
@@ -512,7 +602,7 @@ class LogBinHistogram():
             label=''
         )
         #print('inverse_bins',inverse_bins[0])
-        return inverse_bins, counts
+        return inverse_bins, counts,snr_ranges
 
     def show(self):
 
@@ -531,5 +621,4 @@ class LogBinHistogram():
         plt.show()
 
         return
-        
 ###################################

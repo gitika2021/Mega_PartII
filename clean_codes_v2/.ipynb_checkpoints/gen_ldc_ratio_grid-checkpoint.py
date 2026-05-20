@@ -199,29 +199,35 @@ def remove_nan_from_arrays(a, b, c):
     
     return a_clean, b_clean, c_clean
 
-def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=True):
+def kde_sampling(
+    data,
+    n_samples=7745,
+    low_cut=90,
+    hig_cut=98,
+    percentile_flag=True,
+    random_seed=None
+):
 
-    
-    if percentile_flag == False:
+    rng = np.random.default_rng(random_seed)
+
+    if percentile_flag is False:
         low = low_cut
         high = hig_cut
-        
-    elif percentile_flag == True:
+    else:
         low = np.percentile(data, low_cut)
         high = np.percentile(data, hig_cut)
-        
+
     data_cut = data[(data >= low) & (data <= high)]
-    #print('data_cut',data_cut)
+
     if data_cut.size < 2:
-        samples = np.random.uniform(low, high, size=n_samples)
-        return samples
-        
+        return rng.uniform(low, high, size=n_samples)
+
     kde = gaussian_kde(data_cut, bw_method=0.05)
 
     samples = np.array([])
 
     while samples.size < n_samples:
-        new = kde.resample(n_samples)[0]
+        new = kde.resample(n_samples, seed=rng)[0]
         new = new[(new >= low) & (new <= high)]
         samples = np.concatenate((samples, new))
 
@@ -232,7 +238,8 @@ def kde_sampling(data, n_samples=7745, low_cut=90, hig_cut=98, percentile_flag=T
 def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
                             koi_table_folder= "/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Kepler/",
                             koi_table_filename="koi_cumulative_2025.06.28_01.24.15.csv",
-                            outfile=None):
+                            outfile=None,
+                           random_seed = None):
     """
     sampling = 'kde'/'uni'
     kde: choose when want to generate same distribution as Kepler
@@ -272,8 +279,13 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
     # high_cut_rprs = 1/2.0#0.125
     print(f"loc_cut_rprs ={loc_cut_rprs}, high_cut_rprs = {high_cut_rprs}")
     
-    rng = np.random.default_rng(50)
+    # rng = np.random.default_rng(50)
+    # values = rng.uniform(0, 6, 20) 
+
+    rng = np.random.default_rng(random_seed)
     values = rng.uniform(0, 6, 20) 
+    #print('values',values[0:3])
+    
     #values= np.arange(0,5.0,0.1) # for more than 14.8 intensity becomes negative non-physical
     
     #anew, upper, lower,std,b_fit, coeffs = generate_band(a, b, method="std", value=0, show=True)
@@ -294,7 +306,7 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
 
     if sampling == 'uni':
         #rprs_grid = kde_sampling(rprs, n_samples=pairs.shape[0], low_cut_perc=low_perc, hig_cut_perc=hig_perc)
-        rprs_grid = kde_sampling(rprs, n_samples=pairs.shape[0], low_cut=loc_cut_rprs, hig_cut= high_cut_rprs,percentile_flag = False)
+        rprs_grid = kde_sampling(rprs, n_samples=pairs.shape[0], low_cut=loc_cut_rprs, hig_cut= high_cut_rprs,percentile_flag = False, random_seed=random_seed)
         
         print('rprs_grid',rprs_grid.shape,pairs.shape[0])
         for i, valuei in enumerate(values):
@@ -302,9 +314,9 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
             aext = np.concatenate((anew,anew))
             bext = np.concatenate((upper,lower))
             ni = len(aext)
-            rng = np.random.default_rng(20)
+            #rng = np.random.default_rng(random_seed)
             rprsi = rng.uniform(loc_cut_rprs, high_cut_rprs, size=len(aext))
-        
+            print('rprsi',rprsi[0:3])
             pairs[i*ni:(i+1)*ni,0] = aext
             pairs[i*ni:(i+1)*ni,1] = bext
             pairs[i*ni:(i+1)*ni,2] = rprsi
@@ -329,14 +341,14 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
         print(np.any(pairs[:,3] == 0))
 
     elif sampling == 'kde':
-        rprs_grid = kde_sampling(rprs, n_samples=pairs.shape[0], low_cut=loc_cut_rprs, hig_cut= high_cut_rprs,percentile_flag = False)        
+        rprs_grid = kde_sampling(rprs, n_samples=pairs.shape[0], low_cut=loc_cut_rprs, hig_cut= high_cut_rprs,percentile_flag = False, random_seed=random_seed)        
         print('rprs_grid',rprs_grid.shape,pairs.shape[0])
         for i, valuei in enumerate(values):
             anew, upper, lower,std, b_fit,coeffsnew = generate_band(a, b, method="std", value=valuei, size= size)
             aext = np.concatenate((anew,anew))
             bext = np.concatenate((upper,lower))
             ni = len(aext)
-            rng = np.random.default_rng(20)
+            #rng = np.random.default_rng(20)
             #rprsi = rng.uniform(loc_cut_rprs, high_cut_rprs, size=len(aext))
         
             pairs[i*ni:(i+1)*ni,0] = aext
@@ -361,6 +373,7 @@ def run_ldc_ratio_generator(rsrp1=5, rsrp2=10, sampling = 'kde',
         
         print('radius ratio (Rs/Rp)',pairs[:,3],pairs[:,3].min(),pairs[:,3].max())
         print(np.any(pairs[:,3] == 0))
+        print('pairs[0:3,:]',pairs[0:3,:])
     # return outfile
     return outfile # changed to allow downstream use of planet_ldc_file
 
@@ -485,11 +498,11 @@ def plot_grid(planet_ldc_file,outfile="/home/iit-t/Gitika/Github-Repositories/Ab
 
 
 def main(rsrp1=5,rsrp2=10,koi_table_folder=None,
-         koi_table_filename=None,outfile=None,fig_dir=None):
+         koi_table_filename=None,outfile=None,fig_dir=None, random_seed=None):
     
     outfile = run_ldc_ratio_generator(rsrp1=rsrp1, rsrp2=rsrp2, sampling = 'kde',
                                                       koi_table_folder=koi_table_folder,koi_table_filename=koi_table_filename,
-                                                      outfile= outfile)
+                                                      outfile= outfile,random_seed=random_seed)
 
     figure_path = fig_dir / f"ldc_rsrp_{rsrp1}_{rsrp2}.png"
     ##################

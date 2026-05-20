@@ -14,6 +14,7 @@ import time
 from scipy.interpolate import interp1d
 from concurrent.futures import ProcessPoolExecutor
 from tqdm import tqdm
+import seaborn as sns
 
 class FitCircleTo2DBinaryImage():
 
@@ -589,7 +590,7 @@ def batch_predict_shape(
         final_maps
     )
 
-import seaborn as sns
+
 
 def plot_confusion_matrix(tp, tn, fp, fn, class_names=("Negative", "Positive"), savefig=None):
     """
@@ -629,7 +630,7 @@ def plot_confusion_matrix(tp, tn, fp, fn, class_names=("Negative", "Positive"), 
                 
     plt.show()
     
-def estimate_ml_metrics_v2(binary_true, binary_predicted, savefig=None):
+def estimate_ml_metrics(binary_true, binary_predicted, savefig=None):
 
     y_true = np.asarray(binary_true)
     y_pred = np.asarray(binary_predicted)

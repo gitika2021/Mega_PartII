@@ -1,0 +1,1294 @@
+Updated filename to 1
+base_dir /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data
+... initialization complete.
+lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_2LC.npy']
+self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_2LC.npy']
+self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_1.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/train_2.npy']
+for lc max: 1.0 , min: 0.0
+lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_2LC.npy']
+self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_2LC.npy']
+self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_1.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_7_9/val_2.npy']
+for lc max: 1.0 , min: 0.0
+Total number of training samples:   16000
+Total number of validation samples: 4000
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0000, max=-0.0000, norm=0.0000
+bn_input.bias: min=-0.0000, max=-0.0000, norm=0.0000
+conv1_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc1.weight: min=-0.0000, max=0.0000, norm=0.0000
+fc1.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc2.weight: min=-0.0000, max=0.0000, norm=0.0000
+fc2.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc3.weight: min=-0.0000, max=0.0000, norm=0.0001
+fc3.bias: min=-0.0000, max=0.0000, norm=0.0001
+conv2d_1.weight: min=-0.0000, max=0.0000, norm=0.0003
+conv2d_1.bias: min=-0.0028, max=0.0008, norm=0.0071
+conv2d_2.weight: min=-0.0020, max=0.0019, norm=0.0520
+conv2d_2.bias: min=-0.0056, max=0.0053, norm=0.0165
+conv2d_3.weight: min=-0.0062, max=0.0032, norm=0.0660
+conv2d_3.bias: min=-0.0211, max=0.0122, norm=0.0400
+conv2d_4.weight: min=-0.0177, max=0.0007, norm=0.0852
+conv2d_4.bias: min=-0.0996, max=-0.0996, norm=0.0996
+  ✔ New best model saved (val_loss=0.5742)
+[1/300] Train BCE: 0.4859, Train MSE: 0.1621 | Val BCE: 0.4355, Val MSE: 0.1387
+  ✔ New best model saved (val_loss=0.5292)
+[2/300] Train BCE: 0.4060, Train MSE: 0.1300 | Val BCE: 0.4009, Val MSE: 0.1283
+  ✔ New best model saved (val_loss=0.5228)
+[3/300] Train BCE: 0.3959, Train MSE: 0.1272 | Val BCE: 0.3958, Val MSE: 0.1270
+  ✔ New best model saved (val_loss=0.5201)
+[4/300] Train BCE: 0.3939, Train MSE: 0.1265 | Val BCE: 0.3938, Val MSE: 0.1263
+  ✔ New best model saved (val_loss=0.5127)
+[5/300] Train BCE: 0.3921, Train MSE: 0.1259 | Val BCE: 0.3881, Val MSE: 0.1246
+  ✔ New best model saved (val_loss=0.5103)
+[6/300] Train BCE: 0.3888, Train MSE: 0.1247 | Val BCE: 0.3863, Val MSE: 0.1240
+[7/300] Train BCE: 0.3846, Train MSE: 0.1235 | Val BCE: 0.3867, Val MSE: 0.1242
+  ✔ New best model saved (val_loss=0.5058)
+[8/300] Train BCE: 0.3840, Train MSE: 0.1233 | Val BCE: 0.3829, Val MSE: 0.1229
+[9/300] Train BCE: 0.3830, Train MSE: 0.1230 | Val BCE: 0.3836, Val MSE: 0.1231
+  ✔ New best model saved (val_loss=0.5053)
+[10/300] Train BCE: 0.3830, Train MSE: 0.1230 | Val BCE: 0.3824, Val MSE: 0.1229
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0075, max=0.0075, norm=0.0075
+bn_input.bias: min=0.0040, max=0.0040, norm=0.0040
+conv1_1.weight: min=-0.0026, max=0.0022, norm=0.0115
+conv1_1.bias: min=-0.0036, max=0.0041, norm=0.0116
+conv1_2.weight: min=-0.0041, max=0.0012, norm=0.0327
+conv1_2.bias: min=-0.0080, max=0.0015, norm=0.0109
+conv2_1.weight: min=-0.0034, max=0.0016, norm=0.0220
+conv2_1.bias: min=-0.0022, max=0.0021, norm=0.0053
+conv2_2.weight: min=-0.0009, max=0.0008, norm=0.0111
+conv2_2.bias: min=-0.0012, max=0.0013, norm=0.0042
+conv3_1.weight: min=-0.0015, max=0.0003, norm=0.0117
+conv3_1.bias: min=-0.0009, max=0.0004, norm=0.0021
+conv3_2.weight: min=-0.0003, max=0.0002, norm=0.0064
+conv3_2.bias: min=-0.0002, max=0.0003, norm=0.0012
+fc1.weight: min=-0.0002, max=0.0003, norm=0.0092
+fc1.bias: min=-0.0001, max=0.0001, norm=0.0005
+fc2.weight: min=-0.0011, max=0.0003, norm=0.0088
+fc2.bias: min=-0.0002, max=0.0001, norm=0.0003
+fc3.weight: min=-0.0012, max=0.0009, norm=0.0154
+fc3.bias: min=-0.0001, max=0.0001, norm=0.0004
+conv2d_1.weight: min=-0.0004, max=0.0002, norm=0.0023
+conv2d_1.bias: min=-0.0006, max=0.0005, norm=0.0020
+conv2d_2.weight: min=-0.0005, max=0.0002, norm=0.0118
+conv2d_2.bias: min=-0.0009, max=0.0004, norm=0.0020
+conv2d_3.weight: min=-0.0018, max=0.0009, norm=0.0222
+conv2d_3.bias: min=-0.0007, max=0.0005, norm=0.0014
+conv2d_4.weight: min=-0.0050, max=0.0037, norm=0.0319
+conv2d_4.bias: min=0.0002, max=0.0002, norm=0.0002
+  ✔ New best model saved (val_loss=0.5027)
+[11/300] Train BCE: 0.3822, Train MSE: 0.1227 | Val BCE: 0.3805, Val MSE: 0.1221
+[12/300] Train BCE: 0.3793, Train MSE: 0.1216 | Val BCE: 0.3868, Val MSE: 0.1242
+  ✔ New best model saved (val_loss=0.4832)
+[13/300] Train BCE: 0.3760, Train MSE: 0.1202 | Val BCE: 0.3667, Val MSE: 0.1164
+  ✔ New best model saved (val_loss=0.4675)
+[14/300] Train BCE: 0.3619, Train MSE: 0.1150 | Val BCE: 0.3549, Val MSE: 0.1126
+  ✔ New best model saved (val_loss=0.4644)
+[15/300] Train BCE: 0.3571, Train MSE: 0.1134 | Val BCE: 0.3526, Val MSE: 0.1118
+  ✔ New best model saved (val_loss=0.4606)
+[16/300] Train BCE: 0.3536, Train MSE: 0.1122 | Val BCE: 0.3497, Val MSE: 0.1109
+  ✔ New best model saved (val_loss=0.4579)
+[17/300] Train BCE: 0.3499, Train MSE: 0.1110 | Val BCE: 0.3477, Val MSE: 0.1102
+  ✔ New best model saved (val_loss=0.4544)
+[18/300] Train BCE: 0.3497, Train MSE: 0.1109 | Val BCE: 0.3450, Val MSE: 0.1093
+  ✔ New best model saved (val_loss=0.4533)
+[19/300] Train BCE: 0.3469, Train MSE: 0.1100 | Val BCE: 0.3442, Val MSE: 0.1090
+  💾 Checkpoint saved at epoch 20
+[20/300] Train BCE: 0.3451, Train MSE: 0.1093 | Val BCE: 0.3448, Val MSE: 0.1092
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0303, max=0.0303, norm=0.0303
+bn_input.bias: min=0.0079, max=0.0079, norm=0.0079
+conv1_1.weight: min=-0.0311, max=0.0369, norm=0.1343
+conv1_1.bias: min=-0.0219, max=0.0448, norm=0.0928
+conv1_2.weight: min=-0.0651, max=0.0291, norm=0.3184
+conv1_2.bias: min=-0.0867, max=0.0294, norm=0.1078
+conv2_1.weight: min=-0.0182, max=0.0141, norm=0.1368
+conv2_1.bias: min=-0.0104, max=0.0274, norm=0.0567
+conv2_2.weight: min=-0.0090, max=0.0105, norm=0.0779
+conv2_2.bias: min=-0.0126, max=0.0180, norm=0.0505
+conv3_1.weight: min=-0.0069, max=0.0035, norm=0.0531
+conv3_1.bias: min=-0.0071, max=0.0136, norm=0.0425
+conv3_2.weight: min=-0.0038, max=0.0019, norm=0.0477
+conv3_2.bias: min=-0.0115, max=0.0101, norm=0.0427
+fc1.weight: min=-0.0009, max=0.0008, norm=0.0344
+fc1.bias: min=-0.0008, max=0.0008, norm=0.0055
+fc2.weight: min=-0.0031, max=0.0016, norm=0.0292
+fc2.bias: min=-0.0006, max=0.0003, norm=0.0029
+fc3.weight: min=-0.0003, max=0.0019, norm=0.0272
+fc3.bias: min=-0.0001, max=0.0004, norm=0.0014
+conv2d_1.weight: min=-0.0006, max=0.0023, norm=0.0164
+conv2d_1.bias: min=-0.0048, max=0.0049, norm=0.0171
+conv2d_2.weight: min=-0.0021, max=0.0027, norm=0.0683
+conv2d_2.bias: min=-0.0049, max=0.0048, norm=0.0134
+conv2d_3.weight: min=-0.0100, max=0.0105, norm=0.1305
+conv2d_3.bias: min=-0.0060, max=0.0054, norm=0.0120
+conv2d_4.weight: min=-0.0004, max=0.0368, norm=0.2596
+conv2d_4.bias: min=0.0201, max=0.0201, norm=0.0201
+  ✔ New best model saved (val_loss=0.4490)
+[21/300] Train BCE: 0.3432, Train MSE: 0.1087 | Val BCE: 0.3411, Val MSE: 0.1080
+  ✔ New best model saved (val_loss=0.4463)
+[22/300] Train BCE: 0.3422, Train MSE: 0.1084 | Val BCE: 0.3390, Val MSE: 0.1073
+  ✔ New best model saved (val_loss=0.4444)
+[23/300] Train BCE: 0.3398, Train MSE: 0.1076 | Val BCE: 0.3377, Val MSE: 0.1068
+  ✔ New best model saved (val_loss=0.4424)
+[24/300] Train BCE: 0.3370, Train MSE: 0.1066 | Val BCE: 0.3361, Val MSE: 0.1063
+  ✔ New best model saved (val_loss=0.4395)
+[25/300] Train BCE: 0.3372, Train MSE: 0.1066 | Val BCE: 0.3340, Val MSE: 0.1055
+  ✔ New best model saved (val_loss=0.4346)
+[26/300] Train BCE: 0.3310, Train MSE: 0.1044 | Val BCE: 0.3304, Val MSE: 0.1042
+  ✔ New best model saved (val_loss=0.4301)
+[27/300] Train BCE: 0.3280, Train MSE: 0.1034 | Val BCE: 0.3269, Val MSE: 0.1032
+  ✔ New best model saved (val_loss=0.4230)
+[28/300] Train BCE: 0.3251, Train MSE: 0.1024 | Val BCE: 0.3217, Val MSE: 0.1013
+  ✔ New best model saved (val_loss=0.4212)
+[29/300] Train BCE: 0.3236, Train MSE: 0.1019 | Val BCE: 0.3205, Val MSE: 0.1008
+  ✔ New best model saved (val_loss=0.4196)
+[30/300] Train BCE: 0.3212, Train MSE: 0.1011 | Val BCE: 0.3192, Val MSE: 0.1004
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0024, max=0.0024, norm=0.0024
+bn_input.bias: min=0.0016, max=0.0016, norm=0.0016
+conv1_1.weight: min=-0.0586, max=0.0635, norm=0.2195
+conv1_1.bias: min=-0.0260, max=0.0436, norm=0.0717
+conv1_2.weight: min=-0.0397, max=0.0197, norm=0.2530
+conv1_2.bias: min=-0.0264, max=0.0209, norm=0.0619
+conv2_1.weight: min=-0.0178, max=0.0248, norm=0.1707
+conv2_1.bias: min=-0.0191, max=0.0423, norm=0.0845
+conv2_2.weight: min=-0.0063, max=0.0159, norm=0.1067
+conv2_2.bias: min=-0.0242, max=0.0190, norm=0.0529
+conv3_1.weight: min=-0.0080, max=0.0049, norm=0.0720
+conv3_1.bias: min=-0.0083, max=0.0160, norm=0.0402
+conv3_2.weight: min=-0.0035, max=0.0022, norm=0.0408
+conv3_2.bias: min=-0.0208, max=0.0132, norm=0.0382
+fc1.weight: min=-0.0023, max=0.0035, norm=0.0459
+fc1.bias: min=-0.0034, max=0.0052, norm=0.0134
+fc2.weight: min=-0.0042, max=0.0017, norm=0.0324
+fc2.bias: min=-0.0021, max=0.0008, norm=0.0056
+fc3.weight: min=-0.0008, max=0.0016, norm=0.0247
+fc3.bias: min=-0.0004, max=0.0010, norm=0.0024
+conv2d_1.weight: min=-0.0004, max=0.0017, norm=0.0083
+conv2d_1.bias: min=-0.0031, max=0.0018, norm=0.0114
+conv2d_2.weight: min=-0.0015, max=0.0011, norm=0.0316
+conv2d_2.bias: min=-0.0034, max=0.0024, norm=0.0081
+conv2d_3.weight: min=-0.0040, max=0.0034, norm=0.0461
+conv2d_3.bias: min=-0.0030, max=0.0024, norm=0.0059
+conv2d_4.weight: min=-0.0003, max=0.0130, norm=0.0873
+conv2d_4.bias: min=0.0084, max=0.0084, norm=0.0084
+[31/300] Train BCE: 0.3199, Train MSE: 0.1007 | Val BCE: 0.3192, Val MSE: 0.1005
+[32/300] Train BCE: 0.3185, Train MSE: 0.1002 | Val BCE: 0.3199, Val MSE: 0.1005
+  ✔ New best model saved (val_loss=0.4137)
+[33/300] Train BCE: 0.3187, Train MSE: 0.1003 | Val BCE: 0.3147, Val MSE: 0.0989
+[34/300] Train BCE: 0.3163, Train MSE: 0.0995 | Val BCE: 0.3179, Val MSE: 0.1001
+[35/300] Train BCE: 0.3156, Train MSE: 0.0992 | Val BCE: 0.3160, Val MSE: 0.0994
+[36/300] Train BCE: 0.3168, Train MSE: 0.0996 | Val BCE: 0.3147, Val MSE: 0.0990
+[37/300] Train BCE: 0.3145, Train MSE: 0.0988 | Val BCE: 0.3180, Val MSE: 0.0999
+  ✔ New best model saved (val_loss=0.4114)
+[38/300] Train BCE: 0.3136, Train MSE: 0.0986 | Val BCE: 0.3129, Val MSE: 0.0984
+[39/300] Train BCE: 0.3118, Train MSE: 0.0980 | Val BCE: 0.3153, Val MSE: 0.0993
+  ✔ New best model saved (val_loss=0.4085)
+  💾 Checkpoint saved at epoch 40
+[40/300] Train BCE: 0.3115, Train MSE: 0.0979 | Val BCE: 0.3108, Val MSE: 0.0977
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0041, max=-0.0041, norm=0.0041
+bn_input.bias: min=0.0112, max=0.0112, norm=0.0112
+conv1_1.weight: min=-0.0707, max=0.0851, norm=0.2900
+conv1_1.bias: min=-0.0603, max=0.0373, norm=0.0958
+conv1_2.weight: min=-0.0211, max=0.0738, norm=0.3936
+conv1_2.bias: min=-0.0252, max=0.0704, norm=0.1024
+conv2_1.weight: min=-0.0507, max=0.0250, norm=0.2411
+conv2_1.bias: min=-0.1070, max=0.0280, norm=0.1320
+conv2_2.weight: min=-0.0241, max=0.0098, norm=0.1471
+conv2_2.bias: min=-0.0308, max=0.0431, norm=0.0917
+conv3_1.weight: min=-0.0083, max=0.0191, norm=0.1167
+conv3_1.bias: min=-0.0377, max=0.0290, norm=0.0701
+conv3_2.weight: min=-0.0052, max=0.0037, norm=0.0655
+conv3_2.bias: min=-0.0121, max=0.0142, norm=0.0546
+fc1.weight: min=-0.0033, max=0.0021, norm=0.0555
+fc1.bias: min=-0.0064, max=0.0044, norm=0.0207
+fc2.weight: min=-0.0018, max=0.0042, norm=0.0437
+fc2.bias: min=-0.0012, max=0.0027, norm=0.0094
+fc3.weight: min=-0.0017, max=0.0005, norm=0.0269
+fc3.bias: min=-0.0010, max=0.0002, norm=0.0033
+conv2d_1.weight: min=-0.0025, max=0.0010, norm=0.0174
+conv2d_1.bias: min=-0.0045, max=0.0060, norm=0.0243
+conv2d_2.weight: min=-0.0021, max=0.0028, norm=0.0606
+conv2d_2.bias: min=-0.0047, max=0.0071, norm=0.0154
+conv2d_3.weight: min=-0.0061, max=0.0068, norm=0.0851
+conv2d_3.bias: min=-0.0048, max=0.0056, norm=0.0110
+conv2d_4.weight: min=-0.0218, max=0.0004, norm=0.1562
+conv2d_4.bias: min=-0.0160, max=-0.0160, norm=0.0160
+  ✔ New best model saved (val_loss=0.4050)
+[41/300] Train BCE: 0.3104, Train MSE: 0.0975 | Val BCE: 0.3082, Val MSE: 0.0968
+[42/300] Train BCE: 0.3092, Train MSE: 0.0972 | Val BCE: 0.3094, Val MSE: 0.0973
+[43/300] Train BCE: 0.3095, Train MSE: 0.0973 | Val BCE: 0.3085, Val MSE: 0.0969
+[44/300] Train BCE: 0.3091, Train MSE: 0.0971 | Val BCE: 0.3091, Val MSE: 0.0972
+  ✔ New best model saved (val_loss=0.4047)
+[45/300] Train BCE: 0.3083, Train MSE: 0.0969 | Val BCE: 0.3080, Val MSE: 0.0967
+  ✔ New best model saved (val_loss=0.4033)
+[46/300] Train BCE: 0.3076, Train MSE: 0.0966 | Val BCE: 0.3069, Val MSE: 0.0964
+[47/300] Train BCE: 0.3075, Train MSE: 0.0966 | Val BCE: 0.3102, Val MSE: 0.0975
+  ✔ New best model saved (val_loss=0.4028)
+[48/300] Train BCE: 0.3067, Train MSE: 0.0963 | Val BCE: 0.3065, Val MSE: 0.0963
+  ✔ New best model saved (val_loss=0.4011)
+[49/300] Train BCE: 0.3074, Train MSE: 0.0966 | Val BCE: 0.3053, Val MSE: 0.0958
+[50/300] Train BCE: 0.3055, Train MSE: 0.0959 | Val BCE: 0.3058, Val MSE: 0.0961
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0024, max=-0.0024, norm=0.0024
+bn_input.bias: min=0.0109, max=0.0109, norm=0.0109
+conv1_1.weight: min=-0.0554, max=0.0526, norm=0.2096
+conv1_1.bias: min=-0.0457, max=0.0158, norm=0.0634
+conv1_2.weight: min=-0.0563, max=0.0781, norm=0.4027
+conv1_2.bias: min=-0.0099, max=0.0531, norm=0.0753
+conv2_1.weight: min=-0.0460, max=0.0223, norm=0.2453
+conv2_1.bias: min=-0.0668, max=0.0317, norm=0.1126
+conv2_2.weight: min=-0.0232, max=0.0181, norm=0.1824
+conv2_2.bias: min=-0.0257, max=0.0604, norm=0.1008
+conv3_1.weight: min=-0.0118, max=0.0238, norm=0.1343
+conv3_1.bias: min=-0.0295, max=0.0272, norm=0.0694
+conv3_2.weight: min=-0.0085, max=0.0060, norm=0.0793
+conv3_2.bias: min=-0.0187, max=0.0155, norm=0.0626
+fc1.weight: min=-0.0033, max=0.0024, norm=0.0608
+fc1.bias: min=-0.0066, max=0.0052, norm=0.0241
+fc2.weight: min=-0.0032, max=0.0018, norm=0.0459
+fc2.bias: min=-0.0018, max=0.0014, norm=0.0115
+fc3.weight: min=-0.0020, max=0.0004, norm=0.0321
+fc3.bias: min=-0.0015, max=0.0001, norm=0.0045
+conv2d_1.weight: min=-0.0036, max=0.0015, norm=0.0227
+conv2d_1.bias: min=-0.0072, max=0.0128, norm=0.0427
+conv2d_2.weight: min=-0.0027, max=0.0039, norm=0.0876
+conv2d_2.bias: min=-0.0075, max=0.0115, norm=0.0253
+conv2d_3.weight: min=-0.0064, max=0.0064, norm=0.1008
+conv2d_3.bias: min=-0.0067, max=0.0080, norm=0.0171
+conv2d_4.weight: min=-0.0243, max=0.0000, norm=0.2061
+conv2d_4.bias: min=-0.0233, max=-0.0233, norm=0.0233
+[51/300] Train BCE: 0.3046, Train MSE: 0.0956 | Val BCE: 0.3140, Val MSE: 0.0988
+[52/300] Train BCE: 0.3052, Train MSE: 0.0959 | Val BCE: 0.3063, Val MSE: 0.0962
+  ✔ New best model saved (val_loss=0.3987)
+[53/300] Train BCE: 0.3038, Train MSE: 0.0954 | Val BCE: 0.3035, Val MSE: 0.0953
+[54/300] Train BCE: 0.3029, Train MSE: 0.0951 | Val BCE: 0.3107, Val MSE: 0.0978
+  ✔ New best model saved (val_loss=0.3972)
+[55/300] Train BCE: 0.3025, Train MSE: 0.0949 | Val BCE: 0.3023, Val MSE: 0.0948
+[56/300] Train BCE: 0.3026, Train MSE: 0.0950 | Val BCE: 0.3028, Val MSE: 0.0950
+[57/300] Train BCE: 0.3017, Train MSE: 0.0947 | Val BCE: 0.3034, Val MSE: 0.0953
+[58/300] Train BCE: 0.3014, Train MSE: 0.0946 | Val BCE: 0.3050, Val MSE: 0.0958
+[59/300] Train BCE: 0.3010, Train MSE: 0.0945 | Val BCE: 0.3031, Val MSE: 0.0949
+  ✔ New best model saved (val_loss=0.3969)
+  💾 Checkpoint saved at epoch 60
+[60/300] Train BCE: 0.3007, Train MSE: 0.0943 | Val BCE: 0.3021, Val MSE: 0.0948
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0980, max=0.0980, norm=0.0980
+bn_input.bias: min=-0.0388, max=-0.0388, norm=0.0388
+conv1_1.weight: min=-0.0675, max=0.0629, norm=0.2959
+conv1_1.bias: min=-0.0654, max=0.0433, norm=0.1282
+conv1_2.weight: min=-0.1788, max=0.0292, norm=0.8220
+conv1_2.bias: min=-0.1652, max=0.0177, norm=0.1680
+conv2_1.weight: min=-0.0179, max=0.0227, norm=0.1195
+conv2_1.bias: min=-0.0199, max=0.0262, norm=0.0576
+conv2_2.weight: min=-0.0102, max=0.0086, norm=0.0817
+conv2_2.bias: min=-0.0274, max=0.0114, norm=0.0531
+conv3_1.weight: min=-0.0046, max=0.0047, norm=0.0605
+conv3_1.bias: min=-0.0143, max=0.0104, norm=0.0385
+conv3_2.weight: min=-0.0020, max=0.0026, norm=0.0346
+conv3_2.bias: min=-0.0045, max=0.0106, norm=0.0328
+fc1.weight: min=-0.0020, max=0.0013, norm=0.0293
+fc1.bias: min=-0.0053, max=0.0035, norm=0.0124
+fc2.weight: min=-0.0022, max=0.0011, norm=0.0259
+fc2.bias: min=-0.0016, max=0.0009, norm=0.0070
+fc3.weight: min=-0.0016, max=0.0016, norm=0.0211
+fc3.bias: min=-0.0012, max=0.0009, norm=0.0032
+conv2d_1.weight: min=-0.0005, max=0.0011, norm=0.0073
+conv2d_1.bias: min=-0.0063, max=0.0045, norm=0.0203
+conv2d_2.weight: min=-0.0016, max=0.0010, norm=0.0342
+conv2d_2.bias: min=-0.0047, max=0.0026, norm=0.0106
+conv2d_3.weight: min=-0.0026, max=0.0024, norm=0.0376
+conv2d_3.bias: min=-0.0034, max=0.0022, norm=0.0069
+conv2d_4.weight: min=-0.0002, max=0.0123, norm=0.0795
+conv2d_4.bias: min=0.0093, max=0.0093, norm=0.0093
+[61/300] Train BCE: 0.3013, Train MSE: 0.0945 | Val BCE: 0.3132, Val MSE: 0.0986
+  ✔ New best model saved (val_loss=0.3953)
+[62/300] Train BCE: 0.3010, Train MSE: 0.0944 | Val BCE: 0.3009, Val MSE: 0.0944
+[63/300] Train BCE: 0.2989, Train MSE: 0.0938 | Val BCE: 0.3031, Val MSE: 0.0950
+  ✔ New best model saved (val_loss=0.3944)
+[64/300] Train BCE: 0.2994, Train MSE: 0.0939 | Val BCE: 0.3002, Val MSE: 0.0942
+[65/300] Train BCE: 0.2976, Train MSE: 0.0933 | Val BCE: 0.3020, Val MSE: 0.0947
+[66/300] Train BCE: 0.2988, Train MSE: 0.0937 | Val BCE: 0.3030, Val MSE: 0.0947
+  ✔ New best model saved (val_loss=0.3910)
+[67/300] Train BCE: 0.2979, Train MSE: 0.0934 | Val BCE: 0.2977, Val MSE: 0.0933
+[68/300] Train BCE: 0.2968, Train MSE: 0.0931 | Val BCE: 0.2990, Val MSE: 0.0938
+[69/300] Train BCE: 0.2961, Train MSE: 0.0928 | Val BCE: 0.2991, Val MSE: 0.0938
+[70/300] Train BCE: 0.2967, Train MSE: 0.0930 | Val BCE: 0.2983, Val MSE: 0.0935
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0336, max=-0.0336, norm=0.0336
+bn_input.bias: min=-0.0050, max=-0.0050, norm=0.0050
+conv1_1.weight: min=-0.0662, max=0.0426, norm=0.1942
+conv1_1.bias: min=-0.0561, max=0.0093, norm=0.0872
+conv1_2.weight: min=-0.0235, max=0.0279, norm=0.2089
+conv1_2.bias: min=-0.0291, max=0.0357, norm=0.0688
+conv2_1.weight: min=-0.0199, max=0.0172, norm=0.1359
+conv2_1.bias: min=-0.0323, max=0.0333, norm=0.0716
+conv2_2.weight: min=-0.0065, max=0.0117, norm=0.0845
+conv2_2.bias: min=-0.0130, max=0.0269, norm=0.0569
+conv3_1.weight: min=-0.0050, max=0.0078, norm=0.0662
+conv3_1.bias: min=-0.0099, max=0.0220, norm=0.0455
+conv3_2.weight: min=-0.0044, max=0.0038, norm=0.0367
+conv3_2.bias: min=-0.0151, max=0.0107, norm=0.0398
+fc1.weight: min=-0.0011, max=0.0010, norm=0.0265
+fc1.bias: min=-0.0031, max=0.0030, norm=0.0111
+fc2.weight: min=-0.0028, max=0.0012, norm=0.0222
+fc2.bias: min=-0.0019, max=0.0013, norm=0.0059
+fc3.weight: min=-0.0009, max=0.0017, norm=0.0206
+fc3.bias: min=-0.0005, max=0.0013, norm=0.0033
+conv2d_1.weight: min=-0.0004, max=0.0010, norm=0.0035
+conv2d_1.bias: min=-0.0051, max=0.0016, norm=0.0163
+conv2d_2.weight: min=-0.0012, max=0.0006, norm=0.0222
+conv2d_2.bias: min=-0.0037, max=0.0011, norm=0.0076
+conv2d_3.weight: min=-0.0021, max=0.0016, norm=0.0302
+conv2d_3.bias: min=-0.0029, max=0.0020, norm=0.0058
+conv2d_4.weight: min=-0.0041, max=0.0101, norm=0.0609
+conv2d_4.bias: min=0.0044, max=0.0044, norm=0.0044
+[71/300] Train BCE: 0.2962, Train MSE: 0.0928 | Val BCE: 0.2980, Val MSE: 0.0934
+[72/300] Train BCE: 0.2945, Train MSE: 0.0923 | Val BCE: 0.2990, Val MSE: 0.0937
+  ✔ New best model saved (val_loss=0.3901)
+[73/300] Train BCE: 0.2940, Train MSE: 0.0921 | Val BCE: 0.2970, Val MSE: 0.0931
+[74/300] Train BCE: 0.2950, Train MSE: 0.0925 | Val BCE: 0.2986, Val MSE: 0.0937
+  ✔ New best model saved (val_loss=0.3899)
+[75/300] Train BCE: 0.2948, Train MSE: 0.0924 | Val BCE: 0.2969, Val MSE: 0.0930
+  ✔ New best model saved (val_loss=0.3875)
+[76/300] Train BCE: 0.2922, Train MSE: 0.0916 | Val BCE: 0.2951, Val MSE: 0.0924
+[77/300] Train BCE: 0.2917, Train MSE: 0.0914 | Val BCE: 0.2953, Val MSE: 0.0924
+[78/300] Train BCE: 0.2919, Train MSE: 0.0914 | Val BCE: 0.3011, Val MSE: 0.0943
+[79/300] Train BCE: 0.2912, Train MSE: 0.0912 | Val BCE: 0.2996, Val MSE: 0.0937
+  💾 Checkpoint saved at epoch 80
+[80/300] Train BCE: 0.2918, Train MSE: 0.0914 | Val BCE: 0.2977, Val MSE: 0.0933
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0417, max=-0.0417, norm=0.0417
+bn_input.bias: min=-0.0362, max=-0.0362, norm=0.0362
+conv1_1.weight: min=-0.2431, max=0.2595, norm=0.8424
+conv1_1.bias: min=-0.0902, max=0.1673, norm=0.2296
+conv1_2.weight: min=-0.0914, max=0.0925, norm=0.6381
+conv1_2.bias: min=-0.0355, max=0.0381, norm=0.0759
+conv2_1.weight: min=-0.0790, max=0.0593, norm=0.4570
+conv2_1.bias: min=-0.0593, max=0.0566, norm=0.1538
+conv2_2.weight: min=-0.0299, max=0.0498, norm=0.2902
+conv2_2.bias: min=-0.0510, max=0.0730, norm=0.1638
+conv3_1.weight: min=-0.0129, max=0.0114, norm=0.1803
+conv3_1.bias: min=-0.0419, max=0.0311, norm=0.1034
+conv3_2.weight: min=-0.0107, max=0.0096, norm=0.1145
+conv3_2.bias: min=-0.0386, max=0.0270, norm=0.0969
+fc1.weight: min=-0.0035, max=0.0049, norm=0.0833
+fc1.bias: min=-0.0101, max=0.0128, norm=0.0363
+fc2.weight: min=-0.0038, max=0.0061, norm=0.0581
+fc2.bias: min=-0.0027, max=0.0043, norm=0.0180
+fc3.weight: min=-0.0027, max=0.0040, norm=0.0410
+fc3.bias: min=-0.0021, max=0.0030, norm=0.0074
+conv2d_1.weight: min=-0.0022, max=0.0010, norm=0.0121
+conv2d_1.bias: min=-0.0066, max=0.0095, norm=0.0320
+conv2d_2.weight: min=-0.0016, max=0.0025, norm=0.0476
+conv2d_2.bias: min=-0.0040, max=0.0075, norm=0.0156
+conv2d_3.weight: min=-0.0034, max=0.0034, norm=0.0494
+conv2d_3.bias: min=-0.0031, max=0.0048, norm=0.0098
+conv2d_4.weight: min=-0.0176, max=0.0010, norm=0.1030
+conv2d_4.bias: min=-0.0133, max=-0.0133, norm=0.0133
+[81/300] Train BCE: 0.2917, Train MSE: 0.0914 | Val BCE: 0.3001, Val MSE: 0.0940
+[82/300] Train BCE: 0.2921, Train MSE: 0.0915 | Val BCE: 0.2951, Val MSE: 0.0925
+[83/300] Train BCE: 0.2897, Train MSE: 0.0908 | Val BCE: 0.2961, Val MSE: 0.0928
+[84/300] Train BCE: 0.2905, Train MSE: 0.0910 | Val BCE: 0.2956, Val MSE: 0.0926
+[85/300] Train BCE: 0.2885, Train MSE: 0.0903 | Val BCE: 0.3024, Val MSE: 0.0947
+  ✔ New best model saved (val_loss=0.3845)
+[86/300] Train BCE: 0.2877, Train MSE: 0.0901 | Val BCE: 0.2928, Val MSE: 0.0917
+[87/300] Train BCE: 0.2890, Train MSE: 0.0905 | Val BCE: 0.2960, Val MSE: 0.0928
+  ✔ New best model saved (val_loss=0.3839)
+[88/300] Train BCE: 0.2873, Train MSE: 0.0900 | Val BCE: 0.2924, Val MSE: 0.0915
+[89/300] Train BCE: 0.2867, Train MSE: 0.0898 | Val BCE: 0.2978, Val MSE: 0.0934
+[90/300] Train BCE: 0.2862, Train MSE: 0.0896 | Val BCE: 0.3037, Val MSE: 0.0954
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0055, max=0.0055, norm=0.0055
+bn_input.bias: min=0.0296, max=0.0296, norm=0.0296
+conv1_1.weight: min=-0.5035, max=0.2685, norm=1.4733
+conv1_1.bias: min=-0.1229, max=0.2408, norm=0.4747
+conv1_2.weight: min=-0.2039, max=0.1943, norm=1.1160
+conv1_2.bias: min=-0.1065, max=0.1311, norm=0.2646
+conv2_1.weight: min=-0.1001, max=0.1311, norm=0.6976
+conv2_1.bias: min=-0.0902, max=0.0923, norm=0.2128
+conv2_2.weight: min=-0.0620, max=0.0830, norm=0.5887
+conv2_2.bias: min=-0.1064, max=0.1422, norm=0.3171
+conv3_1.weight: min=-0.0381, max=0.0302, norm=0.3635
+conv3_1.bias: min=-0.0378, max=0.0634, norm=0.1671
+conv3_2.weight: min=-0.0198, max=0.0142, norm=0.2184
+conv3_2.bias: min=-0.0528, max=0.0415, norm=0.1496
+fc1.weight: min=-0.0033, max=0.0052, norm=0.1237
+fc1.bias: min=-0.0095, max=0.0158, norm=0.0550
+fc2.weight: min=-0.0054, max=0.0065, norm=0.0829
+fc2.bias: min=-0.0037, max=0.0046, norm=0.0245
+fc3.weight: min=-0.0014, max=0.0053, norm=0.0556
+fc3.bias: min=-0.0008, max=0.0041, norm=0.0096
+conv2d_1.weight: min=-0.0020, max=0.0061, norm=0.0369
+conv2d_1.bias: min=-0.0147, max=0.0085, norm=0.0566
+conv2d_2.weight: min=-0.0043, max=0.0030, norm=0.0904
+conv2d_2.bias: min=-0.0127, max=0.0082, norm=0.0260
+conv2d_3.weight: min=-0.0070, max=0.0096, norm=0.1092
+conv2d_3.bias: min=-0.0083, max=0.0082, norm=0.0188
+conv2d_4.weight: min=-0.0011, max=0.0397, norm=0.2534
+conv2d_4.bias: min=0.0248, max=0.0248, norm=0.0248
+  ✔ New best model saved (val_loss=0.3830)
+[91/300] Train BCE: 0.2867, Train MSE: 0.0898 | Val BCE: 0.2917, Val MSE: 0.0913
+[92/300] Train BCE: 0.2855, Train MSE: 0.0894 | Val BCE: 0.2927, Val MSE: 0.0917
+[93/300] Train BCE: 0.2853, Train MSE: 0.0893 | Val BCE: 0.2923, Val MSE: 0.0915
+[94/300] Train BCE: 0.2841, Train MSE: 0.0889 | Val BCE: 0.2918, Val MSE: 0.0913
+  ✔ New best model saved (val_loss=0.3826)
+[95/300] Train BCE: 0.2847, Train MSE: 0.0891 | Val BCE: 0.2914, Val MSE: 0.0912
+[96/300] Train BCE: 0.2826, Train MSE: 0.0884 | Val BCE: 0.3001, Val MSE: 0.0938
+[97/300] Train BCE: 0.2825, Train MSE: 0.0884 | Val BCE: 0.2937, Val MSE: 0.0920
+[98/300] Train BCE: 0.2831, Train MSE: 0.0886 | Val BCE: 0.2996, Val MSE: 0.0941
+[99/300] Train BCE: 0.2829, Train MSE: 0.0886 | Val BCE: 0.2916, Val MSE: 0.0912
+  ✔ New best model saved (val_loss=0.3820)
+  💾 Checkpoint saved at epoch 100
+[100/300] Train BCE: 0.2819, Train MSE: 0.0882 | Val BCE: 0.2910, Val MSE: 0.0910
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0342, max=-0.0342, norm=0.0342
+bn_input.bias: min=-0.0494, max=-0.0494, norm=0.0494
+conv1_1.weight: min=-0.0555, max=0.0524, norm=0.1868
+conv1_1.bias: min=-0.0539, max=0.0669, norm=0.1189
+conv1_2.weight: min=-0.0355, max=0.0452, norm=0.3226
+conv1_2.bias: min=-0.0442, max=0.0494, norm=0.0872
+conv2_1.weight: min=-0.0294, max=0.0234, norm=0.2058
+conv2_1.bias: min=-0.0259, max=0.0540, norm=0.0907
+conv2_2.weight: min=-0.0141, max=0.0112, norm=0.1401
+conv2_2.bias: min=-0.0327, max=0.0321, norm=0.1127
+conv3_1.weight: min=-0.0070, max=0.0100, norm=0.1094
+conv3_1.bias: min=-0.0184, max=0.0259, norm=0.0738
+conv3_2.weight: min=-0.0064, max=0.0045, norm=0.0727
+conv3_2.bias: min=-0.0227, max=0.0253, norm=0.0759
+fc1.weight: min=-0.0018, max=0.0019, norm=0.0456
+fc1.bias: min=-0.0046, max=0.0056, norm=0.0176
+fc2.weight: min=-0.0034, max=0.0028, norm=0.0292
+fc2.bias: min=-0.0018, max=0.0021, norm=0.0077
+fc3.weight: min=-0.0013, max=0.0028, norm=0.0223
+fc3.bias: min=-0.0009, max=0.0021, norm=0.0041
+conv2d_1.weight: min=-0.0004, max=0.0012, norm=0.0057
+conv2d_1.bias: min=-0.0008, max=0.0017, norm=0.0049
+conv2d_2.weight: min=-0.0005, max=0.0008, norm=0.0116
+conv2d_2.bias: min=-0.0007, max=0.0012, norm=0.0028
+conv2d_3.weight: min=-0.0012, max=0.0025, norm=0.0197
+conv2d_3.bias: min=-0.0004, max=0.0010, norm=0.0018
+conv2d_4.weight: min=-0.0030, max=0.0086, norm=0.0386
+conv2d_4.bias: min=0.0031, max=0.0031, norm=0.0031
+[101/300] Train BCE: 0.2816, Train MSE: 0.0881 | Val BCE: 0.2914, Val MSE: 0.0912
+[102/300] Train BCE: 0.2810, Train MSE: 0.0879 | Val BCE: 0.2917, Val MSE: 0.0913
+[103/300] Train BCE: 0.2815, Train MSE: 0.0881 | Val BCE: 0.2933, Val MSE: 0.0918
+[104/300] Train BCE: 0.2799, Train MSE: 0.0876 | Val BCE: 0.2928, Val MSE: 0.0915
+[105/300] Train BCE: 0.2797, Train MSE: 0.0875 | Val BCE: 0.2937, Val MSE: 0.0918
+[106/300] Train BCE: 0.2799, Train MSE: 0.0876 | Val BCE: 0.2969, Val MSE: 0.0930
+[107/300] Train BCE: 0.2789, Train MSE: 0.0873 | Val BCE: 0.2946, Val MSE: 0.0921
+[108/300] Train BCE: 0.2783, Train MSE: 0.0871 | Val BCE: 0.2923, Val MSE: 0.0915
+[109/300] Train BCE: 0.2769, Train MSE: 0.0866 | Val BCE: 0.2936, Val MSE: 0.0920
+[110/300] Train BCE: 0.2785, Train MSE: 0.0872 | Val BCE: 0.2930, Val MSE: 0.0919
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0676, max=-0.0676, norm=0.0676
+bn_input.bias: min=-0.0182, max=-0.0182, norm=0.0182
+conv1_1.weight: min=-0.0807, max=0.0623, norm=0.2929
+conv1_1.bias: min=-0.0407, max=0.0360, norm=0.1110
+conv1_2.weight: min=-0.0328, max=0.0332, norm=0.2748
+conv1_2.bias: min=-0.0199, max=0.0368, norm=0.0646
+conv2_1.weight: min=-0.0257, max=0.0141, norm=0.1689
+conv2_1.bias: min=-0.0681, max=0.0234, norm=0.0941
+conv2_2.weight: min=-0.0093, max=0.0134, norm=0.1081
+conv2_2.bias: min=-0.0147, max=0.0299, norm=0.0772
+conv3_1.weight: min=-0.0060, max=0.0052, norm=0.0808
+conv3_1.bias: min=-0.0205, max=0.0168, norm=0.0532
+conv3_2.weight: min=-0.0035, max=0.0043, norm=0.0522
+conv3_2.bias: min=-0.0107, max=0.0143, norm=0.0436
+fc1.weight: min=-0.0016, max=0.0019, norm=0.0404
+fc1.bias: min=-0.0039, max=0.0047, norm=0.0154
+fc2.weight: min=-0.0020, max=0.0027, norm=0.0301
+fc2.bias: min=-0.0013, max=0.0019, norm=0.0091
+fc3.weight: min=-0.0009, max=0.0020, norm=0.0208
+fc3.bias: min=-0.0008, max=0.0016, norm=0.0040
+conv2d_1.weight: min=-0.0005, max=0.0014, norm=0.0067
+conv2d_1.bias: min=-0.0087, max=0.0031, norm=0.0260
+conv2d_2.weight: min=-0.0020, max=0.0008, norm=0.0361
+conv2d_2.bias: min=-0.0066, max=0.0024, norm=0.0132
+conv2d_3.weight: min=-0.0026, max=0.0015, norm=0.0322
+conv2d_3.bias: min=-0.0035, max=0.0019, norm=0.0078
+conv2d_4.weight: min=-0.0003, max=0.0123, norm=0.0647
+conv2d_4.bias: min=0.0081, max=0.0081, norm=0.0081
+[111/300] Train BCE: 0.2770, Train MSE: 0.0866 | Val BCE: 0.2938, Val MSE: 0.0921
+[112/300] Train BCE: 0.2778, Train MSE: 0.0870 | Val BCE: 0.2920, Val MSE: 0.0913
+  ✔ New best model saved (val_loss=0.3816)
+[113/300] Train BCE: 0.2764, Train MSE: 0.0865 | Val BCE: 0.2909, Val MSE: 0.0907
+[114/300] Train BCE: 0.2768, Train MSE: 0.0866 | Val BCE: 0.2921, Val MSE: 0.0913
+[115/300] Train BCE: 0.2744, Train MSE: 0.0858 | Val BCE: 0.2925, Val MSE: 0.0916
+[116/300] Train BCE: 0.2749, Train MSE: 0.0860 | Val BCE: 0.2945, Val MSE: 0.0923
+[117/300] Train BCE: 0.2741, Train MSE: 0.0858 | Val BCE: 0.2949, Val MSE: 0.0919
+[118/300] Train BCE: 0.2735, Train MSE: 0.0855 | Val BCE: 0.2931, Val MSE: 0.0914
+[119/300] Train BCE: 0.2727, Train MSE: 0.0853 | Val BCE: 0.2952, Val MSE: 0.0924
+  💾 Checkpoint saved at epoch 120
+[120/300] Train BCE: 0.2724, Train MSE: 0.0852 | Val BCE: 0.2987, Val MSE: 0.0934
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0669, max=0.0669, norm=0.0669
+bn_input.bias: min=0.0007, max=0.0007, norm=0.0007
+conv1_1.weight: min=-0.3538, max=0.4463, norm=1.4044
+conv1_1.bias: min=-0.1597, max=0.2197, norm=0.3894
+conv1_2.weight: min=-0.1591, max=0.1650, norm=1.0797
+conv1_2.bias: min=-0.0437, max=0.0468, norm=0.1092
+conv2_1.weight: min=-0.1321, max=0.1468, norm=0.7844
+conv2_1.bias: min=-0.0618, max=0.0936, norm=0.2139
+conv2_2.weight: min=-0.0522, max=0.0401, norm=0.4784
+conv2_2.bias: min=-0.1711, max=0.0970, norm=0.2854
+conv3_1.weight: min=-0.0231, max=0.0195, norm=0.3093
+conv3_1.bias: min=-0.0440, max=0.0761, norm=0.1637
+conv3_2.weight: min=-0.0131, max=0.0188, norm=0.1875
+conv3_2.bias: min=-0.0279, max=0.0347, norm=0.1134
+fc1.weight: min=-0.0045, max=0.0039, norm=0.1164
+fc1.bias: min=-0.0124, max=0.0091, norm=0.0468
+fc2.weight: min=-0.0068, max=0.0083, norm=0.0756
+fc2.bias: min=-0.0047, max=0.0085, norm=0.0243
+fc3.weight: min=-0.0039, max=0.0033, norm=0.0479
+fc3.bias: min=-0.0033, max=0.0028, norm=0.0107
+conv2d_1.weight: min=-0.0007, max=0.0029, norm=0.0139
+conv2d_1.bias: min=-0.0058, max=0.0036, norm=0.0220
+conv2d_2.weight: min=-0.0020, max=0.0011, norm=0.0343
+conv2d_2.bias: min=-0.0058, max=0.0032, norm=0.0109
+conv2d_3.weight: min=-0.0027, max=0.0033, norm=0.0406
+conv2d_3.bias: min=-0.0037, max=0.0032, norm=0.0080
+conv2d_4.weight: min=-0.0007, max=0.0157, norm=0.0912
+conv2d_4.bias: min=0.0097, max=0.0097, norm=0.0097
+[121/300] Train BCE: 0.2742, Train MSE: 0.0858 | Val BCE: 0.2946, Val MSE: 0.0921
+[122/300] Train BCE: 0.2730, Train MSE: 0.0854 | Val BCE: 0.2927, Val MSE: 0.0911
+[123/300] Train BCE: 0.2706, Train MSE: 0.0846 | Val BCE: 0.2915, Val MSE: 0.0908
+[124/300] Train BCE: 0.2708, Train MSE: 0.0847 | Val BCE: 0.2950, Val MSE: 0.0919
+[125/300] Train BCE: 0.2708, Train MSE: 0.0847 | Val BCE: 0.2927, Val MSE: 0.0917
+  ✔ New best model saved (val_loss=0.3814)
+[126/300] Train BCE: 0.2699, Train MSE: 0.0844 | Val BCE: 0.2907, Val MSE: 0.0906
+[127/300] Train BCE: 0.2695, Train MSE: 0.0843 | Val BCE: 0.2961, Val MSE: 0.0925
+[128/300] Train BCE: 0.2696, Train MSE: 0.0843 | Val BCE: 0.2955, Val MSE: 0.0925
+[129/300] Train BCE: 0.2689, Train MSE: 0.0841 | Val BCE: 0.2961, Val MSE: 0.0926
+[130/300] Train BCE: 0.2688, Train MSE: 0.0841 | Val BCE: 0.2938, Val MSE: 0.0916
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0102, max=-0.0102, norm=0.0102
+bn_input.bias: min=0.0245, max=0.0245, norm=0.0245
+conv1_1.weight: min=-0.2177, max=0.4334, norm=1.2841
+conv1_1.bias: min=-0.1658, max=0.0895, norm=0.3553
+conv1_2.weight: min=-0.0965, max=0.0668, norm=0.6167
+conv1_2.bias: min=-0.0988, max=0.1089, norm=0.1768
+conv2_1.weight: min=-0.0738, max=0.0551, norm=0.4507
+conv2_1.bias: min=-0.0658, max=0.0492, norm=0.1310
+conv2_2.weight: min=-0.0549, max=0.0325, norm=0.3716
+conv2_2.bias: min=-0.0901, max=0.0568, norm=0.1745
+conv3_1.weight: min=-0.0209, max=0.0164, norm=0.2420
+conv3_1.bias: min=-0.0304, max=0.0389, norm=0.1065
+conv3_2.weight: min=-0.0098, max=0.0106, norm=0.1606
+conv3_2.bias: min=-0.0320, max=0.0314, norm=0.1075
+fc1.weight: min=-0.0034, max=0.0037, norm=0.1096
+fc1.bias: min=-0.0093, max=0.0094, norm=0.0449
+fc2.weight: min=-0.0051, max=0.0063, norm=0.0842
+fc2.bias: min=-0.0049, max=0.0039, norm=0.0285
+fc3.weight: min=-0.0038, max=0.0012, norm=0.0454
+fc3.bias: min=-0.0033, max=0.0012, norm=0.0109
+conv2d_1.weight: min=-0.0073, max=0.0024, norm=0.0375
+conv2d_1.bias: min=-0.0101, max=0.0378, norm=0.0834
+conv2d_2.weight: min=-0.0031, max=0.0056, norm=0.0999
+conv2d_2.bias: min=-0.0107, max=0.0192, norm=0.0352
+conv2d_3.weight: min=-0.0067, max=0.0060, norm=0.1003
+conv2d_3.bias: min=-0.0092, max=0.0108, norm=0.0232
+conv2d_4.weight: min=-0.0284, max=0.0000, norm=0.2222
+conv2d_4.bias: min=-0.0277, max=-0.0277, norm=0.0277
+[131/300] Train BCE: 0.2695, Train MSE: 0.0843 | Val BCE: 0.2930, Val MSE: 0.0916
+[132/300] Train BCE: 0.2686, Train MSE: 0.0840 | Val BCE: 0.3010, Val MSE: 0.0943
+[133/300] Train BCE: 0.2676, Train MSE: 0.0837 | Val BCE: 0.2961, Val MSE: 0.0928
+[134/300] Train BCE: 0.2677, Train MSE: 0.0837 | Val BCE: 0.2964, Val MSE: 0.0926
+[135/300] Train BCE: 0.2658, Train MSE: 0.0831 | Val BCE: 0.2970, Val MSE: 0.0931
+[136/300] Train BCE: 0.2654, Train MSE: 0.0830 | Val BCE: 0.2942, Val MSE: 0.0915
+[137/300] Train BCE: 0.2655, Train MSE: 0.0830 | Val BCE: 0.2935, Val MSE: 0.0914
+[138/300] Train BCE: 0.2634, Train MSE: 0.0823 | Val BCE: 0.3020, Val MSE: 0.0944
+[139/300] Train BCE: 0.2656, Train MSE: 0.0831 | Val BCE: 0.2929, Val MSE: 0.0914
+  💾 Checkpoint saved at epoch 140
+[140/300] Train BCE: 0.2638, Train MSE: 0.0825 | Val BCE: 0.2978, Val MSE: 0.0934
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0638, max=0.0638, norm=0.0638
+bn_input.bias: min=0.0683, max=0.0683, norm=0.0683
+conv1_1.weight: min=-0.0933, max=0.0499, norm=0.3237
+conv1_1.bias: min=-0.0374, max=0.0735, norm=0.1526
+conv1_2.weight: min=-0.0249, max=0.0387, norm=0.3613
+conv1_2.bias: min=-0.0539, max=0.0618, norm=0.1138
+conv2_1.weight: min=-0.0523, max=0.0593, norm=0.3044
+conv2_1.bias: min=-0.1342, max=0.0261, norm=0.1594
+conv2_2.weight: min=-0.0142, max=0.0152, norm=0.1606
+conv2_2.bias: min=-0.0266, max=0.0360, norm=0.0977
+conv3_1.weight: min=-0.0089, max=0.0063, norm=0.1160
+conv3_1.bias: min=-0.0231, max=0.0192, norm=0.0628
+conv3_2.weight: min=-0.0043, max=0.0049, norm=0.0710
+conv3_2.bias: min=-0.0156, max=0.0190, norm=0.0617
+fc1.weight: min=-0.0021, max=0.0012, norm=0.0471
+fc1.bias: min=-0.0047, max=0.0028, norm=0.0160
+fc2.weight: min=-0.0022, max=0.0029, norm=0.0297
+fc2.bias: min=-0.0017, max=0.0017, norm=0.0078
+fc3.weight: min=-0.0014, max=0.0017, norm=0.0198
+fc3.bias: min=-0.0010, max=0.0013, norm=0.0038
+conv2d_1.weight: min=-0.0011, max=0.0004, norm=0.0052
+conv2d_1.bias: min=-0.0015, max=0.0036, norm=0.0076
+conv2d_2.weight: min=-0.0004, max=0.0004, norm=0.0102
+conv2d_2.bias: min=-0.0010, max=0.0010, norm=0.0028
+conv2d_3.weight: min=-0.0018, max=0.0010, norm=0.0161
+conv2d_3.bias: min=-0.0010, max=0.0007, norm=0.0025
+conv2d_4.weight: min=-0.0078, max=0.0009, norm=0.0382
+conv2d_4.bias: min=-0.0027, max=-0.0027, norm=0.0027
+[141/300] Train BCE: 0.2642, Train MSE: 0.0826 | Val BCE: 0.2953, Val MSE: 0.0923
+✨ LR reduced to 0.0005. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[142/300] Train BCE: 0.2631, Train MSE: 0.0822 | Val BCE: 0.2953, Val MSE: 0.0921
+  ✔ New best model saved (val_loss=0.3812)
+[143/300] Train BCE: 0.2630, Train MSE: 0.0822 | Val BCE: 0.2905, Val MSE: 0.0907
+[144/300] Train BCE: 0.2616, Train MSE: 0.0817 | Val BCE: 0.2919, Val MSE: 0.0909
+[145/300] Train BCE: 0.2621, Train MSE: 0.0819 | Val BCE: 0.2912, Val MSE: 0.0907
+[146/300] Train BCE: 0.2609, Train MSE: 0.0815 | Val BCE: 0.2917, Val MSE: 0.0909
+[147/300] Train BCE: 0.2602, Train MSE: 0.0813 | Val BCE: 0.2931, Val MSE: 0.0910
+[148/300] Train BCE: 0.2605, Train MSE: 0.0814 | Val BCE: 0.2942, Val MSE: 0.0914
+[149/300] Train BCE: 0.2595, Train MSE: 0.0810 | Val BCE: 0.2926, Val MSE: 0.0909
+[150/300] Train BCE: 0.2600, Train MSE: 0.0812 | Val BCE: 0.2928, Val MSE: 0.0914
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0964, max=-0.0964, norm=0.0964
+bn_input.bias: min=-0.0263, max=-0.0263, norm=0.0263
+conv1_1.weight: min=-0.2155, max=0.2910, norm=0.9289
+conv1_1.bias: min=-0.2248, max=0.1094, norm=0.3259
+conv1_2.weight: min=-0.0609, max=0.0841, norm=0.5677
+conv1_2.bias: min=-0.1040, max=0.0819, norm=0.1749
+conv2_1.weight: min=-0.0446, max=0.0665, norm=0.3751
+conv2_1.bias: min=-0.0220, max=0.0773, norm=0.1437
+conv2_2.weight: min=-0.0366, max=0.0248, norm=0.2670
+conv2_2.bias: min=-0.1002, max=0.0417, norm=0.1766
+conv3_1.weight: min=-0.0129, max=0.0111, norm=0.1875
+conv3_1.bias: min=-0.0338, max=0.0204, norm=0.0878
+conv3_2.weight: min=-0.0068, max=0.0155, norm=0.1248
+conv3_2.bias: min=-0.0232, max=0.0174, norm=0.0771
+fc1.weight: min=-0.0021, max=0.0019, norm=0.0726
+fc1.bias: min=-0.0065, max=0.0057, norm=0.0282
+fc2.weight: min=-0.0039, max=0.0066, norm=0.0429
+fc2.bias: min=-0.0029, max=0.0061, norm=0.0129
+fc3.weight: min=-0.0031, max=0.0022, norm=0.0278
+fc3.bias: min=-0.0025, max=0.0019, norm=0.0064
+conv2d_1.weight: min=-0.0014, max=0.0005, norm=0.0078
+conv2d_1.bias: min=-0.0020, max=0.0026, norm=0.0102
+conv2d_2.weight: min=-0.0010, max=0.0008, norm=0.0164
+conv2d_2.bias: min=-0.0018, max=0.0025, norm=0.0052
+conv2d_3.weight: min=-0.0014, max=0.0013, norm=0.0196
+conv2d_3.bias: min=-0.0016, max=0.0014, norm=0.0035
+conv2d_4.weight: min=-0.0060, max=0.0007, norm=0.0415
+conv2d_4.bias: min=-0.0037, max=-0.0037, norm=0.0037
+[151/300] Train BCE: 0.2600, Train MSE: 0.0812 | Val BCE: 0.2938, Val MSE: 0.0918
+[152/300] Train BCE: 0.2603, Train MSE: 0.0813 | Val BCE: 0.2922, Val MSE: 0.0909
+[153/300] Train BCE: 0.2589, Train MSE: 0.0808 | Val BCE: 0.2946, Val MSE: 0.0916
+[154/300] Train BCE: 0.2597, Train MSE: 0.0811 | Val BCE: 0.2932, Val MSE: 0.0912
+[155/300] Train BCE: 0.2580, Train MSE: 0.0805 | Val BCE: 0.2956, Val MSE: 0.0923
+[156/300] Train BCE: 0.2577, Train MSE: 0.0805 | Val BCE: 0.2966, Val MSE: 0.0917
+[157/300] Train BCE: 0.2572, Train MSE: 0.0803 | Val BCE: 0.2957, Val MSE: 0.0916
+[158/300] Train BCE: 0.2575, Train MSE: 0.0804 | Val BCE: 0.2948, Val MSE: 0.0918
+✨ LR reduced to 0.00025. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[159/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2950, Val MSE: 0.0915
+  ✔ New best model saved (val_loss=0.3810)
+  💾 Checkpoint saved at epoch 160
+[160/300] Train BCE: 0.2597, Train MSE: 0.0811 | Val BCE: 0.2905, Val MSE: 0.0906
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0336, max=-0.0336, norm=0.0336
+bn_input.bias: min=-0.0184, max=-0.0184, norm=0.0184
+conv1_1.weight: min=-0.0972, max=0.1561, norm=0.4861
+conv1_1.bias: min=-0.1055, max=0.0518, norm=0.1773
+conv1_2.weight: min=-0.0486, max=0.0454, norm=0.3344
+conv1_2.bias: min=-0.0441, max=0.0583, norm=0.1070
+conv2_1.weight: min=-0.0263, max=0.0426, norm=0.2437
+conv2_1.bias: min=-0.0246, max=0.0337, norm=0.0861
+conv2_2.weight: min=-0.0211, max=0.0206, norm=0.1677
+conv2_2.bias: min=-0.0632, max=0.0359, norm=0.1166
+conv3_1.weight: min=-0.0094, max=0.0086, norm=0.1306
+conv3_1.bias: min=-0.0193, max=0.0276, norm=0.0632
+conv3_2.weight: min=-0.0064, max=0.0088, norm=0.0870
+conv3_2.bias: min=-0.0101, max=0.0142, norm=0.0562
+fc1.weight: min=-0.0019, max=0.0016, norm=0.0542
+fc1.bias: min=-0.0046, max=0.0037, norm=0.0197
+fc2.weight: min=-0.0033, max=0.0051, norm=0.0392
+fc2.bias: min=-0.0022, max=0.0034, norm=0.0104
+fc3.weight: min=-0.0011, max=0.0023, norm=0.0234
+fc3.bias: min=-0.0008, max=0.0018, norm=0.0046
+conv2d_1.weight: min=-0.0004, max=0.0013, norm=0.0035
+conv2d_1.bias: min=-0.0022, max=0.0012, norm=0.0081
+conv2d_2.weight: min=-0.0007, max=0.0006, norm=0.0120
+conv2d_2.bias: min=-0.0027, max=0.0017, norm=0.0047
+conv2d_3.weight: min=-0.0011, max=0.0009, norm=0.0151
+conv2d_3.bias: min=-0.0014, max=0.0010, norm=0.0034
+conv2d_4.weight: min=-0.0019, max=0.0055, norm=0.0276
+conv2d_4.bias: min=0.0034, max=0.0034, norm=0.0034
+  ✔ New best model saved (val_loss=0.3804)
+[161/300] Train BCE: 0.2590, Train MSE: 0.0808 | Val BCE: 0.2901, Val MSE: 0.0903
+[162/300] Train BCE: 0.2585, Train MSE: 0.0807 | Val BCE: 0.2909, Val MSE: 0.0905
+[163/300] Train BCE: 0.2583, Train MSE: 0.0806 | Val BCE: 0.2918, Val MSE: 0.0907
+[164/300] Train BCE: 0.2582, Train MSE: 0.0806 | Val BCE: 0.2907, Val MSE: 0.0905
+[165/300] Train BCE: 0.2577, Train MSE: 0.0804 | Val BCE: 0.2921, Val MSE: 0.0907
+[166/300] Train BCE: 0.2580, Train MSE: 0.0805 | Val BCE: 0.2913, Val MSE: 0.0907
+[167/300] Train BCE: 0.2573, Train MSE: 0.0803 | Val BCE: 0.2913, Val MSE: 0.0907
+[168/300] Train BCE: 0.2573, Train MSE: 0.0803 | Val BCE: 0.2918, Val MSE: 0.0906
+[169/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2927, Val MSE: 0.0908
+[170/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2914, Val MSE: 0.0905
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0115, max=0.0115, norm=0.0115
+bn_input.bias: min=-0.0222, max=-0.0222, norm=0.0222
+conv1_1.weight: min=-0.1419, max=0.0648, norm=0.3754
+conv1_1.bias: min=-0.0251, max=0.0800, norm=0.1623
+conv1_2.weight: min=-0.0993, max=0.1231, norm=0.5306
+conv1_2.bias: min=-0.0452, max=0.0209, norm=0.0852
+conv2_1.weight: min=-0.0559, max=0.0785, norm=0.3638
+conv2_1.bias: min=-0.0288, max=0.0384, norm=0.1085
+conv2_2.weight: min=-0.0260, max=0.0276, norm=0.2516
+conv2_2.bias: min=-0.0624, max=0.0503, norm=0.1350
+conv3_1.weight: min=-0.0140, max=0.0106, norm=0.1682
+conv3_1.bias: min=-0.0166, max=0.0340, norm=0.0892
+conv3_2.weight: min=-0.0097, max=0.0074, norm=0.1118
+conv3_2.bias: min=-0.0244, max=0.0216, norm=0.0855
+fc1.weight: min=-0.0019, max=0.0024, norm=0.0735
+fc1.bias: min=-0.0057, max=0.0050, norm=0.0268
+fc2.weight: min=-0.0066, max=0.0042, norm=0.0436
+fc2.bias: min=-0.0033, max=0.0025, norm=0.0134
+fc3.weight: min=-0.0031, max=0.0023, norm=0.0277
+fc3.bias: min=-0.0028, max=0.0017, norm=0.0059
+conv2d_1.weight: min=-0.0006, max=0.0004, norm=0.0027
+conv2d_1.bias: min=-0.0018, max=0.0012, norm=0.0059
+conv2d_2.weight: min=-0.0004, max=0.0003, norm=0.0083
+conv2d_2.bias: min=-0.0011, max=0.0010, norm=0.0029
+conv2d_3.weight: min=-0.0006, max=0.0004, norm=0.0082
+conv2d_3.bias: min=-0.0005, max=0.0004, norm=0.0013
+conv2d_4.weight: min=-0.0016, max=0.0012, norm=0.0081
+conv2d_4.bias: min=0.0007, max=0.0007, norm=0.0007
+[171/300] Train BCE: 0.2566, Train MSE: 0.0801 | Val BCE: 0.2931, Val MSE: 0.0913
+[172/300] Train BCE: 0.2556, Train MSE: 0.0798 | Val BCE: 0.2949, Val MSE: 0.0914
+[173/300] Train BCE: 0.2557, Train MSE: 0.0798 | Val BCE: 0.2927, Val MSE: 0.0911
+[174/300] Train BCE: 0.2554, Train MSE: 0.0797 | Val BCE: 0.2923, Val MSE: 0.0908
+[175/300] Train BCE: 0.2554, Train MSE: 0.0797 | Val BCE: 0.2939, Val MSE: 0.0910
+[176/300] Train BCE: 0.2551, Train MSE: 0.0796 | Val BCE: 0.2958, Val MSE: 0.0921
+✨ LR reduced to 0.000125. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[177/300] Train BCE: 0.2548, Train MSE: 0.0795 | Val BCE: 0.2933, Val MSE: 0.0910
+[178/300] Train BCE: 0.2576, Train MSE: 0.0804 | Val BCE: 0.2902, Val MSE: 0.0903
+[179/300] Train BCE: 0.2574, Train MSE: 0.0803 | Val BCE: 0.2908, Val MSE: 0.0907
+  💾 Checkpoint saved at epoch 180
+[180/300] Train BCE: 0.2570, Train MSE: 0.0802 | Val BCE: 0.2906, Val MSE: 0.0905
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0193, max=0.0193, norm=0.0193
+bn_input.bias: min=0.0175, max=0.0175, norm=0.0175
+conv1_1.weight: min=-0.0523, max=0.0674, norm=0.2076
+conv1_1.bias: min=-0.0361, max=0.0354, norm=0.0843
+conv1_2.weight: min=-0.0246, max=0.0327, norm=0.1828
+conv1_2.bias: min=-0.0183, max=0.0141, norm=0.0405
+conv2_1.weight: min=-0.0229, max=0.0147, norm=0.1411
+conv2_1.bias: min=-0.0288, max=0.0131, norm=0.0585
+conv2_2.weight: min=-0.0080, max=0.0083, norm=0.0935
+conv2_2.bias: min=-0.0240, max=0.0264, norm=0.0685
+conv3_1.weight: min=-0.0056, max=0.0054, norm=0.0812
+conv3_1.bias: min=-0.0122, max=0.0161, norm=0.0494
+conv3_2.weight: min=-0.0032, max=0.0044, norm=0.0577
+conv3_2.bias: min=-0.0150, max=0.0093, norm=0.0439
+fc1.weight: min=-0.0017, max=0.0018, norm=0.0448
+fc1.bias: min=-0.0035, max=0.0033, norm=0.0140
+fc2.weight: min=-0.0031, max=0.0028, norm=0.0309
+fc2.bias: min=-0.0017, max=0.0017, norm=0.0089
+fc3.weight: min=-0.0014, max=0.0014, norm=0.0193
+fc3.bias: min=-0.0012, max=0.0008, norm=0.0038
+conv2d_1.weight: min=-0.0014, max=0.0005, norm=0.0095
+conv2d_1.bias: min=-0.0029, max=0.0027, norm=0.0137
+conv2d_2.weight: min=-0.0008, max=0.0009, norm=0.0212
+conv2d_2.bias: min=-0.0028, max=0.0032, norm=0.0069
+conv2d_3.weight: min=-0.0018, max=0.0016, norm=0.0225
+conv2d_3.bias: min=-0.0020, max=0.0019, norm=0.0042
+conv2d_4.weight: min=-0.0076, max=0.0005, norm=0.0449
+conv2d_4.bias: min=-0.0048, max=-0.0048, norm=0.0048
+[181/300] Train BCE: 0.2571, Train MSE: 0.0802 | Val BCE: 0.2908, Val MSE: 0.0905
+[182/300] Train BCE: 0.2567, Train MSE: 0.0801 | Val BCE: 0.2912, Val MSE: 0.0907
+[183/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2912, Val MSE: 0.0906
+[184/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2919, Val MSE: 0.0908
+[185/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2920, Val MSE: 0.0907
+[186/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2915, Val MSE: 0.0907
+[187/300] Train BCE: 0.2556, Train MSE: 0.0797 | Val BCE: 0.2923, Val MSE: 0.0907
+[188/300] Train BCE: 0.2558, Train MSE: 0.0798 | Val BCE: 0.2924, Val MSE: 0.0907
+[189/300] Train BCE: 0.2554, Train MSE: 0.0797 | Val BCE: 0.2920, Val MSE: 0.0910
+[190/300] Train BCE: 0.2552, Train MSE: 0.0796 | Val BCE: 0.2919, Val MSE: 0.0907
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0109, max=-0.0109, norm=0.0109
+bn_input.bias: min=0.0037, max=0.0037, norm=0.0037
+conv1_1.weight: min=-0.0914, max=0.0295, norm=0.2493
+conv1_1.bias: min=-0.0306, max=0.0411, norm=0.0913
+conv1_2.weight: min=-0.0177, max=0.0274, norm=0.1804
+conv1_2.bias: min=-0.0142, max=0.0454, norm=0.0645
+conv2_1.weight: min=-0.0163, max=0.0228, norm=0.1507
+conv2_1.bias: min=-0.0180, max=0.0348, norm=0.0779
+conv2_2.weight: min=-0.0112, max=0.0077, norm=0.1090
+conv2_2.bias: min=-0.0267, max=0.0298, norm=0.0851
+conv3_1.weight: min=-0.0061, max=0.0049, norm=0.0916
+conv3_1.bias: min=-0.0191, max=0.0096, norm=0.0606
+conv3_2.weight: min=-0.0047, max=0.0039, norm=0.0622
+conv3_2.bias: min=-0.0217, max=0.0151, norm=0.0596
+fc1.weight: min=-0.0012, max=0.0012, norm=0.0430
+fc1.bias: min=-0.0028, max=0.0033, norm=0.0141
+fc2.weight: min=-0.0029, max=0.0019, norm=0.0350
+fc2.bias: min=-0.0028, max=0.0015, norm=0.0093
+fc3.weight: min=-0.0019, max=0.0010, norm=0.0193
+fc3.bias: min=-0.0015, max=0.0008, norm=0.0037
+conv2d_1.weight: min=-0.0006, max=0.0002, norm=0.0019
+conv2d_1.bias: min=-0.0006, max=0.0022, norm=0.0059
+conv2d_2.weight: min=-0.0003, max=0.0004, norm=0.0083
+conv2d_2.bias: min=-0.0005, max=0.0010, norm=0.0027
+conv2d_3.weight: min=-0.0009, max=0.0009, norm=0.0105
+conv2d_3.bias: min=-0.0010, max=0.0009, norm=0.0018
+conv2d_4.weight: min=-0.0025, max=0.0012, norm=0.0138
+conv2d_4.bias: min=-0.0005, max=-0.0005, norm=0.0005
+[191/300] Train BCE: 0.2551, Train MSE: 0.0796 | Val BCE: 0.2917, Val MSE: 0.0907
+[192/300] Train BCE: 0.2547, Train MSE: 0.0795 | Val BCE: 0.2930, Val MSE: 0.0913
+✨ LR reduced to 6.25e-05. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[193/300] Train BCE: 0.2548, Train MSE: 0.0795 | Val BCE: 0.2921, Val MSE: 0.0908
+[194/300] Train BCE: 0.2574, Train MSE: 0.0803 | Val BCE: 0.2905, Val MSE: 0.0903
+[195/300] Train BCE: 0.2569, Train MSE: 0.0801 | Val BCE: 0.2908, Val MSE: 0.0906
+[196/300] Train BCE: 0.2567, Train MSE: 0.0801 | Val BCE: 0.2911, Val MSE: 0.0905
+[197/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2908, Val MSE: 0.0904
+[198/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2911, Val MSE: 0.0906
+[199/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2908, Val MSE: 0.0905
+  💾 Checkpoint saved at epoch 200
+[200/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2912, Val MSE: 0.0905
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0117, max=0.0117, norm=0.0117
+bn_input.bias: min=-0.0037, max=-0.0037, norm=0.0037
+conv1_1.weight: min=-0.0658, max=0.1242, norm=0.3695
+conv1_1.bias: min=-0.0648, max=0.0652, norm=0.1247
+conv1_2.weight: min=-0.0282, max=0.0319, norm=0.2450
+conv1_2.bias: min=-0.0258, max=0.0114, norm=0.0509
+conv2_1.weight: min=-0.0207, max=0.0335, norm=0.1831
+conv2_1.bias: min=-0.0181, max=0.0503, norm=0.0867
+conv2_2.weight: min=-0.0204, max=0.0116, norm=0.1336
+conv2_2.bias: min=-0.0443, max=0.0419, norm=0.1011
+conv3_1.weight: min=-0.0064, max=0.0059, norm=0.1103
+conv3_1.bias: min=-0.0187, max=0.0186, norm=0.0711
+conv3_2.weight: min=-0.0043, max=0.0037, norm=0.0662
+conv3_2.bias: min=-0.0111, max=0.0199, norm=0.0614
+fc1.weight: min=-0.0017, max=0.0017, norm=0.0483
+fc1.bias: min=-0.0038, max=0.0038, norm=0.0177
+fc2.weight: min=-0.0034, max=0.0046, norm=0.0343
+fc2.bias: min=-0.0028, max=0.0028, norm=0.0101
+fc3.weight: min=-0.0015, max=0.0022, norm=0.0205
+fc3.bias: min=-0.0010, max=0.0016, norm=0.0042
+conv2d_1.weight: min=-0.0014, max=0.0003, norm=0.0039
+conv2d_1.bias: min=-0.0011, max=0.0005, norm=0.0037
+conv2d_2.weight: min=-0.0005, max=0.0004, norm=0.0081
+conv2d_2.bias: min=-0.0009, max=0.0010, norm=0.0024
+conv2d_3.weight: min=-0.0011, max=0.0009, norm=0.0100
+conv2d_3.bias: min=-0.0007, max=0.0005, norm=0.0016
+conv2d_4.weight: min=-0.0042, max=0.0007, norm=0.0189
+conv2d_4.bias: min=-0.0015, max=-0.0015, norm=0.0015
+[201/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2911, Val MSE: 0.0907
+[202/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2916, Val MSE: 0.0907
+[203/300] Train BCE: 0.2557, Train MSE: 0.0798 | Val BCE: 0.2912, Val MSE: 0.0906
+[204/300] Train BCE: 0.2558, Train MSE: 0.0798 | Val BCE: 0.2914, Val MSE: 0.0908
+[205/300] Train BCE: 0.2555, Train MSE: 0.0797 | Val BCE: 0.2912, Val MSE: 0.0906
+[206/300] Train BCE: 0.2555, Train MSE: 0.0797 | Val BCE: 0.2918, Val MSE: 0.0906
+[207/300] Train BCE: 0.2553, Train MSE: 0.0796 | Val BCE: 0.2915, Val MSE: 0.0907
+[208/300] Train BCE: 0.2552, Train MSE: 0.0796 | Val BCE: 0.2919, Val MSE: 0.0907
+✨ LR reduced to 3.125e-05. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[209/300] Train BCE: 0.2553, Train MSE: 0.0796 | Val BCE: 0.2914, Val MSE: 0.0906
+[210/300] Train BCE: 0.2570, Train MSE: 0.0802 | Val BCE: 0.2903, Val MSE: 0.0904
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0261, max=-0.0261, norm=0.0261
+bn_input.bias: min=-0.0405, max=-0.0405, norm=0.0405
+conv1_1.weight: min=-0.0561, max=0.0542, norm=0.2042
+conv1_1.bias: min=-0.0361, max=0.0163, norm=0.0639
+conv1_2.weight: min=-0.0329, max=0.0341, norm=0.2424
+conv1_2.bias: min=-0.0330, max=0.0150, norm=0.0556
+conv2_1.weight: min=-0.0257, max=0.0128, norm=0.1609
+conv2_1.bias: min=-0.0271, max=0.0308, norm=0.0708
+conv2_2.weight: min=-0.0099, max=0.0099, norm=0.1041
+conv2_2.bias: min=-0.0269, max=0.0280, norm=0.0734
+conv3_1.weight: min=-0.0052, max=0.0058, norm=0.0892
+conv3_1.bias: min=-0.0147, max=0.0173, norm=0.0569
+conv3_2.weight: min=-0.0029, max=0.0031, norm=0.0547
+conv3_2.bias: min=-0.0174, max=0.0129, norm=0.0519
+fc1.weight: min=-0.0017, max=0.0012, norm=0.0437
+fc1.bias: min=-0.0042, max=0.0030, norm=0.0156
+fc2.weight: min=-0.0030, max=0.0035, norm=0.0336
+fc2.bias: min=-0.0019, max=0.0028, norm=0.0098
+fc3.weight: min=-0.0015, max=0.0024, norm=0.0241
+fc3.bias: min=-0.0014, max=0.0020, norm=0.0053
+conv2d_1.weight: min=-0.0004, max=0.0014, norm=0.0055
+conv2d_1.bias: min=-0.0034, max=0.0016, norm=0.0129
+conv2d_2.weight: min=-0.0009, max=0.0004, norm=0.0155
+conv2d_2.bias: min=-0.0031, max=0.0013, norm=0.0055
+conv2d_3.weight: min=-0.0011, max=0.0008, norm=0.0164
+conv2d_3.bias: min=-0.0014, max=0.0011, norm=0.0036
+conv2d_4.weight: min=-0.0003, max=0.0050, norm=0.0313
+conv2d_4.bias: min=0.0033, max=0.0033, norm=0.0033
+[211/300] Train BCE: 0.2567, Train MSE: 0.0801 | Val BCE: 0.2905, Val MSE: 0.0904
+[212/300] Train BCE: 0.2566, Train MSE: 0.0801 | Val BCE: 0.2903, Val MSE: 0.0904
+[213/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2906, Val MSE: 0.0904
+[214/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2905, Val MSE: 0.0905
+[215/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2905, Val MSE: 0.0904
+[216/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0904
+[217/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2909, Val MSE: 0.0905
+[218/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2910, Val MSE: 0.0905
+[219/300] Train BCE: 0.2560, Train MSE: 0.0798 | Val BCE: 0.2906, Val MSE: 0.0904
+  💾 Checkpoint saved at epoch 220
+[220/300] Train BCE: 0.2558, Train MSE: 0.0798 | Val BCE: 0.2911, Val MSE: 0.0906
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0121, max=-0.0121, norm=0.0121
+bn_input.bias: min=-0.0045, max=-0.0045, norm=0.0045
+conv1_1.weight: min=-0.0582, max=0.0679, norm=0.2382
+conv1_1.bias: min=-0.0522, max=0.0187, norm=0.0924
+conv1_2.weight: min=-0.0482, max=0.0427, norm=0.2778
+conv1_2.bias: min=-0.0203, max=0.0227, norm=0.0485
+conv2_1.weight: min=-0.0325, max=0.0222, norm=0.2030
+conv2_1.bias: min=-0.0398, max=0.0446, norm=0.0847
+conv2_2.weight: min=-0.0143, max=0.0136, norm=0.1317
+conv2_2.bias: min=-0.0265, max=0.0361, norm=0.0908
+conv3_1.weight: min=-0.0065, max=0.0114, norm=0.1005
+conv3_1.bias: min=-0.0128, max=0.0223, norm=0.0542
+conv3_2.weight: min=-0.0058, max=0.0049, norm=0.0696
+conv3_2.bias: min=-0.0145, max=0.0137, norm=0.0533
+fc1.weight: min=-0.0018, max=0.0013, norm=0.0479
+fc1.bias: min=-0.0041, max=0.0025, norm=0.0156
+fc2.weight: min=-0.0029, max=0.0029, norm=0.0321
+fc2.bias: min=-0.0021, max=0.0018, norm=0.0091
+fc3.weight: min=-0.0017, max=0.0017, norm=0.0211
+fc3.bias: min=-0.0015, max=0.0011, norm=0.0042
+conv2d_1.weight: min=-0.0002, max=0.0006, norm=0.0018
+conv2d_1.bias: min=-0.0012, max=0.0007, norm=0.0029
+conv2d_2.weight: min=-0.0003, max=0.0003, norm=0.0061
+conv2d_2.bias: min=-0.0007, max=0.0007, norm=0.0018
+conv2d_3.weight: min=-0.0005, max=0.0004, norm=0.0066
+conv2d_3.bias: min=-0.0004, max=0.0003, norm=0.0009
+conv2d_4.weight: min=-0.0008, max=0.0016, norm=0.0080
+conv2d_4.bias: min=-0.0000, max=-0.0000, norm=0.0000
+[221/300] Train BCE: 0.2557, Train MSE: 0.0798 | Val BCE: 0.2912, Val MSE: 0.0905
+[222/300] Train BCE: 0.2558, Train MSE: 0.0798 | Val BCE: 0.2912, Val MSE: 0.0905
+[223/300] Train BCE: 0.2556, Train MSE: 0.0797 | Val BCE: 0.2912, Val MSE: 0.0907
+[224/300] Train BCE: 0.2556, Train MSE: 0.0797 | Val BCE: 0.2916, Val MSE: 0.0906
+✨ LR reduced to 1.5625e-05. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[225/300] Train BCE: 0.2554, Train MSE: 0.0797 | Val BCE: 0.2914, Val MSE: 0.0905
+[226/300] Train BCE: 0.2569, Train MSE: 0.0802 | Val BCE: 0.2902, Val MSE: 0.0903
+[227/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2904, Val MSE: 0.0903
+[228/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2904, Val MSE: 0.0903
+[229/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2906, Val MSE: 0.0904
+[230/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0294, max=-0.0294, norm=0.0294
+bn_input.bias: min=-0.0179, max=-0.0179, norm=0.0179
+conv1_1.weight: min=-0.0816, max=0.0790, norm=0.2522
+conv1_1.bias: min=-0.0242, max=0.0366, norm=0.0918
+conv1_2.weight: min=-0.0232, max=0.0242, norm=0.2366
+conv1_2.bias: min=-0.0250, max=0.0507, norm=0.0667
+conv2_1.weight: min=-0.0250, max=0.0212, norm=0.1778
+conv2_1.bias: min=-0.0656, max=0.0402, norm=0.0991
+conv2_2.weight: min=-0.0085, max=0.0118, norm=0.1060
+conv2_2.bias: min=-0.0168, max=0.0386, norm=0.0776
+conv3_1.weight: min=-0.0069, max=0.0042, norm=0.0799
+conv3_1.bias: min=-0.0204, max=0.0138, norm=0.0477
+conv3_2.weight: min=-0.0034, max=0.0032, norm=0.0510
+conv3_2.bias: min=-0.0082, max=0.0208, norm=0.0444
+fc1.weight: min=-0.0014, max=0.0010, norm=0.0345
+fc1.bias: min=-0.0025, max=0.0030, norm=0.0114
+fc2.weight: min=-0.0012, max=0.0014, norm=0.0211
+fc2.bias: min=-0.0008, max=0.0014, norm=0.0048
+fc3.weight: min=-0.0011, max=0.0018, norm=0.0159
+fc3.bias: min=-0.0007, max=0.0012, norm=0.0029
+conv2d_1.weight: min=-0.0003, max=0.0004, norm=0.0015
+conv2d_1.bias: min=-0.0007, max=0.0005, norm=0.0023
+conv2d_2.weight: min=-0.0003, max=0.0002, norm=0.0040
+conv2d_2.bias: min=-0.0010, max=0.0003, norm=0.0014
+conv2d_3.weight: min=-0.0004, max=0.0002, norm=0.0045
+conv2d_3.bias: min=-0.0005, max=0.0003, norm=0.0008
+conv2d_4.weight: min=-0.0011, max=0.0015, norm=0.0070
+conv2d_4.bias: min=0.0005, max=0.0005, norm=0.0005
+[231/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[232/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0905
+[233/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2907, Val MSE: 0.0904
+[234/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2907, Val MSE: 0.0905
+[235/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2909, Val MSE: 0.0905
+[236/300] Train BCE: 0.2559, Train MSE: 0.0798 | Val BCE: 0.2908, Val MSE: 0.0904
+[237/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2908, Val MSE: 0.0905
+[238/300] Train BCE: 0.2559, Train MSE: 0.0798 | Val BCE: 0.2909, Val MSE: 0.0904
+[239/300] Train BCE: 0.2559, Train MSE: 0.0798 | Val BCE: 0.2910, Val MSE: 0.0906
+  💾 Checkpoint saved at epoch 240
+[240/300] Train BCE: 0.2558, Train MSE: 0.0798 | Val BCE: 0.2909, Val MSE: 0.0905
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0204, max=0.0204, norm=0.0204
+bn_input.bias: min=0.0222, max=0.0222, norm=0.0222
+conv1_1.weight: min=-0.0400, max=0.0400, norm=0.1288
+conv1_1.bias: min=-0.0341, max=0.0465, norm=0.0814
+conv1_2.weight: min=-0.0201, max=0.0243, norm=0.1666
+conv1_2.bias: min=-0.0171, max=0.0266, norm=0.0502
+conv2_1.weight: min=-0.0124, max=0.0216, norm=0.1401
+conv2_1.bias: min=-0.0314, max=0.0372, norm=0.0752
+conv2_2.weight: min=-0.0095, max=0.0073, norm=0.0945
+conv2_2.bias: min=-0.0265, max=0.0215, norm=0.0704
+conv3_1.weight: min=-0.0045, max=0.0049, norm=0.0700
+conv3_1.bias: min=-0.0103, max=0.0136, norm=0.0365
+conv3_2.weight: min=-0.0026, max=0.0040, norm=0.0518
+conv3_2.bias: min=-0.0122, max=0.0124, norm=0.0434
+fc1.weight: min=-0.0016, max=0.0014, norm=0.0375
+fc1.bias: min=-0.0032, max=0.0032, norm=0.0121
+fc2.weight: min=-0.0020, max=0.0021, norm=0.0270
+fc2.bias: min=-0.0019, max=0.0013, norm=0.0075
+fc3.weight: min=-0.0013, max=0.0012, norm=0.0178
+fc3.bias: min=-0.0013, max=0.0010, norm=0.0035
+conv2d_1.weight: min=-0.0004, max=0.0007, norm=0.0042
+conv2d_1.bias: min=-0.0033, max=0.0019, norm=0.0119
+conv2d_2.weight: min=-0.0008, max=0.0004, norm=0.0146
+conv2d_2.bias: min=-0.0030, max=0.0015, norm=0.0057
+conv2d_3.weight: min=-0.0011, max=0.0007, norm=0.0121
+conv2d_3.bias: min=-0.0015, max=0.0010, norm=0.0031
+conv2d_4.weight: min=-0.0007, max=0.0044, norm=0.0210
+conv2d_4.bias: min=0.0034, max=0.0034, norm=0.0034
+✨ LR reduced to 7.8125e-06. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[241/300] Train BCE: 0.2557, Train MSE: 0.0798 | Val BCE: 0.2910, Val MSE: 0.0905
+  ✔ New best model saved (val_loss=0.3803)
+[242/300] Train BCE: 0.2570, Train MSE: 0.0802 | Val BCE: 0.2900, Val MSE: 0.0903
+[243/300] Train BCE: 0.2566, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0904
+[244/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[245/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[246/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0904
+[247/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2904, Val MSE: 0.0904
+[248/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2904, Val MSE: 0.0904
+[249/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0904
+[250/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0904
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0185, max=-0.0185, norm=0.0185
+bn_input.bias: min=0.0131, max=0.0131, norm=0.0131
+conv1_1.weight: min=-0.1286, max=0.1074, norm=0.4244
+conv1_1.bias: min=-0.0927, max=0.0392, norm=0.1194
+conv1_2.weight: min=-0.0413, max=0.0529, norm=0.2926
+conv1_2.bias: min=-0.0155, max=0.0260, norm=0.0463
+conv2_1.weight: min=-0.0418, max=0.0307, norm=0.2151
+conv2_1.bias: min=-0.0180, max=0.0180, norm=0.0528
+conv2_2.weight: min=-0.0142, max=0.0122, norm=0.1445
+conv2_2.bias: min=-0.0354, max=0.0281, norm=0.0829
+conv3_1.weight: min=-0.0065, max=0.0107, norm=0.1041
+conv3_1.bias: min=-0.0166, max=0.0197, norm=0.0565
+conv3_2.weight: min=-0.0053, max=0.0044, norm=0.0678
+conv3_2.bias: min=-0.0149, max=0.0134, norm=0.0456
+fc1.weight: min=-0.0017, max=0.0013, norm=0.0468
+fc1.bias: min=-0.0037, max=0.0033, norm=0.0158
+fc2.weight: min=-0.0027, max=0.0025, norm=0.0293
+fc2.bias: min=-0.0024, max=0.0022, norm=0.0085
+fc3.weight: min=-0.0013, max=0.0013, norm=0.0193
+fc3.bias: min=-0.0011, max=0.0012, norm=0.0037
+conv2d_1.weight: min=-0.0004, max=0.0013, norm=0.0049
+conv2d_1.bias: min=-0.0024, max=0.0014, norm=0.0099
+conv2d_2.weight: min=-0.0007, max=0.0004, norm=0.0126
+conv2d_2.bias: min=-0.0024, max=0.0014, norm=0.0046
+conv2d_3.weight: min=-0.0010, max=0.0007, norm=0.0128
+conv2d_3.bias: min=-0.0012, max=0.0008, norm=0.0028
+conv2d_4.weight: min=-0.0003, max=0.0033, norm=0.0235
+conv2d_4.bias: min=0.0028, max=0.0028, norm=0.0028
+[251/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[252/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0905
+[253/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2906, Val MSE: 0.0904
+[254/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2907, Val MSE: 0.0904
+[255/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2907, Val MSE: 0.0904
+[256/300] Train BCE: 0.2560, Train MSE: 0.0799 | Val BCE: 0.2907, Val MSE: 0.0904
+[257/300] Train BCE: 0.2559, Train MSE: 0.0798 | Val BCE: 0.2907, Val MSE: 0.0905
+✨ LR reduced to 3.90625e-06. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[258/300] Train BCE: 0.2559, Train MSE: 0.0798 | Val BCE: 0.2907, Val MSE: 0.0905
+[259/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+  💾 Checkpoint saved at epoch 260
+[260/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0552, max=0.0552, norm=0.0552
+bn_input.bias: min=0.0627, max=0.0627, norm=0.0627
+conv1_1.weight: min=-0.0293, max=0.0685, norm=0.2063
+conv1_1.bias: min=-0.0519, max=0.0387, norm=0.0904
+conv1_2.weight: min=-0.0099, max=0.0214, norm=0.1387
+conv1_2.bias: min=-0.0054, max=0.0138, norm=0.0273
+conv2_1.weight: min=-0.0199, max=0.0166, norm=0.1450
+conv2_1.bias: min=-0.0634, max=0.0213, norm=0.0905
+conv2_2.weight: min=-0.0100, max=0.0079, norm=0.0809
+conv2_2.bias: min=-0.0231, max=0.0153, norm=0.0544
+conv3_1.weight: min=-0.0040, max=0.0042, norm=0.0735
+conv3_1.bias: min=-0.0123, max=0.0163, norm=0.0501
+conv3_2.weight: min=-0.0023, max=0.0028, norm=0.0470
+conv3_2.bias: min=-0.0139, max=0.0081, norm=0.0420
+fc1.weight: min=-0.0010, max=0.0018, norm=0.0351
+fc1.bias: min=-0.0029, max=0.0028, norm=0.0111
+fc2.weight: min=-0.0016, max=0.0014, norm=0.0225
+fc2.bias: min=-0.0009, max=0.0008, norm=0.0051
+fc3.weight: min=-0.0010, max=0.0008, norm=0.0157
+fc3.bias: min=-0.0006, max=0.0005, norm=0.0026
+conv2d_1.weight: min=-0.0006, max=0.0002, norm=0.0037
+conv2d_1.bias: min=-0.0011, max=0.0015, norm=0.0059
+conv2d_2.weight: min=-0.0003, max=0.0004, norm=0.0078
+conv2d_2.bias: min=-0.0009, max=0.0015, norm=0.0026
+conv2d_3.weight: min=-0.0006, max=0.0004, norm=0.0085
+conv2d_3.bias: min=-0.0008, max=0.0007, norm=0.0018
+conv2d_4.weight: min=-0.0032, max=0.0004, norm=0.0190
+conv2d_4.bias: min=-0.0020, max=-0.0020, norm=0.0020
+[261/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+[262/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+[263/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[264/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[265/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+[266/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+[267/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+[268/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[269/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[270/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0026, max=0.0026, norm=0.0026
+bn_input.bias: min=-0.0019, max=-0.0019, norm=0.0019
+conv1_1.weight: min=-0.0516, max=0.0519, norm=0.1787
+conv1_1.bias: min=-0.0408, max=0.0240, norm=0.0783
+conv1_2.weight: min=-0.0142, max=0.0147, norm=0.1410
+conv1_2.bias: min=-0.0174, max=0.0170, norm=0.0402
+conv2_1.weight: min=-0.0092, max=0.0174, norm=0.1154
+conv2_1.bias: min=-0.0224, max=0.0265, norm=0.0603
+conv2_2.weight: min=-0.0072, max=0.0072, norm=0.0808
+conv2_2.bias: min=-0.0188, max=0.0195, norm=0.0569
+conv3_1.weight: min=-0.0048, max=0.0036, norm=0.0718
+conv3_1.bias: min=-0.0172, max=0.0098, norm=0.0456
+conv3_2.weight: min=-0.0023, max=0.0038, norm=0.0509
+conv3_2.bias: min=-0.0117, max=0.0150, norm=0.0426
+fc1.weight: min=-0.0014, max=0.0015, norm=0.0380
+fc1.bias: min=-0.0024, max=0.0032, norm=0.0115
+fc2.weight: min=-0.0020, max=0.0019, norm=0.0245
+fc2.bias: min=-0.0013, max=0.0011, norm=0.0056
+fc3.weight: min=-0.0011, max=0.0022, norm=0.0176
+fc3.bias: min=-0.0008, max=0.0013, norm=0.0034
+conv2d_1.weight: min=-0.0002, max=0.0005, norm=0.0021
+conv2d_1.bias: min=-0.0003, max=0.0004, norm=0.0013
+conv2d_2.weight: min=-0.0002, max=0.0002, norm=0.0044
+conv2d_2.bias: min=-0.0004, max=0.0005, norm=0.0013
+conv2d_3.weight: min=-0.0004, max=0.0006, norm=0.0056
+conv2d_3.bias: min=-0.0002, max=0.0003, norm=0.0008
+conv2d_4.weight: min=-0.0004, max=0.0025, norm=0.0116
+conv2d_4.bias: min=0.0008, max=0.0008, norm=0.0008
+[271/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[272/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[273/300] Train BCE: 0.2561, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+✨ LR reduced to 1.953125e-06. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[274/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2905, Val MSE: 0.0904
+[275/300] Train BCE: 0.2566, Train MSE: 0.0800 | Val BCE: 0.2900, Val MSE: 0.0903
+[276/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[277/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[278/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+[279/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+  💾 Checkpoint saved at epoch 280
+[280/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0547, max=-0.0547, norm=0.0547
+bn_input.bias: min=-0.0693, max=-0.0693, norm=0.0693
+conv1_1.weight: min=-0.0685, max=0.0504, norm=0.2509
+conv1_1.bias: min=-0.0359, max=0.0223, norm=0.0765
+conv1_2.weight: min=-0.0222, max=0.0137, norm=0.2041
+conv1_2.bias: min=-0.0303, max=0.0294, norm=0.0534
+conv2_1.weight: min=-0.0131, max=0.0202, norm=0.1466
+conv2_1.bias: min=-0.0299, max=0.0445, norm=0.0807
+conv2_2.weight: min=-0.0091, max=0.0077, norm=0.0975
+conv2_2.bias: min=-0.0168, max=0.0245, norm=0.0568
+conv3_1.weight: min=-0.0046, max=0.0043, norm=0.0811
+conv3_1.bias: min=-0.0114, max=0.0165, norm=0.0473
+conv3_2.weight: min=-0.0037, max=0.0056, norm=0.0541
+conv3_2.bias: min=-0.0177, max=0.0185, norm=0.0480
+fc1.weight: min=-0.0014, max=0.0013, norm=0.0369
+fc1.bias: min=-0.0034, max=0.0025, norm=0.0118
+fc2.weight: min=-0.0014, max=0.0021, norm=0.0247
+fc2.bias: min=-0.0015, max=0.0016, norm=0.0064
+fc3.weight: min=-0.0016, max=0.0009, norm=0.0166
+fc3.bias: min=-0.0013, max=0.0007, norm=0.0029
+conv2d_1.weight: min=-0.0003, max=0.0006, norm=0.0019
+conv2d_1.bias: min=-0.0003, max=0.0011, norm=0.0030
+conv2d_2.weight: min=-0.0002, max=0.0003, norm=0.0060
+conv2d_2.bias: min=-0.0003, max=0.0007, norm=0.0019
+conv2d_3.weight: min=-0.0006, max=0.0006, norm=0.0073
+conv2d_3.bias: min=-0.0002, max=0.0006, norm=0.0010
+conv2d_4.weight: min=-0.0019, max=0.0021, norm=0.0105
+conv2d_4.bias: min=0.0004, max=0.0004, norm=0.0004
+[281/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[282/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[283/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0903
+[284/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2903, Val MSE: 0.0903
+[285/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2903, Val MSE: 0.0904
+[286/300] Train BCE: 0.2563, Train MSE: 0.0799 | Val BCE: 0.2903, Val MSE: 0.0903
+[287/300] Train BCE: 0.2563, Train MSE: 0.0800 | Val BCE: 0.2904, Val MSE: 0.0903
+[288/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+[289/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+✨ LR reduced to 9.765625e-07. Loading best model weights from /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Model/RsRp_7_9/model_n2.pth.
+[290/300] Train BCE: 0.2562, Train MSE: 0.0799 | Val BCE: 0.2904, Val MSE: 0.0904
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0212, max=0.0212, norm=0.0212
+bn_input.bias: min=0.0078, max=0.0078, norm=0.0078
+conv1_1.weight: min=-0.0638, max=0.1210, norm=0.3731
+conv1_1.bias: min=-0.0482, max=0.0332, norm=0.1064
+conv1_2.weight: min=-0.0433, max=0.0211, norm=0.2564
+conv1_2.bias: min=-0.0280, max=0.0131, norm=0.0546
+conv2_1.weight: min=-0.0281, max=0.0301, norm=0.1836
+conv2_1.bias: min=-0.0205, max=0.0354, norm=0.0805
+conv2_2.weight: min=-0.0157, max=0.0097, norm=0.1215
+conv2_2.bias: min=-0.0372, max=0.0231, norm=0.0882
+conv3_1.weight: min=-0.0050, max=0.0069, norm=0.1003
+conv3_1.bias: min=-0.0104, max=0.0205, norm=0.0562
+conv3_2.weight: min=-0.0039, max=0.0052, norm=0.0637
+conv3_2.bias: min=-0.0134, max=0.0096, norm=0.0487
+fc1.weight: min=-0.0019, max=0.0012, norm=0.0414
+fc1.bias: min=-0.0062, max=0.0044, norm=0.0157
+fc2.weight: min=-0.0018, max=0.0033, norm=0.0277
+fc2.bias: min=-0.0015, max=0.0026, norm=0.0076
+fc3.weight: min=-0.0014, max=0.0011, norm=0.0182
+fc3.bias: min=-0.0014, max=0.0008, norm=0.0033
+conv2d_1.weight: min=-0.0004, max=0.0012, norm=0.0040
+conv2d_1.bias: min=-0.0017, max=0.0013, norm=0.0069
+conv2d_2.weight: min=-0.0006, max=0.0004, norm=0.0109
+conv2d_2.bias: min=-0.0020, max=0.0011, norm=0.0037
+conv2d_3.weight: min=-0.0009, max=0.0006, norm=0.0106
+conv2d_3.bias: min=-0.0012, max=0.0008, norm=0.0023
+conv2d_4.weight: min=-0.0003, max=0.0033, norm=0.0201
+conv2d_4.bias: min=0.0025, max=0.0025, norm=0.0025
+  ✔ New best model saved (val_loss=0.3802)
+[291/300] Train BCE: 0.2566, Train MSE: 0.0800 | Val BCE: 0.2900, Val MSE: 0.0903
+[292/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2900, Val MSE: 0.0903
+[293/300] Train BCE: 0.2565, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[294/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[295/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[296/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[297/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2901, Val MSE: 0.0903
+[298/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+[299/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+  💾 Checkpoint saved at epoch 300
+[300/300] Train BCE: 0.2564, Train MSE: 0.0800 | Val BCE: 0.2902, Val MSE: 0.0903
+✔ Finished training for SNR=500, best val loss=0.3802

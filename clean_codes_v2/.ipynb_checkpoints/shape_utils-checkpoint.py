@@ -197,21 +197,22 @@ def generate_circles(num_maps=1000, size=SHAPE_SIZE):
 
 
 def main(
-    Num,
-    N=1,
-    base_dir=None,
-    maps_path=None,
+        Num,
+        N,
+        shape_dir,
+        # base_dir=None,
+        maps_path=None
 ):
-    # Use provided base_dir or fallback to current working directory
-    base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
+    # # Use provided base_dir or fallback to current working directory
+    # base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
 
-    # OM10 directory
-    om10_dir = base_dir / "OM10"
-    om10_dir.mkdir(parents=True, exist_ok=True)
+    # # shapes directory
+    # shape_dir = base_dir / "OM10"
+    # shape_dir.mkdir(parents=True, exist_ok=True)
 
     # Paths with override support
     if maps_path is None:
-        maps_path = om10_dir / f"{N}.npy"
+        maps_path = shape_dir / f"{N}.npy"
     else:
         maps_path = Path(maps_path)
 
@@ -231,13 +232,13 @@ def main(
         print("This array now contains the binary masks of the SOLID Bezier shapes.")
         print("\nExample of the first 10 rows of the first shape's mask (1s now represent the solid area):")
         # Display a small section of the mask for demonstration
-        print(shapes_data_masks[0][:10])
+        #print(shapes_data_masks[0][:10])
     else:
         print("No shapes were generated.")
         
     print("\n----------------------------------")
 
-    return om10_dir
+    return 
     
 if __name__ == "__main__":
     Num = int(sys.argv[1])
