@@ -7,15 +7,18 @@ import torch.nn.functional as F
 
 class LightCurveDataset(Dataset):
     def __init__(self, folder: str, data_type: str,device: str):
-        self.lc_folder = os.path.join(folder, "LC10")
-        self.img_folder = os.path.join(folder, "OM10")
+        # self.lc_folder = os.path.join(folder, "LC10")
+        # self.img_folder = os.path.join(folder, "OM10")
+        self.lc_folder = os.path.join(folder)
+        self.img_folder = os.path.join(folder)
+        
         self.device=device
         self.data_type = data_type
         
         
         self.base_names = []
         lc_files_paths = sorted(glob.glob(os.path.join(self.lc_folder, f"{self.data_type}_*LC.npy")))
-        
+        print("lc_files_paths",lc_files_paths)
         for lc_path in lc_files_paths:
             base_name = os.path.basename(lc_path).replace('LC.npy', '')
             
@@ -23,10 +26,10 @@ class LightCurveDataset(Dataset):
 
         self.lc_paths = [os.path.join(self.lc_folder, f"{name}LC.npy") for name in self.base_names]
         #self.depth_paths = [os.path.join(self.lc_folder, f"{name}_meta.npy") for name in self.base_names]
-        
+        print("self.lc_paths",self.lc_paths)
         
         self.img_paths = [os.path.join(self.img_folder, f"{name.strip()}.npy") for name in self.base_names]
-        
+        print("self.img_paths",self.img_paths)
         
         for i, path in enumerate(self.img_paths):
             if not os.path.exists(path):

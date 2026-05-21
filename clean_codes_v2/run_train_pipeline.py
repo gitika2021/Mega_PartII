@@ -69,6 +69,7 @@ if __name__ == "__main__":
         checkpoint_freq = config.get('checkpoint_freq',3)
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
                                    epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
+        print(f"For training device used is: {device}")
     else:
         print("Preprocessing")
         obj.execute()

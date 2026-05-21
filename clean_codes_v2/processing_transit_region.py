@@ -270,7 +270,7 @@ class TransitRegionSelector():
     def find_transit_region_and_save_parallel(self):
     
         ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
-        print(f'Number of files found is {len(ltcrv_npz_files)}')
+        print(f'Number of *_binned.npz files found is {len(ltcrv_npz_files)}')
         rows = [filepath for filepath in ltcrv_npz_files]
     
         print(f"Using {self.max_workers} CPU cores")

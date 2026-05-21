@@ -43,7 +43,7 @@ __Step 5: Test the trained model using a simulated test dataset__
 python clean_codes_v2/run_inference_pipeline.py --config-file demo_config.json --Num 250 --test 1 --fresh_run 0
 
 __Step 6: Use the trained model on real Kepler Light Curves__
-python clean_codes_v2/run_inference_pipeline.py --config-file demo_config.json --test 0 --fresh_run 0
+python clean_codes_v2/run_inference_pipeline.py --config-file demo_config.json --test 0 
 
 __Important Points:__
 

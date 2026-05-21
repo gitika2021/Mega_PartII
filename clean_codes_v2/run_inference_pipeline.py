@@ -59,6 +59,6 @@ if __name__ == "__main__":
         
         print("Infering shape from LC using trained model for real data")
         infer = MLInference(lc_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
-                     n_scale=n_scale, N=None)
+                     n_scale=n_scale, N=None, obj = obj)
         infer.execute()      
     

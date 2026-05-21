@@ -4,7 +4,7 @@ import torch.optim as optim
 import json
 from torch.utils.data import DataLoader
 import numpy as np
-from datasetv2 import *
+from dataset import *
 from models import *
 import cProfile
 import pstats
