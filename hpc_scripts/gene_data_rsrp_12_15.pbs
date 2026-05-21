@@ -59,7 +59,7 @@ print(f"Created: {outfile}")
 EOF
 
 
-MASTER_LOG="pipeline_time.log"
+MASTER_LOG="gene_time.log"
 
 start_time=$(date +%s)
 
@@ -67,10 +67,8 @@ echo "==================================" >> $MASTER_LOG
 echo "Pipeline started at: $(date)" >> $MASTER_LOG
 echo "==================================" >> $MASTER_LOG
 
-python clean_codes_v2/run_train_pipeline.py --config-file ../Config/train_${ratio1}_${ratio2} --train 0 --N 1 --fresh_run 1 > train_${ratio1}_${ratio2}_N1.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file ../Config/train_${ratio1}_${ratio2} --train 0 --N 2 --fresh_run 1 > train_${ratio1}_${ratio2}_N2.log 2>&1 
-
-python clean_codes_v2/run_train_pipeline.py --config-file ../Config/train_${ratio1}_${ratio2} --train 1  > train_${ratio1}_${ratio2}.log 2>&1
+python ../clean_codes_v2/run_train_pipeline.py --config-file ../Config/train_${ratio1}_${ratio2} --train 0 --N 1 --fresh_run 1 > train_${ratio1}_${ratio2}_N1.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file ../Config/train_${ratio1}_${ratio2} --train 0 --N 2 --fresh_run 1 > train_${ratio1}_${ratio2}_N2.log 
 
 end_time=$(date +%s)
 
