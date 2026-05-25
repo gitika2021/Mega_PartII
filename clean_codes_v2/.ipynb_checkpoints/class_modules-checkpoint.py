@@ -11,6 +11,10 @@ import os
 from binary_classifier import *
 from rich import print as prcolor
 import re
+from utils import extract_key
+import ast
+import shutil
+import pandas as pd
 ###################################
 class MLPreProcessing():
     def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None,fresh_run=False):
@@ -258,7 +262,7 @@ class MLInference():
         self.lcs_filename = self.lc_dir_pthobj / "light_curves_all.npy"
         self.key_filename = self.lc_dir_pthobj / "keynames_all.npy"
         self.pre_filename = self.lc_dir_pthobj / "prediction_maps_all.npy"
-        self.map_filename = self.lc_dir_pthobj / "original_maps_all.npy" if N is not None else None
+        self.map_filename = self.lc_dir_pthobj / "original_maps_all.npy"
 
         
     def extract_key(self,filepath,split_str="_binned.npz"):
@@ -273,14 +277,24 @@ class MLInference():
                                                                 max_workers=self.nproc)
             trs.find_transit_region_and_save_parallel()
             ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"*_binned_transit_interp.npz"))
+
+            self.orig_shapes = np.zeros((len(ltcrv_npz_files),shape_utils.SHAPE_SIZE,shape_utils.SHAPE_SIZE))
+            np.save(self.map_filename,self.orig_shapes)
+            prcolor('[bold green]original shapes not applicable: fake data created')
         else:
                     
             # for file in Path(self.lc_dir_pthobj).glob(f"{self.N}*_binned_transit_interp.npz"):
             #     file.unlink()
             ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"{self.N}*_binned_transit_interp.npz"))
+            print(f'Number of Test shapes is {len(ltcrv_npz_files)}')
+            orig_shapes_file = self.mlprep.shape_file
+            orig_shapes = np.load(orig_shapes_file)
+            np.save(self.map_filename,orig_shapes)
+            print(f'Saved Original Test shapes to {self.map_filename}')
+            prcolor('[bold green]original shapes applicable: actual data used')
 
-        files_sorted = sorted(ltcrv_npz_files)
-
+        files_sorted = sorted(ltcrv_npz_files, key=processing_transit_region.extract_index)
+        print('files_sorted',files_sorted)
         data_temp = np.load(ltcrv_npz_files[0])
         
         keys_sorted = np.empty(len(ltcrv_npz_files), dtype=object)
@@ -317,24 +331,12 @@ class MLInference():
             out.append(generator(lc[i].unsqueeze(0).float()).squeeze().detach().cpu())
         np.save(self.pre_filename,torch.stack(out, dim=0).numpy())        
         return
+ 
 
     def plot_prediction_orig_maps(self):
-        meta_file = self.mlprep.out_file_lc_meta
-        meta_data = np.load(meta_file)
-        
-        orig_shapes_file = self.mlprep.shape_file 
-        pred_shapes_file = self.pre_filename
-        inp_lcs_file = self.lcs_filename
-
-        
-        orig_shapes = np.load(orig_shapes_file)
-        predicted_shape = np.load(pred_shapes_file)
-        inp_lcs = np.load(inp_lcs_file)
-        np.save(self.map_filename,orig_shapes)
-        print('orig_shapes.shape, predicted_shape.shape',orig_shapes.shape, predicted_shape.shape)
-        
-        images = orig_shapes
-        predictions = predicted_shape
+        images = self.orig_shapes
+        predictions = self.pred_shapes
+        inpt_ltcrvs = self.inpt_ltcrvs
         
         n_total = images.shape[0]
         n_cols = 12                               # number of images per row
@@ -357,36 +359,186 @@ class MLInference():
                 ax_pred = axes[1, i] if count > 1 else axes[0]
                 ax_pred.imshow(predictions[start + i], cmap='viridis')
                 #ax_img.set_title(f"{kepnames[start + i]}\n$R_p/R_s$: {rp_rs_ratio[start + i]:.2f}\n$snr$: {snr[start + i]:.2f}", fontsize=8)
+                ax_img.set_title(f"{self.keynames[start + i]}\n", fontsize=6)
                 ax_pred.axis('off')
                 
                 # Plot 1D profile
                 ax_prof = axes[2, i] if count > 1 else axes[1]
-                ax_prof.plot(inp_lcs[start + i])
+                ax_prof.plot(inpt_ltcrvs[start + i])
                 ax_prof.set_xticks([])
                 ax_prof.set_yticks([])
-        
-            plt.suptitle(f"Images and 1D Profiles: Group {group+1}/{n_groups}", fontsize=12)
-            plt.tight_layout()
-            plt.savefig(self.figure_dir/ f'{self.N}_org_vs_pred.png')
-            plt.show()
+            if group+1 > 20 and self.N is not None:
+                plt.suptitle(f"Images and 1D Profiles: Group {group+1}/{n_groups}", fontsize=12)
+                plt.tight_layout()
+                plt.savefig(self.figure_dir/ f'{self.N}_grp{group+1}_org_vs_pred.png')
+                plt.show()
+            elif self.N is None:
+                
+                plt.suptitle(f"Images and 1D Profiles: Group {group+1}/{n_groups}", fontsize=12)
+                plt.tight_layout()
+                plt.savefig(self.figure_dir/ f'{self.N}_grp{group+1}_org_vs_pred.png')
+                plt.show()
+                
+                
         return
         
 
-    def run_binary_classifier(self):
+    def load_imp_files(self):
+        self.orig_shapes = np.load(self.map_filename)
+        self.pred_shapes = np.load(self.pre_filename)
+        self.inpt_ltcrvs = np.load(self.lcs_filename)
+        self.keynames = np.load(self.key_filename,allow_pickle=True)
+        
+        prcolor("[bold green]Check that sizes of these files are same??")
+        print(f"Shape of original file:{self.orig_shapes.shape}")
+        print(f"Shape of predicted file:{self.pred_shapes.shape}")
+        print(f"Shape of light curve file:{self.inpt_ltcrvs.shape}")
+        print(f"Shape of keynames file:{self.keynames.shape}")
+        print('self.keynames',self.keynames)
+        return
+ 
+    def run_binary_classifier(self):        
         self.flux_cutI = 0.94
         self.dist_cutII = 0.10
-
-        orig_shape = np.load(self.map_filename)
-        binclas_orig,acc,CI,CII,flags_str,rad_fit, fmaps = batch_predict_shape(images=orig_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=nrpoc, show= False) 
-
-        pred_shape = np.load(self.pre_filename)
-        binclas_pred,acc_pred,CI_pred,CII_pred,flags_str_pred,rad_fit_pred, fmaps_pred = batch_predict_shape(images=orig_shape,deviation_estimator='flux',cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=nrpoc, show= False)
+        self.deviation_estimator = 'flux'
         
+        if self.N is None:
+            # for real data
+            self.binclas_pred,acc_pred,self.CI_pred,self.CII_pred,flags_str_pred,self.rad_fit_pred, self.fmaps_pred = batch_predict_shape(images=self.pred_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False)  
+            
+            self.CI_pred = np.round(self.CI_pred,2)
+            self.CII_pred = np.round(self.CII_pred,2)
+        
+        else:
+            # for simulated test data              
+            binclas_orig,acc,CI,CII,flags_str,self.rad_fit, self.fmaps = batch_predict_shape(images=self.orig_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False) 
+    
+            self.binclas_pred,acc_pred,self.CI_pred,self.CII_pred,flags_str_pred,self.rad_fit_pred, self.fmaps_pred = batch_predict_shape(images=self.pred_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False)
+            
+            savefigname = self.figure_dir/ f'confusion_met_{self.N}.png'
+            results = estimate_ml_metrics(binclas_orig, binclas_pred, 
+                            savefig=savefigname)
+            
 
-        results = estimate_ml_metrics(binclas_orig, binclas_pred, 
-                        savefig=None)
 
         return
+
+    def create_anomaly_catalog(self):
+        planet_names = np.array(['K' + key[15:20] + '-' + key[21:] for key in self.keynames])
+        planet_kic = np.array(['KIC' + key[4:12] for key in self.keynames])
+        
+        anomalous_objs_mask = (self.binclas_pred == 1)
+        
+        anomalous_objs_keys = self.keynames[anomalous_objs_mask]
+        anomalous_planet_names = planet_names[anomalous_objs_mask]
+        anomalous_planet_kic = planet_kic[anomalous_objs_mask]
+        #anomalous_planet_names = ['K' + key[15:20] + '-' + key[21:-1]+' '+key[-1] for key in self.keynames]
+        anomalous_objs_CI = self.CI_pred[anomalous_objs_mask]
+        anomalous_objs_CII = self.CII_pred[anomalous_objs_mask]
+        anomalous_objs_maps = self.fmaps_pred[anomalous_objs_mask, :, :]
+        print('anomalous_objs_keys',anomalous_objs_keys,anomalous_planet_names) 
+        print('anomalous_planet_kic',anomalous_planet_kic)
+
+        planet_objs_keys = self.keynames[~anomalous_objs_mask]
+        planet_planet_names = planet_names[~anomalous_objs_mask]
+        planet_planet_kic = planet_kic[~anomalous_objs_mask]
+        #planet_planet_names = ['K' + key[15:20] + '-' + key[21:-1]+' '+key[-1] for key in self.keynames]
+        planet_objs_CI = self.CI_pred[~anomalous_objs_mask]
+        planet_objs_CII = self.CII_pred[~anomalous_objs_mask]
+        planet_objs_maps = self.fmaps_pred[~anomalous_objs_mask, :, :]
+        print('planet_objs_keys',planet_objs_keys,planet_planet_names) 
+        print('planet_planet_kic',planet_planet_kic)
+        
+        np.save(self.lc_dir_pthobj / f"{self.N}_final_predicted_maps_anamalous.npy",anomalous_objs_maps)
+        np.save(self.lc_dir_pthobj / f"{self.N}_final_predicted_maps_planet.npy",planet_objs_maps)
+        
+        # Create DataFrame
+        df = pd.DataFrame({
+            "KIC ID": anomalous_planet_kic,
+            "Planet Names": anomalous_planet_names,
+            "Cut I": anomalous_objs_CI,
+            "Cut II": anomalous_objs_CII
+        })
+        
+        print(df)
+        
+        # ---- Save table as PNG ----
+        # fig, ax = plt.subplots(figsize=(5, 2))
+        # ax.axis('off')
+        
+        # table = ax.table(
+        #     cellText=df.values,
+        #     colLabels=df.columns,
+        #     loc='center',
+        #     cellLoc='center'
+        # )
+        
+        # table.auto_set_font_size(False)
+        # table.set_fontsize(10)
+        # table.scale(1.2, 1.5)
+        
+        # # Make header bold
+        # for (row, col), cell in table.get_celld().items():
+        #     if row == 0:
+        #         cell.set_text_props(weight='bold')
+        
+        # plt.savefig(self.figure_dir/ f'{self.N}_kepler_anomalous_table.png', bbox_inches='tight', dpi=300)
+        # plt.close()
+
+        fig, ax = plt.subplots(figsize=(7, 2.5), dpi=300)
+        ax.axis('off')
+        
+        table = ax.table(
+            cellText=df.values,
+            colLabels=df.columns,
+            loc='center',
+            cellLoc='center'
+        )
+        
+        # Font control
+        table.auto_set_font_size(False)
+        table.set_fontsize(11)
+        
+        # Scale table
+        table.scale(1.2, 1.6)
+        
+        # Style cells
+        for (row, col), cell in table.get_celld().items():
+        
+            # Thin borders
+            cell.set_linewidth(0.6)
+        
+            # Header row
+            if row == 0:
+                cell.set_text_props(weight='bold', color='black')
+                cell.set_facecolor('#D9E6F2')   # light blue-gray
+                cell.set_height(0.18)
+        
+            else:
+                cell.set_facecolor('white')
+                cell.set_height(0.15)
+        
+        # Optional title
+        plt.title(
+            'Kepler Anmalous Candidates',
+            fontsize=13,
+            weight='bold',
+            pad=12
+        )
+        
+        plt.tight_layout()
+        
+        # Save for paper
+        plt.savefig(
+            self.figure_dir/ f'{self.N}_kepler_anomalous_table.png',
+            bbox_inches='tight',
+            dpi=300
+        )
+        
+        plt.show()
+
+        return        
+        
     def execute(self):
         if self.lc_dir is not None:
             self.process_orig_ltcrvs()
@@ -396,6 +548,11 @@ class MLInference():
                 pattern =f"kplr*"
             self.read_processed_ltcrvs(pattern=pattern)
             self.infer_2dshape()
+            self.load_imp_files()
+            self.plot_prediction_orig_maps()
+            self.run_binary_classifier()
+            if self.N is None:
+                self.create_anomaly_catalog()
 
         return
 ###################################
@@ -494,7 +651,7 @@ class LogBinHistogram():
                 snr_ranges[i, 2] = int(np.percentile(snr_in_bin,50))
         
             else:
-                snr_ranges[i] = [np.nan, np.nan,np.nan]
+                snr_ranges[i] = [-np.inf, np.inf,np.inf]
         
         # ----- Rp/Rs plots -----
 
@@ -533,7 +690,7 @@ class LogBinHistogram():
         # ----- Inverse ratio bins -----
 
         inv_edges = 1.0 / bin_edges
-
+        #print('inv_edges',inv_edges)
         inverse_bins = np.zeros(
             (self.nbins, 2),
             dtype=int
@@ -621,4 +778,52 @@ class LogBinHistogram():
         plt.show()
 
         return
+###################################
+
+###################################
+# class for processing Kepler Data
+
+class SaveKeplerToRsRpBins():    
+    def __init__(self,lcs_dir,snr_cut = 50, n_rsrp_bins=21):
+        import kepler_distribution_utils
+        self.filesfolder = Path(lcs_dir)
+        self.snr_cut = snr_cut
+        self.n_rsrp_bins = n_rsrp_bins
+        self.obj = MLPreProcessing()
+        table_subset_new = kepler_distribution_utils.main(snr_cut = self.snr_cut, n_rsrp_bins=self.n_rsrp_bins)
+        self.df = table_subset_new
+                
+    def distribute_kepler_into_rsrp_bins(self):
+        ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
+        objs_not_found = []
+        objs_found = []
+        for i, f in enumerate(ltcrv_npz_files):
+            #print('file',f)
+            key = extract_key(f,split_str="_binned.npz")
+            planet_name = key[14:]
+            planet_name = 'K'+planet_name[1:6]+'-'+planet_name[7:]
+            #planet_name= 'Kepler_809b'
+
+            matches = self.df.loc[self.df['kepname'] == planet_name, 'invrprs_bin_edges']
+            if not matches.empty:
+                objs_found.append(planet_name)
+                rsrp_bin = matches.iloc[0]
+                #print('rsrp_bin',rsrp_bin)
+                rsrp_bin = ast.literal_eval(rsrp_bin)
+                rsrp1, rsrp2 = rsrp_bin
+                #print('rsrp1, rsrp2',int(rsrp1), int(rsrp2),type(rsrp1))
+
+                # copy phase folded files to Binned directory as per their rsrp ratio
+                kepler_binned_dir = Path(Base_Dir) / f"Kepler_RsRp_Bins/RsRp_{rsrp1}_{rsrp2}"
+                kepler_binned_dir.mkdir(parents=True, exist_ok=True)
+                src = Path(f)
+                shutil.copy2(src, kepler_binned_dir / src.name)
+                                
+            else:
+                #print("No matching kepname found")
+                objs_not_found.append(planet_name)
+        print('Kepler objs_not_found and not Binned in RsRp',len(objs_not_found))
+        print('Kepler objs_found and binned in RsRp',len(objs_found))
+            
+        return 
 ###################################

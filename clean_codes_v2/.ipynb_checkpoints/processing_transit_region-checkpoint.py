@@ -440,7 +440,7 @@ def combine_flux(folder_path,N, output_file="combined_flux.npy", savefolder_path
 
     # Sort files based on LC index
     files_sorted = sorted(files, key=extract_index)
-    #print(files_sorted)
+    print('transit files_sorted',files_sorted)
     print(f"Found {len(files_sorted)} files")
 
     all_flux = []

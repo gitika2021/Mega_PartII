@@ -5,6 +5,9 @@ from paths import *
 from koi_table import KoiTableObjs as koitab
 import pandas as pd
 from pathlib import Path
+from utils import extract_key
+import ast
+import shutil
 
 def remove_nan_from_arrays(a, b, c):
     """
@@ -63,7 +66,7 @@ def save_kepler_ldc_ratio(koi_table_folder = "/home/iit-t/Gitika/Github-Reposito
     
     ldca, ldcb, rprs,mask = remove_nan_from_arrays(kepler_lcs_ldca, kepler_lcs_ldcb, kepler_lcs_rprs)
     kepler_snr = kepler_snr[mask]
-    print('kepler_snr',kepler_snr)
+    #print('kepler_snr',kepler_snr)
     print('Number of valid values in Kepler KOI for LDC and Rp/Rs',len(ldca))
     #np.isnan(a).any(),np.isnan(a).sum()
     LDC_coeffs = np.zeros((len(ldca),4))
@@ -92,8 +95,9 @@ def add_inverse_bins_as_input(df, bins, column='rprs',
     df = df.copy()
 
     rprs = df[column].to_numpy()
-    inv_rprs = 1.0 / rprs
-
+    #inv_rprs = 1.0 / rprs
+    inv_rprs = np.round(1.0 / rprs).astype(int)
+    #print('inv_rprs',inv_rprs)
     bins = np.asarray(bins)
 
     bin_idx = np.full(len(df), -1, dtype=int)
@@ -106,27 +110,28 @@ def add_inverse_bins_as_input(df, bins, column='rprs',
     # include right edge for last bin
     l, r = bins[-1]
     bin_idx[(inv_rprs >= l) & (inv_rprs <= r)] = len(bins) - 1
-
+    # print('bins',bins)
+    # print('l, r(last bin)',l, r)
+    # print('bin_idx[(inv_rprs >= l) & (inv_rprs <= r)]',inv_rprs[(inv_rprs >= l) & (inv_rprs <= r)])
+    
     df['invrprs_bin_index'] = bin_idx
 
     # store inverse-space bins (as given)
     df['invrprs_bin_edges'] = [
-        tuple(bins[i]) if i >= 0 else (np.nan, np.nan)
+        tuple(bins[i]) if i >= 0 else (-np.inf, np.inf)
         for i in bin_idx
     ]
 
     # convert back to rprs-space bins
     df['rprs_bin_edges'] = [
         (1.0 / bins[i][1], 1.0 / bins[i][0])
-        if i >= 0 else (np.nan, np.nan)
+        if i >= 0 else (-p.inf, np.inf)
         for i in bin_idx
     ]
 
     df.to_csv(outfile, index=False)
 
     return df
-
-
 
         
 def main(snr_cut = 50, n_rsrp_bins=15):
@@ -151,7 +156,7 @@ def main(snr_cut = 50, n_rsrp_bins=15):
 
     snr_1 = ldcs_coeffs_1[:,3] # all planets
     snr_2 = ldcs_coeffs_2[:,3] # planets with snr>snr_cut
-    print('snr_2',snr_2)
+    #print('snr_2',snr_2)
 
     # bin log(rprs) into n_rsrp_bins 
     hist = LogBinHistogram(nbins=n_rsrp_bins,figure_dir= figure_dir)
@@ -162,7 +167,7 @@ def main(snr_cut = 50, n_rsrp_bins=15):
         alpha=0.4,
         snr = snr_1
     )
-    inverse_bins, counts,snr_ranges = hist.add(
+    inverse_bins_org, counts,snr_ranges = hist.add(
         rp_rs_2,
         label=f"Kepler Planets (SNR > {snr_cut}) ",
         color='red',
@@ -170,14 +175,14 @@ def main(snr_cut = 50, n_rsrp_bins=15):
         snr = snr_2
     )    
     hist.show()
-    print('Rs/Rp bins are',inverse_bins)
+    print('Rs/Rp bins are',inverse_bins_org)
     print('Number of targets in each bin',counts)
 
     # sort the bins in increasing number of objects per bin
     # note: some bins may not have any real data in that bin
     mask = np.argsort(counts)[::-1] #(counts!=0)
     counts =counts[mask]
-    inverse_bins = inverse_bins[mask]
+    inverse_bins = inverse_bins_org[mask]
     snr_ranges = snr_ranges[mask]
 
     rsrp_bins = np.zeros((len(counts),6))
@@ -217,15 +222,18 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     plt.savefig(figure_dir/"kepler_radius_bins_table.png", bbox_inches='tight', dpi=300)
     plt.close()
     
-    print("Saved as table.png")
+    print(f"Saved as {figure_dir}/kepler_radius_bins_table.png")
 
     
     # create new table containing extra columns with bin index and bin ranges added
     table_subset = koi_conf_plans_tabl[koi_conf_plans_tabl['koi_model_snr']>= snr_cut]
-    add_inverse_bins_as_input(table_subset, inverse_bins, column='koi_ror',
-                                  outfile= obj.koi_table_folder + f'koi_cumulative_snr{snr_cut}.csv')
-    return
+    table_subset_new_name = obj.koi_table_folder + f'koi_cumulative_snr{snr_cut}.csv'
+    add_inverse_bins_as_input(table_subset, inverse_bins_org, column='koi_ror',
+                                  outfile= table_subset_new_name)
     
+    table_subset_new = pd.read_csv(table_subset_new_name,comment='#')
+    return table_subset_new
+        
 if __name__ == "__main__":
     obj = MLPreProcessing()
     

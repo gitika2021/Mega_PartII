@@ -3,6 +3,7 @@ import torch.nn.functional as F
 import numpy as np
 import math
 import torch.nn as nn
+import os 
 def symmetry_aware_dice_loss(y_true, y_pred, epsilon=1e-6):
     # 1. Standard Orientation
     intersection1 = (y_true * y_pred).sum(dim=(1, 2))
@@ -75,3 +76,10 @@ def calculate_iou(pred_mask, true_mask, threshold=0.5):
 def add_real_noise_to_batch(lc_batch: torch.Tensor, snr: float):
     noise = torch.randn_like(lc_batch) * (1/snr)
     return lc_batch + noise
+
+
+def extract_key(filepath,split_str="_binned.npz"):
+    filename = os.path.basename(filepath)
+    #filename = filepath.stem
+    #print('filename',filename)
+    return filename.split(split_str)[0]

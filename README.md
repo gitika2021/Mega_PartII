@@ -1,8 +1,11 @@
 # README #
 
-`ExoShadower` is an python pipeline that:
+__UMBRA__: Unveiling Megastrutures By Recognising Anomalies
+
+`UMBRA` is a python pipeline that:
 1. Can invert a light curve to recover the "shadow image" that produced it;
 2. Can predict the class of returned shadow image as "anomalous" or "planet".
+
 
 # Installing Dependencies #
 Do the installations in this order else some errors might occur.
@@ -50,10 +53,10 @@ __Important Points:__
 - For training dataset, avoid using __N = 99__ as it is reserved for storing test dataset.
 - fresh_run = 0 is set so as to avoid repeating processes in case required files already exist.
 - fresh_run = 1 generates everything from scratch e.g generating radius ratio grid, Bezier Shapes, Light Curves etc. Set it true only in case of testing.
-- For the purpose of testing the pipeline choose small __Num__ s
+- For the purpose of testing the pipeline choose small __Num__ 
 - Run __Step 5 to Step 6__ once the __Step 4__ is completed
 
-# ExoShadower #
+# UMBRA #
 
 The pipeline generates 2D Bezier shapes (38x38) and corresponding limb darkened light curves using the [EightBitTransit](https://github.com/esandford/EightBitTransit) package. A convolutional neural network model is trained on the simulated light curves to predict the 2D projected transiting shape (a.k.a Shadow) of the transiting system. The trained model then can be used on real light curves to predict the shadow of the transitor and find anomalous (non-circular) systems. 
 
@@ -64,6 +67,7 @@ __Details of the Dataset__
    - Binary Images: 1 = opaque pixel blocking star light
                     0 = transparent pixel 
 # 2. Light Curves:
+
     - We select targets in the Kepler KOI cumulative table with SNR >=50 (N=711). For these we get their $Rp/Rs$ and the Limb darkening coefficients.
     - We find the tight ant-correlation b/w the LDC coefficients [a,b]. We approximate this relation as stright line.
     - We generate many (~7500) LDC grid points in addition to including the  value for 711 sources.

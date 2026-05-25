@@ -51,7 +51,7 @@ if __name__ == "__main__":
         infer = MLInference(lc_dir=obj.noisy_ltcrv_folder,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
                      n_scale=n_scale, N=N, obj = obj)
         infer.execute()
-        infer.plot_prediction_orig_maps()
+        #infer.plot_prediction_orig_maps()
         
 
     elif test is False:
