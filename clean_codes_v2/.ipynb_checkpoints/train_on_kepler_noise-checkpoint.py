@@ -32,7 +32,7 @@ def save_checkpoint(epoch, generator, optimizer_G, scheduler, best_val_loss, val
 
 def load_checkpoint(checkpoint_path, generator, optimizer_G, scheduler, device):
     #ckpt = torch.load(checkpoint_path, map_location=device, weights_only=True)
-    ckpt = torch.load(checkpoint_path,map_location=device) # use this for proper reloading of checkpoint and retraining
+    ckpt = torch.load(checkpoint_path,map_location=device, weights_only=False) # use this for proper reloading of checkpoint and retraining
     
     generator.load_state_dict(ckpt['model_state_dict'])
     optimizer_G.load_state_dict(ckpt['optimizer_state_dict'])
