@@ -223,7 +223,7 @@ class MLPreProcessing():
                     prcolor("[bold green]Select Transit region")
                     self.select_transit_region()
         
-                if not self.lc_hscaled_file.is_file():
+                if self.lc_hscaled_file.is_file():
                     prcolor("[bold green]Preprocess light curves")
                     hscaled_processed_file = self.preprocess_ltcrvs()
                 else:
