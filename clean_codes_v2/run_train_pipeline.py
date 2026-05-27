@@ -43,8 +43,12 @@ if __name__ == "__main__":
     N = args.N if args.N is not None else config['N']
     Num = args.Num if args.Num is not None else config.get('Num',10)
     test = False #bool(args.test) if args.test is not None else config['test']
-    fresh_run = bool(args.fresh_run) if args.fresh_run is not None else config['fresh_run']
-
+    #fresh_run = bool(args.fresh_run) if args.fresh_run is not None else config['fresh_run']
+    if args.fresh_run != 2:
+        fresh_run = bool(args.fresh_run) if args.fresh_run is not None else config['fresh_run']
+    else:
+        fresh_run = args.fresh_run if args.fresh_run is not None else config['fresh_run']
+        
     N = 1 if N==99 else N
     prcolor(f"[bold green]Updated filename to {N}")
     
@@ -70,7 +74,11 @@ if __name__ == "__main__":
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
                                    epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
         print(f"For training device used is: {device}")
-    else:
-        print("Preprocessing")
+    elif fresh_run==2:
+        print("Generating shapes only")
+        obj.gen_shapes()
+    elif fresh_run==True or fresh_run==False:
+        print("Running full excute pipeline")
         obj.execute()
+
     
