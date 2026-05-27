@@ -227,10 +227,10 @@ def main(
         # Save the rasterized shapes to a file
         np.save(maps_path, shapes_data_masks)
         print("\n--- Output Summary (Filled Shapes) ---")
-        print(f"Successfully generated and rasterized {N} FILLED shapes.")
+        print(f"Successfully generated and rasterized {Num} FILLED shapes.")
         print(f"Saved NumPy array 'randomshapes.npy' with shape: {shapes_data_masks.shape}")
         print("This array now contains the binary masks of the SOLID Bezier shapes.")
-        print("\nExample of the first 10 rows of the first shape's mask (1s now represent the solid area):")
+        #print("\nExample of the first 10 rows of the first shape's mask (1s now represent the solid area):")
         # Display a small section of the mask for demonstration
         #print(shapes_data_masks[0][:10])
     else:

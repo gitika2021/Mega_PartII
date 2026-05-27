@@ -211,7 +211,7 @@ class MLPreProcessing():
 
             else:                                    
                 if not (self.out_dir_proc_lc / f"{self.N}LC.npy").is_file():
-                    prcolor("[bold green]Generating light curves")
+                    prcolor("[bold green]GShapes files exist, generating light curves")
                     self.gen_ltcrvs()
                     
                 #self.add_noise()

@@ -8,9 +8,9 @@ echo "==================================" >> $MASTER_LOG
 echo "Pipeline started at: $(date)" >> $MASTER_LOG
 echo "==================================" >> $MASTER_LOG
 
-python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 1 --fresh_run 0 > logs/lcb1_rsrp_2_5.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 2 --fresh_run 0 > logs/lcb2_rsrp_2_5.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 3 --fresh_run 0 > logs/lcb3_rsrp_2_5.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 1 --fresh_run 1 > logs/lcb1_rsrp_2_5.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 2 --fresh_run 1 > logs/lcb2_rsrp_2_5.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 0 --N 3 --fresh_run 1 > logs/lcb3_rsrp_2_5.log 2>&1 && \
 python clean_codes_v2/run_train_pipeline.py --config-file train_2_5.json --train 1 --fresh_run 0 > logs/train_rsrp_2_5.log 2>&1
 
 end_time=$(date +%s)

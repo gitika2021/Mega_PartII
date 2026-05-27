@@ -1,0 +1,13 @@
+Updated filename to 1
+base_dir /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data
+... initialization complete.
+Generating shapes only
+Generating 10 random closed Bezier shapes of size 38x38...
+  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 556.97it/s]
+
+--- Output Summary (Filled Shapes) ---
+Successfully generated and rasterized 10 FILLED shapes.
+Saved NumPy array 'randomshapes.npy' with shape: (10, 38, 38)
+This array now contains the binary masks of the SOLID Bezier shapes.
+
+----------------------------------
