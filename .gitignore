@@ -3,6 +3,9 @@
 **.pyc
 **/Test
 **/nohup.out
-**/PBS_Scripts/master_log
+**/PBS_Scripts/master_log*
 **/PBS_Scripts/*.o*
 **/PBS_Scripts/*.e*
+**/Mega_Runs*
+**/Test_R*
+**/logs

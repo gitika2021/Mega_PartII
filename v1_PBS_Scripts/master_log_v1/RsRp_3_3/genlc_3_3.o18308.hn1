@@ -1,0 +1,30 @@
+==================================
+Pipeline started at: Wed May 27 14:55:37 IST 2026
+==================================
+rsrp1=3
+rsrp2=3
+Created: ../Config/train_3_3.json
+::::::::::::::
+../Config/train_3_3.json
+::::::::::::::
+{
+    "train": false,
+    "test": false,
+    "fresh_run": false,
+    "Num": 5,
+    "N": 1,
+    "maps_path": null,
+    "nproc": 32,
+    "rsrp1": 3,
+    "rsrp2": 3,
+    "train_frac": 0.8,
+    "seed": 50,
+    "maps_folder_str": "_testing",
+    "epochs": 70,
+    "batch_size": 5,
+    "n_scale": 2,
+    "resume": true,
+    "checkpoint_freq": 10
+}Job ended at: Wed May 27 15:00:28 IST 2026
+Total walltime (seconds): 291
+Total walltime (hh:mm:ss): 00:04:51

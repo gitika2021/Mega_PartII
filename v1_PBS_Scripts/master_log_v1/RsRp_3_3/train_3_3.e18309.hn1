@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/home/project/cshukla.gitika/Mega_PartII/PBS_Scripts/../clean_codes_v2/run_train_pipeline.py", line 74, in <module>
+    train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
+  File "/mnt/home/project/cshukla.gitika/Mega_PartII/clean_codes_v2/train_on_kepler_noise.py", line 232, in main
+    traindataset = LightCurveDataset(data_dir, 'train', device=device)
+  File "/mnt/home/project/cshukla.gitika/Mega_PartII/clean_codes_v2/dataset.py", line 54, in __init__
+    self.lc_data =    torch.tensor(np.concatenate(self.lc_data), dtype=torch.float32).to(self.device)
+ValueError: need at least one array to concatenate

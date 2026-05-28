@@ -1,3 +1,12 @@
+==================================
+Pipeline started at: Wed May 27 20:30:00 IST 2026
+==================================
+rsrp1=10
+rsrp2=12
+Created: ../Config/train_10_12.json
+::::::::::::::
+../Config/train_10_12.json
+::::::::::::::
 {
     "train": false,
     "test": false,

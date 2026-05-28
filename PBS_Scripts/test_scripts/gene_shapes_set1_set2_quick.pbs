@@ -2,7 +2,7 @@
 
 # Run your script
 #PBS -l select=1:ncpus=32
-#PBS -l walltime=02:00:00
+#PBS -l walltime=00:10:00
 #PBS -q project
 #PBS -P hpc2601012
 #PBS -N gen_shapes
@@ -62,7 +62,7 @@ seed = int("$SEED")
 #checkpoint_freq=10
 #nproc = 32
 # Input JSON path
-input_file = "../Config/train_config.json"
+input_file = "../Config/train_config_debug.json"
 
 # Read original JSON
 with open(input_file, "r") as f:

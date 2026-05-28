@@ -1,3 +1,12 @@
+==================================
+Pipeline started at: Wed May 27 22:08:46 IST 2026
+==================================
+rsrp1=12
+rsrp2=15
+Created: ../Config/train_12_15.json
+::::::::::::::
+../Config/train_12_15.json
+::::::::::::::
 {
     "train": false,
     "test": false,
@@ -6,8 +15,8 @@
     "N": 1,
     "maps_path": null,
     "nproc": 32,
-    "rsrp1": 10,
-    "rsrp2": 12,
+    "rsrp1": 12,
+    "rsrp2": 15,
     "train_frac": 0.8,
     "seed": 60,
     "maps_folder_str": "10",
