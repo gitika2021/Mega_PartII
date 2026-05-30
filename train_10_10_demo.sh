@@ -11,10 +11,10 @@ echo "==================================" >> $MASTER_LOG
 echo "Generate Light Curves"
 
 python clean_codes_v2/run_kepler_pipeline.py >> $MASTER_LOG
-python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 1 --fresh_run 1 > logs/lc1.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 2 --fresh_run 1 > logs/lc2.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 3 --fresh_run 1 > logs/lc3.log 2>&1 && \
-python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 1 --fresh_run 0 > logs/train_rsrp_2_5.log 2>&1
+python clean_codes_v2/run_train_pipeline.py --config-file train_10_10.json --train 0 --N 1 --fresh_run 0 > logs/lc1.log 2>&1 && \
+#python clean_codes_v2/run_train_pipeline.py --config-file train_rsrp_10_10.json --train 0 --N 2 --fresh_run 1 > logs/lc2.log 2>&1 && \
+#python clean_codes_v2/run_train_pipeline.py --config-file train_rsrp_10_10.json --train 0 --N 3 --fresh_run 1 > logs/lc3.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file train_10_10.json --train 1 --fresh_run 0 > logs/train_rsrp_2_5.log 2>&1
 
 end_time=$(date +%s)
 elapsed=$((end_time - start_time))

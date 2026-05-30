@@ -10,9 +10,9 @@ echo "==================================" >> $MASTER_LOG
 
 echo "Generate full shapes sample first"
 
-python clean_codes_v2/run_train_pipelinev2.py --config-file demo_config.json --train 0 --N 1 --fresh_run 2 > logs/sh1.log 2>&1 && \
-python clean_codes_v2/run_train_pipelinev2.py --config-file demo_config.json --train 0 --N 2 --fresh_run 2 > logs/sh2.log 2>&1 && \
-python clean_codes_v2/run_train_pipelinev2.py --config-file demo_config.json --train 0 --N 3 --fresh_run 2 > logs/sh3.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 1 --fresh_run 2 > logs/sh1.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 2 --fresh_run 2 > logs/sh2.log 2>&1 && \
+python clean_codes_v2/run_train_pipeline.py --config-file demo_config.json --train 0 --N 3 --fresh_run 2 > logs/sh3.log 2>&1 && \
 end_time=$(date +%s)
 elapsed=$((end_time - start_time))
 

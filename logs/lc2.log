@@ -7,18 +7,18 @@ Running pipeline afresh
 a.min(),a.max() 0.2291 0.6914
 b.min(),b.max() 0.0628 0.4418
 rprs.min(),rprs.max() 0.008919 0.415349
-loc_cut_rprs =0.3333, high_cut_rprs = 0.5
+loc_cut_rprs =0.0833, high_cut_rprs = 0.1
 pairs.shape (5711, 4)
 rprs_grid (5711,) 5711
 Number of LDC & Rp/Rs points is 5711
-radius ratio (Rs/Rp) [2. 2. 2. ... 2. 3. 2.] 2.0 3.0
+radius ratio (Rs/Rp) [11. 11. 10. ... 11. 11. 12.] 10.0 12.0
 False
-pairs[0:3,:] [[0.2291     0.43344766 0.43594768 2.        ]
- [0.23282823 0.43105058 0.42902352 2.        ]
- [0.23655645 0.4286535  0.41990791 2.        ]]
+pairs[0:3,:] [[ 0.2291      0.43344766  0.09047728 11.        ]
+ [ 0.23282823  0.43105058  0.09012794 11.        ]
+ [ 0.23655645  0.4286535   0.0960528  10.        ]]
 LDC giving negative intesnity (array([], dtype=int64),)
 Generating 10 random closed Bezier shapes of size 38x38...
-  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 690.61it/s]
+  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 641.00it/s]
 
 --- Output Summary (Filled Shapes) ---
 Successfully generated and rasterized 10 FILLED shapes.
@@ -46,19 +46,19 @@ Starting batched simulation...
   amR = (1. - am)**0.25
 /home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
   bmR = (1. - bm)**0.25
- 10%|█         | 1/10 [00:07<01:07,  7.45s/it] 50%|█████     | 5/10 [00:09<00:07,  1.55s/it] 60%|██████    | 6/10 [00:10<00:05,  1.44s/it] 70%|███████   | 7/10 [00:11<00:03,  1.32s/it] 90%|█████████ | 9/10 [00:13<00:01,  1.25s/it]100%|██████████| 10/10 [00:13<00:00,  1.38s/it]
-⏱️ Time taken: 13.96 seconds
-⏱️ Time taken: 13.96 seconds
+ 10%|█         | 1/10 [00:16<02:28, 16.47s/it] 50%|█████     | 5/10 [00:29<00:26,  5.29s/it] 60%|██████    | 6/10 [00:29<00:16,  4.08s/it] 90%|█████████ | 9/10 [00:40<00:03,  3.85s/it]100%|██████████| 10/10 [00:41<00:00,  3.28s/it]100%|██████████| 10/10 [00:41<00:00,  4.17s/it]
+⏱️ Time taken: 41.79 seconds
+⏱️ Time taken: 41.79 seconds
 Interpolating final results...
 ✅ Saved LCs and Meta.
-processed_lightcurves[0,0:10] [1.         1.         1.         1.         1.         1.
- 0.9999996  0.9998915  0.9991896  0.99788547]
+processed_lightcurves[0,0:10] [1.         0.99999994 0.99994594 0.99972886 0.9993213  0.99877363
+ 0.9980957  0.99736065 0.99660057 0.9958536 ]
 Generated light curves
-  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.36it/s]100%|██████████| 1/1 [00:00<00:00,  1.36it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.15it/s]100%|██████████| 1/1 [00:00<00:00,  1.15it/s]
 Added noise
-Number of *_binned.npz files found is 30
+Number of *_binned.npz files found is 20
 Using 4 CPU cores
-Total time (minutes): 0.0033179362614949542
+Total time (minutes): 0.007294805844624838
 Found 10 files
 Final shape: (10, 120)
 Saved to 2LC_hscaled.npy

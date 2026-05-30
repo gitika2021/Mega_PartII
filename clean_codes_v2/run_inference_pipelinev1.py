@@ -58,9 +58,7 @@ if __name__ == "__main__":
         obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, maps_folder_str = maps_folder_str, test=test, fresh_run = fresh_run)
         
         print("Infering shape from LC using trained model for real data")
-        # infer = MLInference(lc_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
-        #              n_scale=n_scale, N=None, obj = obj)
-        infer = MLInference(lc_dir=Infer_LC_Dir+f"RsRp_{rsrp1}_{rsrp2}/",nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
+        infer = MLInference(lc_dir=Infer_LC_Dir,nproc=nproc, rsrp1=rsrp1, rsrp2=rsrp2,
                      n_scale=n_scale, N=None, obj = obj)
         infer.execute()      
     

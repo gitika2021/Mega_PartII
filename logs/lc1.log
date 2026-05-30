@@ -3,30 +3,23 @@ base_dir /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega
 ... initialization complete.
 Running full excute pipeline
 If testing pipeline set: --fresh_run = 1
-Running pipeline afresh
+Running pipeline
+ fresh_run = False: Num arg on command line ignored in case shape and light curve files pre-exist. 
+Generating ldc ratio grid
 a.min(),a.max() 0.2291 0.6914
 b.min(),b.max() 0.0628 0.4418
 rprs.min(),rprs.max() 0.008919 0.415349
-loc_cut_rprs =0.3333, high_cut_rprs = 0.5
+loc_cut_rprs =0.1, high_cut_rprs = 0.1
 pairs.shape (5711, 4)
 rprs_grid (5711,) 5711
 Number of LDC & Rp/Rs points is 5711
-radius ratio (Rs/Rp) [2. 3. 3. ... 2. 3. 2.] 2.0 3.0
+radius ratio (Rs/Rp) [10. 10. 10. ... 10. 10. 10.] 10.0 10.0
 False
-pairs[0:3,:] [[0.2291     0.46396823 0.49040495 2.        ]
- [0.23282823 0.46157115 0.38449996 3.        ]
- [0.23655645 0.45917407 0.37579294 3.        ]]
+pairs[0:3,:] [[ 0.2291      0.46396823  0.1        10.        ]
+ [ 0.23282823  0.46157115  0.1        10.        ]
+ [ 0.23655645  0.45917407  0.1        10.        ]]
 LDC giving negative intesnity (array([], dtype=int64),)
-Generating 10 random closed Bezier shapes of size 38x38...
-  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 666.52it/s]
-
---- Output Summary (Filled Shapes) ---
-Successfully generated and rasterized 10 FILLED shapes.
-Saved NumPy array 'randomshapes.npy' with shape: (10, 38, 38)
-This array now contains the binary masks of the SOLID Bezier shapes.
-
-----------------------------------
-Generated Bezier shapes
+GShapes files exist, generating light curves
 Detected 10 masks in /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/OM_Demo/1.npy
 Generating parameter sets for 10 masks x 1 sims...
 Starting batched simulation...
@@ -46,26 +39,26 @@ Starting batched simulation...
   amR = (1. - am)**0.25
 /home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
   bmR = (1. - bm)**0.25
- 10%|█         | 1/10 [00:07<01:11,  7.89s/it] 50%|█████     | 5/10 [00:12<00:10,  2.09s/it] 90%|█████████ | 9/10 [00:14<00:01,  1.21s/it]100%|██████████| 10/10 [00:14<00:00,  1.09s/it]100%|██████████| 10/10 [00:14<00:00,  1.46s/it]
-⏱️ Time taken: 14.72 seconds
-⏱️ Time taken: 14.72 seconds
+ 10%|█         | 1/10 [00:17<02:35, 17.24s/it] 50%|█████     | 5/10 [00:26<00:23,  4.63s/it] 60%|██████    | 6/10 [00:29<00:16,  4.13s/it] 90%|█████████ | 9/10 [00:38<00:03,  3.61s/it]100%|██████████| 10/10 [00:40<00:00,  3.20s/it]100%|██████████| 10/10 [00:40<00:00,  4.02s/it]
+⏱️ Time taken: 40.28 seconds
+⏱️ Time taken: 40.28 seconds
 Interpolating final results...
 ✅ Saved LCs and Meta.
-processed_lightcurves[0,0:10] [1.         1.         1.         1.         1.         1.
- 0.99995947 0.9993596  0.99812084 0.99645454]
-Generated light curves
-  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.09it/s]100%|██████████| 1/1 [00:00<00:00,  1.09it/s]
-Added noise
-Number of *_binned.npz files found is 30
+processed_lightcurves[0,0:10] [1.         1.         0.9999286  0.99954    0.9988385  0.9980877
+ 0.99733734 0.99658525 0.9958426  0.9951335 ]
+Adding noise to light curves
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  1.93it/s]100%|██████████| 1/1 [00:00<00:00,  1.93it/s]
+Select Transit region
+Number of *_binned.npz files found is 10
 Using 4 CPU cores
-Total time (minutes): 0.02368002732594808
+Total time (minutes): 0.00759802261988322
 Found 10 files
 Final shape: (10, 120)
 Saved to 1LC_hscaled.npy
-Selected transit region
+Preprocess light curves
 ver scaled
 Processed tensor shape: torch.Size([10, 120])
-Final processed light curves generated
 Split dataset into train and val
 Saved train samples: 8
 Saved vald samples:  2
+ved vald samples:  2
