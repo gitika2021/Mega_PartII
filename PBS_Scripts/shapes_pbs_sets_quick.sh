@@ -3,7 +3,7 @@ ratio1=3
 ratio2=3
 seed=50
 
-log_dir="master_log"
+log_dir="master_log_quick"
 rsrp_dir="shapes"
 base_dir="${log_dir}/${rsrp_dir}"
 mkdir -p "${base_dir}"

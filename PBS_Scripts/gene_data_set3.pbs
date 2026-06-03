@@ -96,10 +96,10 @@ more ../Config/train_${ratio1}_${ratio2}.json
 
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 1 --fresh_run 0 > ${base_dir}/N1.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 2 --fresh_run 0 > ${base_dir}/N2.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 3 --fresh_run 0 > ${base_dir}/N3.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 4 --fresh_run 0 > ${base_dir}/N4.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 5 --fresh_run 0 > ${base_dir}/N5.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 6 --fresh_run 0 > ${base_dir}/N6.log 2>&1 && \
+#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 3 --fresh_run 0 > ${base_dir}/N3.log 2>&1 && \
+#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 4 --fresh_run 0 > ${base_dir}/N4.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 5 --fresh_run 0 > ${base_dir}/N5.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 6 --fresh_run 0 > ${base_dir}/N6.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 7 --fresh_run 0 > ${base_dir}/N7.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 8 --fresh_run 0 > ${base_dir}/N8.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 9 --fresh_run 0 > ${base_dir}/N9.log 2>&1 && \

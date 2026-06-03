@@ -2,7 +2,7 @@
 
 # Run your script
 #PBS -l select=1:ncpus=32
-#PBS -l walltime=96:00:00
+#PBS -l walltime=00:10:00
 #PBS -q project
 #PBS -P hpc2601012
 #PBS -N gen_lc
@@ -62,7 +62,7 @@ seed = int("$SEED")
 #checkpoint_freq=10
 #nproc = 32
 # Input JSON path
-input_file = "../Config/train_config.json"
+input_file = "../Config/train_config_debug.json"
 
 # Read original JSON
 with open(input_file, "r") as f:
@@ -92,18 +92,18 @@ EOF
 
 more ../Config/train_${ratio1}_${ratio2}.json
 
-#python ../clean_codes_v2/run_kepler_pipeline.py
+python ../clean_codes_v2/run_kepler_pipeline.py
 
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 1 --fresh_run 0 > ${base_dir}/N1.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 2 --fresh_run 0 > ${base_dir}/N2.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 3 --fresh_run 0 > ${base_dir}/N3.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 4 --fresh_run 0 > ${base_dir}/N4.log 2>&1 && \
+#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 3 --fresh_run 0 > ${base_dir}/N3.log 2>&1 && \
+#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 4 --fresh_run 0 > ${base_dir}/N4.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 5 --fresh_run 0 > ${base_dir}/N5.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 6 --fresh_run 0 > ${base_dir}/N6.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 7 --fresh_run 0 > ${base_dir}/N7.log 2>&1 && \
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 8 --fresh_run 0 > ${base_dir}/N8.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 9 --fresh_run 0 > ${base_dir}/N9.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 10 --fresh_run 0 > ${base_dir}/N10.log 2>&1 
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 9 --fresh_run 0 > ${base_dir}/N9.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 10 --fresh_run 0 > ${base_dir}/N10.log 2>&1 
 
 
 #python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 2 --fresh_run 1 > ${base_dir}/logs/train_${ratio1}_${ratio2}_N2.log 2>&1 
