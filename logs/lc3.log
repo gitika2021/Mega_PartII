@@ -18,7 +18,7 @@ pairs[0:3,:] [[ 0.2291      0.37695833  0.09323028 11.        ]
  [ 0.23655645  0.37216417  0.09964241 10.        ]]
 LDC giving negative intesnity (array([], dtype=int64),)
 Generating 10 random closed Bezier shapes of size 38x38...
-  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 680.31it/s]
+  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 981.74it/s]
 
 --- Output Summary (Filled Shapes) ---
 Successfully generated and rasterized 10 FILLED shapes.
@@ -46,19 +46,19 @@ Starting batched simulation...
   amR = (1. - am)**0.25
 /home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
   bmR = (1. - bm)**0.25
- 10%|█         | 1/10 [00:15<02:19, 15.51s/it] 50%|█████     | 5/10 [00:27<00:24,  4.86s/it] 70%|███████   | 7/10 [00:29<00:09,  3.33s/it] 90%|█████████ | 9/10 [00:40<00:04,  4.09s/it]100%|██████████| 10/10 [00:40<00:00,  3.34s/it]100%|██████████| 10/10 [00:40<00:00,  4.05s/it]
-⏱️ Time taken: 40.60 seconds
-⏱️ Time taken: 40.60 seconds
+ 10%|█         | 1/10 [00:10<01:35, 10.63s/it] 50%|█████     | 5/10 [00:18<00:16,  3.25s/it] 70%|███████   | 7/10 [00:19<00:06,  2.28s/it] 90%|█████████ | 9/10 [00:26<00:02,  2.69s/it]100%|██████████| 10/10 [00:26<00:00,  2.67s/it]
+⏱️ Time taken: 26.82 seconds
+⏱️ Time taken: 26.82 seconds
 Interpolating final results...
 ✅ Saved LCs and Meta.
-processed_lightcurves[0,0:10] [1.         1.         0.9999934  0.9999626  0.99979335 0.9995521
- 0.99921495 0.9987293  0.9981354  0.99744976]
+processed_lightcurves[0,0:10] [1.         0.99999714 0.99987614 0.99954844 0.9989956  0.99836296
+ 0.99769974 0.99701613 0.9963256  0.9956712 ]
 Generated light curves
-  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  4.28it/s]100%|██████████| 1/1 [00:00<00:00,  4.28it/s]
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 75.60it/s]
 Added noise
 Number of *_binned.npz files found is 30
 Using 4 CPU cores
-Total time (minutes): 0.014871033032735188
+Total time (minutes): 0.0017295082410176594
 Found 10 files
 Final shape: (10, 120)
 Saved to 3LC_hscaled.npy

@@ -1,22 +1,56 @@
 Updated filename to 1
 base_dir /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data
 ... initialization complete.
-lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/train_1LC.npy']
-self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/train_1LC.npy']
-self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/train_1.npy']
+lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_2LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_3LC.npy']
+self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_2LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_3LC.npy']
+self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_1.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_2.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/train_3.npy']
 for lc max: 1.0 , min: 0.0
-lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/val_1LC.npy']
-self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/val_1LC.npy']
-self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_10/val_1.npy']
+lc_files_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_2LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_3LC.npy']
+self.lc_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_1LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_2LC.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_3LC.npy']
+self.img_paths ['/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_1.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_2.npy', '/home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/Train/RsRp_10_12/val_3.npy']
 for lc max: 1.0 , min: 0.0
-Total number of training samples:   8
-Total number of validation samples: 2
-  ✔ New best model saved (val_loss=0.9192)
-[1/3] Train BCE: 0.6958, Train MSE: 0.2513 | Val BCE: 0.6772, Val MSE: 0.2420
-  ✔ New best model saved (val_loss=0.8954)
-[2/3] Train BCE: 0.6834, Train MSE: 0.2451 | Val BCE: 0.6613, Val MSE: 0.2341
-  ✔ New best model saved (val_loss=0.8734)
+Total number of training samples:   24
+Total number of validation samples: 6
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=-0.0000, max=-0.0000, norm=0.0000
+bn_input.bias: min=0.0000, max=0.0000, norm=0.0000
+conv1_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc1.weight: min=-0.0000, max=0.0000, norm=0.0000
+fc1.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc2.weight: min=-0.0000, max=0.0000, norm=0.0001
+fc2.bias: min=-0.0000, max=0.0000, norm=0.0001
+fc3.weight: min=-0.0000, max=0.0000, norm=0.0001
+fc3.bias: min=-0.0000, max=0.0000, norm=0.0002
+conv2d_1.weight: min=-0.0000, max=0.0000, norm=0.0003
+conv2d_1.bias: min=-0.0017, max=0.0011, norm=0.0047
+conv2d_2.weight: min=-0.0015, max=0.0011, norm=0.0346
+conv2d_2.bias: min=-0.0039, max=0.0031, norm=0.0098
+conv2d_3.weight: min=-0.0039, max=0.0029, norm=0.0376
+conv2d_3.bias: min=-0.0124, max=0.0093, norm=0.0198
+conv2d_4.weight: min=-0.0141, max=0.0009, norm=0.0655
+conv2d_4.bias: min=-0.0618, max=-0.0618, norm=0.0618
+  ✔ New best model saved (val_loss=0.9216)
+[1/5] Train BCE: 0.6905, Train MSE: 0.2487 | Val BCE: 0.6788, Val MSE: 0.2428
+  ✔ New best model saved (val_loss=0.8184)
+[2/5] Train BCE: 0.6604, Train MSE: 0.2338 | Val BCE: 0.6090, Val MSE: 0.2094
+  ✔ New best model saved (val_loss=0.7757)
   💾 Checkpoint saved at epoch 3
-[3/3] Train BCE: 0.6738, Train MSE: 0.2403 | Val BCE: 0.6466, Val MSE: 0.2268
-✔ Finished training for SNR=500, best val loss=0.8734
+[3/5] Train BCE: 0.5989, Train MSE: 0.2022 | Val BCE: 0.5791, Val MSE: 0.1966
+[4/5] Train BCE: 0.5576, Train MSE: 0.1892 | Val BCE: 0.5827, Val MSE: 0.1978
+  ✔ New best model saved (val_loss=0.6714)
+  💾 Checkpoint saved at epoch 5
+[5/5] Train BCE: 0.5252, Train MSE: 0.1799 | Val BCE: 0.5011, Val MSE: 0.1704
+✔ Finished training for SNR=500, best val loss=0.6714
 For training device used is: cpu
