@@ -6,7 +6,7 @@ seed=23
 #walltime="00:20:00"
 
 queue="project"
-walltime="96:00:00"
+walltime="72:00:00"
 
 log_dir="master_log"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
