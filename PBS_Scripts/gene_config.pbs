@@ -96,7 +96,6 @@ print(f"configuration: {config}")
 EOF
 
 #more ../Config/train_${ratio1}_${ratio2}.json
-python ../clean_codes_v2/run_kepler_pipeline.py
 
 end_time=$(date +%s)
 elapsed=$((end_time - start_time))
