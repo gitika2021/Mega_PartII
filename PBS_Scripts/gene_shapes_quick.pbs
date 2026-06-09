@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Run your script
+#PBS -l select=1:ncpus=32
+#PBS -l walltime=00:10:00
+#PBS -q project
+#PBS -P hpc2601012
+#PBS -N gen_shapes
+
+
+# redirect stdout/stderr immediately
+
+
+cd $PBS_O_WORKDIR
+
+LOGDIR="$base_dir"
+
+LOGFILE="$LOGDIR/${PBS_JOBNAME}.o${PBS_JOBID}"
+ERRFILE="$LOGDIR/${PBS_JOBNAME}.e${PBS_JOBID}"
+
+exec > "$LOGFILE"
+exec 2> "$ERRFILE"
+
+# Initialize conda (IMPORTANT)
+#source ~/anaconda3/etc/profile.d/conda.sh
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
+# Activate your environment
+conda activate genenv_gitika
+
+start_time=$(date +%s)
+
+echo "==================================" 
+echo "Pipeline started at: $(date)" 
+echo "==================================" 
+
+
+echo "rsrp1=$ratio1"
+echo "rsrp2=$ratio2"
+
+# use them like:
+#ratio1=$ratio1
+#ratio2=$ratio2
+#base_dir=$base_dir
+
+# Pass these using qsub -v or define here
+RSRP1=$ratio1
+RSRP2=$ratio2
+SEED=$seed
+
+echo "Running Kepler pipeline"
+
+python ../clean_codes_v2/run_kepler_pipeline.py
+
+echo "Running shape generation pipeline"
+
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 1 --fresh_run 2 > ${base_dir}/N1_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 2 --fresh_run 2 > ${base_dir}/N2_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 3 --fresh_run 2 > ${base_dir}/N3_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 4 --fresh_run 2 > ${base_dir}/N4_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 5 --fresh_run 2 > ${base_dir}/N5_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 6 --fresh_run 2 > ${base_dir}/N6_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 7 --fresh_run 2 > ${base_dir}/N7_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 8 --fresh_run 2 > ${base_dir}/N8_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 9 --fresh_run 2 > ${base_dir}/N9_${PBS_JOBID}.log 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 10 --fresh_run 2 > ${base_dir}/N10_${PBS_JOBID}.log 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 11 --fresh_run 2 > ${base_dir}/N11_${PBS_JOBID}.log 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_config_debug.json --train 0 --N 12 --fresh_run 2 > ${base_dir}/N12_${PBS_JOBID}.log 2>&1 
+
+
+end_time=$(date +%s)
+elapsed=$((end_time - start_time))
+echo "Job ended at: $(date)"
+echo "Total walltime (seconds): $elapsed"
+echo "Total walltime (hh:mm:ss): $(printf '%02d:%02d:%02d\n' $((elapsed/3600)) $((elapsed%3600/60)) $((elapsed%60)))"
+

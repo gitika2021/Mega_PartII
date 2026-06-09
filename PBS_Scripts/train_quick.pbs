@@ -1,0 +1,47 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=32
+#PBS -l walltime=00:20:00
+#PBS -q project
+#PBS -P hpc2601012
+#PBS -N train
+
+cd $PBS_O_WORKDIR
+
+# redirect stdout/stderr immediately
+LOGDIR="$base_dir"
+
+LOGFILE="$LOGDIR/${PBS_JOBNAME}.o${PBS_JOBID}"
+ERRFILE="$LOGDIR/${PBS_JOBNAME}.e${PBS_JOBID}"
+
+exec > "$LOGFILE"
+exec 2> "$ERRFILE"
+
+# Initialize conda (IMPORTANT)
+#source ~/anaconda3/etc/profile.d/conda.sh
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
+# Activate your environment
+conda activate genenv_gitika
+
+start_time=$(date +%s)
+
+echo "==================================" 
+echo "Pipeline started at: $(date)" 
+echo "==================================" 
+
+# Pass these using qsub -v or define here
+RSRP1=$ratio1
+RSRP2=$ratio2
+SEED=123
+
+
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 1  
+
+end_time=$(date +%s)
+elapsed=$((end_time - start_time))
+echo "Job ended at: $(date)"
+echo "Total walltime (seconds): $elapsed"
+echo "Total walltime (hh:mm:ss): $(printf '%02d:%02d:%02d\n' $((elapsed/3600)) $((elapsed%3600/60)) $((elapsed%60)))"
+
+
+

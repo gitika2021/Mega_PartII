@@ -2,7 +2,7 @@
 
 # Run your script
 #PBS -l select=1:ncpus=32
-#PBS -l walltime=96:00:00
+#PBS -l walltime=00:10:00
 #PBS -q project
 #PBS -P hpc2601012
 #PBS -N gen_lc
@@ -22,7 +22,7 @@ exec > "$LOGFILE"
 exec 2> "$ERRFILE"
 
 # Initialize conda (IMPORTANT)
-source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
+source ~/anaconda3/etc/profile.d/conda.sh
 
 # Activate your environment
 conda activate genenv_gitika

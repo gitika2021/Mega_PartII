@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# Run your script
+#PBS -l select=1:ncpus=32
+#PBS -l walltime=00:05:00
+#PBS -q project
+#PBS -P hpc2601012
+#PBS -N gen_lc
+
+
+# redirect stdout/stderr immediately
+
+
+cd $PBS_O_WORKDIR
+
+LOGDIR="$base_dir"
+
+LOGFILE="$LOGDIR/${PBS_JOBNAME}.o${PBS_JOBID}"
+ERRFILE="$LOGDIR/${PBS_JOBNAME}.e${PBS_JOBID}"
+
+exec > "$LOGFILE"
+exec 2> "$ERRFILE"
+
+# Initialize conda (IMPORTANT)
+#source ~/anaconda3/etc/profile.d/conda.sh
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
+# Activate your environment
+conda activate genenv_gitika
+
+start_time=$(date +%s)
+
+echo "==================================" 
+echo "Pipeline started at: $(date)" 
+echo "==================================" 
+
+
+echo "rsrp1=$ratio1"
+echo "rsrp2=$ratio2"
+
+# use them like:
+#ratio1=$ratio1
+#ratio2=$ratio2
+#base_dir=$base_dir
+
+# Pass these using qsub -v or define here
+RSRP1=$ratio1
+RSRP2=$ratio2
+SEED=$seed
+
+
+python3 << EOF
+import sys
+import json
+from pathlib import Path
+
+clean_codes_dir = Path(__file__).resolve().parent.parent / "clean_codes_v2"
+sys.path.insert(0, str(clean_codes_dir))
+from paths import *
+
+rsrp1 = int("$RSRP1")
+rsrp2 = int("$RSRP2")
+seed = int("$SEED")
+
+# Input JSON path
+input_file = "../Config/train_config_debug.json"
+
+# Read original JSON
+with open(input_file, "r") as f:
+    config = json.load(f)
+
+# Update values
+config["rsrp1"] = rsrp1
+config["rsrp2"] = rsrp2
+config["seed"] = seed
+#config["Num"] = Num
+#config["maps_folder_str"] = maps_folder_str
+#config["epochs"] = epochs
+#config["batch_size"] = batch_size
+#config["checkpoint_freq"] = checkpoint_freq
+#config["nproc"] = 32 
+
+
+# Output filename
+#outfile = f"../Config/train_{rsrp1}_{rsrp2}.json"
+
+config_out_dir = Path(Config_Dir)
+config_out_dir.mkdir(parents=True, exist_ok=True)
+outfile = f"{Config_Dir}train_{rsrp1}_{rsrp2}.json"
+# Save updated JSON
+with open(outfile, "w") as f:
+    json.dump(config, f, indent=4)
+
+print(f"Created: {outfile}")
+print(f"configuration: {config}")
+
+EOF
+
+#more ../Config/train_${ratio1}_${ratio2}.json
+
+end_time=$(date +%s)
+elapsed=$((end_time - start_time))
+echo "Job ended at: $(date)"
+echo "Total walltime (seconds): $elapsed"
+echo "Total walltime (hh:mm:ss): $(printf '%02d:%02d:%02d\n' $((elapsed/3600)) $((elapsed%3600/60)) $((elapsed%60)))"
+

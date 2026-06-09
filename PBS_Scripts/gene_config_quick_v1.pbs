@@ -2,18 +2,21 @@
 
 # Run your script
 #PBS -l select=1:ncpus=32
-#PBS -l walltime=96:00:00
+#PBS -l walltime=00:05:00
 #PBS -q project
 #PBS -P hpc2601012
 #PBS -N gen_lc
 
 
 # redirect stdout/stderr immediately
-sleep 60
+
 
 cd $PBS_O_WORKDIR
+echo "base_dir=$base_dir"
+echo "PBS_O_WORKDIR=$PBS_O_WORKDIR"
 
-LOGDIR="$base_dir"
+LOGDIR="$PBS_O_WORKDIR/$base_dir"
+mkdir -p "$LOGDIR"
 
 LOGFILE="$LOGDIR/${PBS_JOBNAME}.o${PBS_JOBID}"
 ERRFILE="$LOGDIR/${PBS_JOBNAME}.e${PBS_JOBID}"
@@ -33,6 +36,7 @@ echo "=================================="
 echo "Pipeline started at: $(date)" 
 echo "==================================" 
 
+
 echo "rsrp1=$ratio1"
 echo "rsrp2=$ratio2"
 
@@ -46,15 +50,44 @@ RSRP1=$ratio1
 RSRP2=$ratio2
 SEED=$seed
 
+
+python3 << EOF
+import json
+
+rsrp1 = int("$RSRP1")
+rsrp2 = int("$RSRP2")
+seed = int("$SEED")
+
+# Input JSON path
+input_file = "../Config/train_config_debug.json"
+
+# Read original JSON
+with open(input_file, "r") as f:
+    config = json.load(f)
+
+# Update values
+config["rsrp1"] = rsrp1
+config["rsrp2"] = rsrp2
+config["seed"] = seed
+#config["Num"] = Num
+#config["maps_folder_str"] = maps_folder_str
+#config["epochs"] = epochs
+#config["batch_size"] = batch_size
+#config["checkpoint_freq"] = checkpoint_freq
+#config["nproc"] = 32 
+
+
+# Output filename
+outfile = f"../Config/train_{rsrp1}_{rsrp2}.json"
+
+# Save updated JSON
+with open(outfile, "w") as f:
+    json.dump(config, f, indent=4)
+
+print(f"Created: {outfile}")
+EOF
+
 more ../Config/train_${ratio1}_${ratio2}.json
-
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 5 --fresh_run 0 > ${base_dir}/N5_${PBS_JOBID}.log 2>&1 && \
-
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 6 --fresh_run 0 > ${base_dir}/N6_${PBS_JOBID}.log 2>&1 && \
-
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 7 --fresh_run 0 > ${base_dir}/N7_${PBS_JOBID}.log 2>&1 && \
-
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 8 --fresh_run 0 > ${base_dir}/N8_${PBS_JOBID}.log 2>&1 && \
 
 end_time=$(date +%s)
 elapsed=$((end_time - start_time))

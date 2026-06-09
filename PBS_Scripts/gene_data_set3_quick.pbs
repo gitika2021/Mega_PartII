@@ -10,6 +10,7 @@
 
 # redirect stdout/stderr immediately
 
+sleep 60
 
 cd $PBS_O_WORKDIR
 
@@ -22,8 +23,8 @@ exec > "$LOGFILE"
 exec 2> "$ERRFILE"
 
 # Initialize conda (IMPORTANT)
-source ~/anaconda3/etc/profile.d/conda.sh
-
+#source ~/anaconda3/etc/profile.d/conda.sh
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
 # Activate your environment
 conda activate genenv_gitika
 
@@ -32,7 +33,6 @@ start_time=$(date +%s)
 echo "==================================" 
 echo "Pipeline started at: $(date)" 
 echo "==================================" 
-
 
 echo "rsrp1=$ratio1"
 echo "rsrp2=$ratio2"
@@ -47,66 +47,16 @@ RSRP1=$ratio1
 RSRP2=$ratio2
 SEED=$seed
 
-
-python3 << EOF
-import json
-
-rsrp1 = int("$RSRP1")
-rsrp2 = int("$RSRP2")
-seed = int("$SEED")
-
-#Num=30000
-#maps_folder_str="10"
-#epochs=500
-#batch_size=256
-#checkpoint_freq=10
-#nproc = 32
-# Input JSON path
-input_file = "../Config/train_config_debug.json"
-
-# Read original JSON
-with open(input_file, "r") as f:
-    config = json.load(f)
-
-# Update values
-config["rsrp1"] = rsrp1
-config["rsrp2"] = rsrp2
-config["seed"] = seed
-#config["Num"] = Num
-#config["maps_folder_str"] = maps_folder_str
-#config["epochs"] = epochs
-#config["batch_size"] = batch_size
-#config["checkpoint_freq"] = checkpoint_freq
-#config["nproc"] = 32 
-
-
-# Output filename
-outfile = f"../Config/train_{rsrp1}_{rsrp2}.json"
-
-# Save updated JSON
-with open(outfile, "w") as f:
-    json.dump(config, f, indent=4)
-
-print(f"Created: {outfile}")
-EOF
-
 more ../Config/train_${ratio1}_${ratio2}.json
 
-python ../clean_codes_v2/run_kepler_pipeline.py
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 9 --fresh_run 0 > ${base_dir}/N9_${PBS_JOBID}.log 2>&1 && \
 
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 1 --fresh_run 0 > ${base_dir}/N1.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 2 --fresh_run 0 > ${base_dir}/N2.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 3 --fresh_run 0 > ${base_dir}/N3.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 4 --fresh_run 0 > ${base_dir}/N4.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 5 --fresh_run 0 > ${base_dir}/N5.log 2>&1 && \
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 6 --fresh_run 0 > ${base_dir}/N6.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 7 --fresh_run 0 > ${base_dir}/N7.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 8 --fresh_run 0 > ${base_dir}/N8.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 9 --fresh_run 0 > ${base_dir}/N9.log 2>&1 && \
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 10 --fresh_run 0 > ${base_dir}/N10.log 2>&1 
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 10 --fresh_run 0 > ${base_dir}/N10_${PBS_JOBID}.log 2>&1 
 
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 11 --fresh_run 0 > ${base_dir}/N11_${PBS_JOBID}.log 2>&1 && \
 
-#python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 2 --fresh_run 1 > ${base_dir}/logs/train_${ratio1}_${ratio2}_N2.log 2>&1 
+python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --train 0 --N 12 --fresh_run 0 > ${base_dir}/N12_${PBS_JOBID}.log 2>&1 
+
 end_time=$(date +%s)
 elapsed=$((end_time - start_time))
 echo "Job ended at: $(date)"
