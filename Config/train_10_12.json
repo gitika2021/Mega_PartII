@@ -9,7 +9,7 @@
     "rsrp1": 10,
     "rsrp2": 12,
     "train_frac": 0.8,
-    "seed": 60,
+    "seed": 11,
     "maps_folder_str": "10",
     "epochs": 500,
     "batch_size": 256,

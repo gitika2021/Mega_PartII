@@ -264,9 +264,12 @@ class TransitRegionSelector():
             flux_err=ynewerr
         )
     
-    def find_transit_region_and_save_parallel(self):
-    
-        ltcrv_npz_files = list(self.filesfolder.glob("*_binned.npz"))
+    def find_transit_region_and_save_parallel(self, N = None):
+        if N is not None:
+            ltcrv_npz_files = list(self.filesfolder.glob(f"{N}LC*_binned.npz"))
+        elif N is None:
+            ltcrv_npz_files = list(self.filesfolder.glob(f"*_binned.npz"))
+        
         print(f'Number of *_binned.npz files found is {len(ltcrv_npz_files)}')
         rows = [filepath for filepath in ltcrv_npz_files]
     

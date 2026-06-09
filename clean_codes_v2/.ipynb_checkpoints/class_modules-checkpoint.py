@@ -114,7 +114,7 @@ class MLPreProcessing():
     def select_transit_region(self):
         trs = processing_transit_region.TransitRegionSelector(ltcrv_files_folder=self.noisy_ltcrv_folder,
                                                               max_workers=self.nproc)
-        trs.find_transit_region_and_save_parallel()
+        trs.find_transit_region_and_save_parallel(N=self.N)
         processing_transit_region.combine_flux(self.noisy_ltcrv_folder, 
                                                self.N, output_file=self.lc_hscaled_filename+".npy",
                                                savefolder_path=self.out_dir_proc_lc)        
@@ -817,8 +817,12 @@ class SaveKeplerToRsRpBins():
                 kepler_binned_dir = Path(Base_Dir) / f"Kepler_RsRp_Bins/RsRp_{rsrp1}_{rsrp2}"
                 kepler_binned_dir.mkdir(parents=True, exist_ok=True)
                 src = Path(f)
-                shutil.copy2(src, kepler_binned_dir / src.name)
-                                
+                #shutil.copy2(src, kepler_binned_dir / src.name)
+                try:
+                    shutil.copy2(src, kepler_binned_dir / src.name)
+                except PermissionError:
+                    shutil.copy(src, kepler_binned_dir / src.name)
+                                                
             else:
                 #print("No matching kepname found")
                 objs_not_found.append(planet_name)
