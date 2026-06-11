@@ -1,0 +1,19 @@
+{
+    "train": false,
+    "test": false,
+    "fresh_run": false,
+    "Num": 30000,
+    "N": 1,
+    "maps_path": null,
+    "nproc": 32,
+    "rsrp1": 10,
+    "rsrp2": 12,
+    "train_frac": 0.8,
+    "seed": 11,
+    "maps_folder_str": "10",
+    "epochs": 500,
+    "batch_size": 256,
+    "n_scale": 2,
+    "resume": true,
+    "checkpoint_freq": 10
+}
