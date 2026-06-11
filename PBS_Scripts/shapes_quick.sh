@@ -2,6 +2,8 @@
 ratio1=3
 ratio2=3
 seed=50
+queue="debug"
+walltime="00:20:00"
 
 log_dir="master_log_quick"
 rsrp_dir="shapes"
@@ -10,7 +12,10 @@ mkdir -p "${base_dir}"
 
 PBS_JOBNAME1="shape_gen"
 
-jid1=$(qsub -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
+jid1=$(qsub \
+    -q $queue \
+    -l walltime=$walltime \
+    -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
     -N $PBS_JOBNAME1 \
     gene_shapes_quick.pbs)
 
