@@ -5,8 +5,11 @@ seed=13
 #queue="debug"
 #walltime="00:20:00"
 
+# queue="project"
+# walltime="48:00:00"
+
 queue="project"
-walltime="48:00:00"
+walltime="00:30:00"
 
 log_dir="master_log"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
