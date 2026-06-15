@@ -2,11 +2,11 @@
 ratio1=3
 ratio2=3
 seed=4
-queue="debug"
-walltime="00:20:00"
+# queue="debug"
+# walltime="00:20:00"
 
-# queue="project"
-# walltime="72:00:00"
+queue="project"
+walltime="00:20:00"
 
 log_dir="master_log_quick"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
@@ -34,29 +34,29 @@ jid1=$(qsub \
     -N $PBS_JOBNAME1 \
     gene_data_set1.pbs)
 
-# jid2=$(qsub \
-#     -q $queue \
-#     -l walltime=$walltime \
-#     -W depend=afterok:${jid0} \
-#     -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
-#     -N $PBS_JOBNAME2 \
-#     gene_data_set2.pbs)
+jid2=$(qsub \
+    -q $queue \
+    -l walltime=$walltime \
+    -W depend=afterok:${jid0} \
+    -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
+    -N $PBS_JOBNAME2 \
+    gene_data_set2.pbs)
 
-# jid3=$(qsub \
-#     -q $queue \
-#     -l walltime=$walltime \
-#     -W depend=afterok:${jid0} \
-#     -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
-#     -N $PBS_JOBNAME3 \
-#     gene_data_set3.pbs)
+jid3=$(qsub \
+    -q $queue \
+    -l walltime=$walltime \
+    -W depend=afterok:${jid0} \
+    -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
+    -N $PBS_JOBNAME3 \
+    gene_data_set3.pbs)
 
-# qsub \
-#     -q $queue \
-#     -l walltime=$walltime \
-#     -W depend=afterok:${jid1}:${jid2}:${jid3} \
-#     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
-#     -N $PBS_JOBNAME6 \
-#     train_cpu.pbs
+qsub \
+    -q $queue \
+    -l walltime=$walltime \
+    -W depend=afterok:${jid1}:${jid2}:${jid3} \
+    -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
+    -N $PBS_JOBNAME6 \
+    train_cpu.pbs
 
 end_time=$(date +%s)
 echo "Training Job Submitted"
