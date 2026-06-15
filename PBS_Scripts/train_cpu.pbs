@@ -18,7 +18,8 @@ exec > "$LOGFILE"
 exec 2> "$ERRFILE"
 
 # Initialize conda (IMPORTANT)
-source ~/anaconda3/etc/profile.d/conda.sh
+#source ~/anaconda3/etc/profile.d/conda.sh
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
 
 # Activate your environment
 conda activate genenv_gitika
