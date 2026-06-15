@@ -48,7 +48,8 @@ if __name__ == "__main__":
         fresh_run = bool(args.fresh_run) if args.fresh_run is not None else config['fresh_run']
     else:
         fresh_run = args.fresh_run if args.fresh_run is not None else config['fresh_run']
-        
+
+    
     N = 1 if N==99 else N
     prcolor(f"[bold green]Updated filename to {N}")
     
@@ -71,6 +72,7 @@ if __name__ == "__main__":
         device = "cuda" if torch.cuda.is_available() else "cpu"
         resume = config.get('resume',False)
         checkpoint_freq = config.get('checkpoint_freq',3)
+        print(f"Loaded training parameters from config file")
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
                                    epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
         print(f"For training device used is: {device}")
