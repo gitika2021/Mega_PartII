@@ -2,11 +2,11 @@
 ratio1=3
 ratio2=3
 seed=4
-queue="debug"
-walltime="00:20:00"
-
-# queue="project"
+# queue="debug"
 # walltime="00:20:00"
+
+queue="project"
+walltime="00:20:00"
 
 log_dir="master_log_quick"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
