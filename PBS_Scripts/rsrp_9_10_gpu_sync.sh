@@ -53,7 +53,12 @@ jid3=$(qsub \
     -N $PBS_JOBNAME3 \
     gene_data_set3.pbs)
 
+queue="regular"
+walltime="24:00:00"
+
 qsub \
+    -q $queue \
+    -l walltime=$walltime \
     -W depend=afterok:${jid1}:${jid2}:${jid3} \
     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
     -N $PBS_JOBNAME6 \
