@@ -72,10 +72,11 @@ if __name__ == "__main__":
         device = "cuda" if torch.cuda.is_available() else "cpu"
         resume = config.get('resume',False)
         checkpoint_freq = config.get('checkpoint_freq',3)
+        print(f"For training device used is: {device}")
         print(f"Loaded training parameters from config file")
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
                                    epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
-        print(f"For training device used is: {device}")
+        
     elif fresh_run==2:
         print("Generating shapes only")
         obj.gen_shapes()

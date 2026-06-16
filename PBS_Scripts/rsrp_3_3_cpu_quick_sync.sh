@@ -8,8 +8,8 @@ walltime="00:10:00"
 queue="regular"
 walltime="00:01:00"
 
-queue="project"
-walltime="00:03:00"
+# queue="project"
+# walltime="00:03:00"
 
 log_dir="master_log_quick"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
