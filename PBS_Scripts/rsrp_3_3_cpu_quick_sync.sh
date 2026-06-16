@@ -3,10 +3,13 @@ ratio1=3
 ratio2=3
 seed=4
 queue="debug"
-walltime="00:20:00"
+walltime="00:10:00"
 
-# queue="project"
-# walltime="00:20:00"
+queue="regular"
+walltime="00:01:00"
+
+queue="project"
+walltime="00:03:00"
 
 log_dir="master_log_quick"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
@@ -58,14 +61,21 @@ jid0=$(qsub -v ratio1=$ratio1,ratio2=$ratio2,seed=$seed,base_dir=$base_dir \
 #     -N $PBS_JOBNAME6 \
 #     train_cpu.pbs
 
+# qsub \
+#     -q $queue \
+#     -l walltime=$walltime \
+#     -W depend=afterok:${jid0} \
+#     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
+#     -N $PBS_JOBNAME6 \
+#     train_cpu.pbs
+
 qsub \
     -q $queue \
     -l walltime=$walltime \
     -W depend=afterok:${jid0} \
     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
     -N $PBS_JOBNAME6 \
-    train_cpu.pbs
-
+    train_gpu.pbs
 
 end_time=$(date +%s)
 echo "Training Job Submitted"
