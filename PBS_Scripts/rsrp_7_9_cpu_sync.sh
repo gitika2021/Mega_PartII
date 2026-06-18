@@ -8,6 +8,9 @@ seed=8
 queue="project"
 walltime="24:00:00"
 
+#re-running once lcs are created
+walltime="00:10:00"
+
 log_dir="master_log"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
 base_dir="${log_dir}/${rsrp_dir}"
@@ -50,6 +53,7 @@ jid3=$(qsub \
     -N $PBS_JOBNAME3 \
     gene_data_set3.pbs)
 
+walltime="02:00:00"
 qsub \
     -W depend=afterok:${jid1}:${jid2}:${jid3} \
     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
