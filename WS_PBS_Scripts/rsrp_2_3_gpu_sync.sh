@@ -6,13 +6,17 @@ seed=3
 
 queue="debug"
 walltime="00:20:00"
-config_file="train_config_debug.json"
 
 # queue="project"
 # walltime="01:00:00"
-# config_file="train_config.json"
 
+config_file="train_config_debug.json"
 log_dir="master_log_quick"
+
+# config_file="train_config.json"
+# log_dir="master_log"
+
+
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
 base_dir="${log_dir}/${rsrp_dir}"
 mkdir -p "${base_dir}"
