@@ -5,8 +5,13 @@ seed=10
 #queue="debug"
 #walltime="00:20:00"
 
+# queue="project"
+# walltime="24:00:00"
+
 queue="project"
-walltime="24:00:00"
+walltime="15:00:00"
+
+walltime="00:20:00"
 
 log_dir="master_log"
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
@@ -50,7 +55,14 @@ jid3=$(qsub \
     -N $PBS_JOBNAME3 \
     gene_data_set3.pbs)
 
+queue="regular"
+walltime="24:00:00"
+
+queue="project"
+walltime="01:00:00"
 qsub \
+    -q $queue \
+    -l walltime=$walltime \
     -W depend=afterok:${jid1}:${jid2}:${jid3} \
     -v ratio1=$ratio1,ratio2=$ratio2,base_dir=$base_dir \
     -N $PBS_JOBNAME6 \
