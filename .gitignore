@@ -15,3 +15,5 @@
 **/Config_lipsa
 **/Config_vikram
 **/PBS_Scripts_*
+**/WS_PBS_Scripts/*.o*
+**/WS_PBS_Scripts/*.e*
