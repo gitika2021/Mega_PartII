@@ -1,0 +1,54 @@
+Updated filename to 1
+base_dir /mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data
+... initialization complete.
+Running full excute pipeline
+If testing pipeline set: --fresh_run = 1
+Running pipeline
+ fresh_run = False: Num arg on command line ignored in case shape and light 
+curve files pre-exist. 
+GShapes files exist, generating light curves
+Detected 5 masks in /mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/OM_testing/1.npy
+Generating parameter sets for 5 masks x 1 sims...
+Starting batched simulation...
+  0%|          | 0/5 [00:00<?, ?it/s]/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
+  amR = (1. - am)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
+  bmR = (1. - bm)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
+  amR = (1. - am)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
+  bmR = (1. - bm)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
+  amR = (1. - am)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
+  bmR = (1. - bm)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
+  amR = (1. - am)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
+  bmR = (1. - bm)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
+  amR = (1. - am)**0.25
+/mnt/home/project/cshukla.gitika/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
+  bmR = (1. - bm)**0.25
+ 20%|██        | 1/5 [00:04<00:19,  4.93s/it] 40%|████      | 2/5 [00:05<00:07,  2.50s/it]100%|██████████| 5/5 [00:05<00:00,  1.16s/it]
+⏱️ Time taken: 6.01 seconds
+⏱️ Time taken: 6.01 seconds
+Interpolating final results...
+✅ Saved LCs and Meta.
+processed_lightcurves[0,0:10] [1.        1.        1.        1.        1.        1.        0.9999972
+ 0.9995266 0.9973552 0.9936336]
+Adding noise to light curves
+  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00,  9.54it/s]100%|██████████| 1/1 [00:00<00:00,  9.53it/s]
+Select Transit region
+Number of *_binned.npz files found is 5
+Using 32 CPU cores
+Total time (minutes): 0.023242441813151042
+Found 5 files
+Final shape: (5, 120)
+Saved to 1LC_hscaled.npy
+Preprocess light curves
+ver scaled
+Processed tensor shape: torch.Size([5, 120])
+Split dataset into train and val
+Saved train samples: 4
+Saved vald samples:  1

@@ -1,0 +1,59 @@
+==================================
+Pipeline started at: Tue Jun 16 13:58:29 IST 2026
+JOBNAME=train_2_3
+JOBID=20587.hn1
+==================================
+rsrp1=2
+rsrp2=3
+seed=3
+Updated filename to 1
+base_dir /mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data
+... initialization complete.
+For training device used is: cpu
+Loaded training parameters from config file
+lc_files_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_1LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_2LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_3LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_4LC.npy']
+self.lc_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_1LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_2LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_3LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_4LC.npy']
+self.img_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_1.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_2.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_3.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/train_4.npy']
+for lc max: 1.0 , min: 0.0
+lc_files_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_1LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_2LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_3LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_4LC.npy']
+self.lc_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_1LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_2LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_3LC.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_4LC.npy']
+self.img_paths ['/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_1.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_2.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_3.npy', '/mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data/Train/RsRp_2_3/val_4.npy']
+for lc max: 1.0 , min: 0.0
+Total number of training samples:   16
+Total number of validation samples: 4
+⚠ No checkpoint found at /mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Model/RsRp_2_3/model_n2_checkpoint.pth. Starting from scratch.
+
+[Step 1] Gradient Stats:
+bn_input.weight: min=0.0000, max=0.0000, norm=0.0000
+bn_input.bias: min=0.0000, max=0.0000, norm=0.0000
+conv1_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv1_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv2_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_1.bias: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.weight: min=-0.0000, max=0.0000, norm=0.0000
+conv3_2.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc1.weight: min=-0.0000, max=0.0000, norm=0.0000
+fc1.bias: min=-0.0000, max=0.0000, norm=0.0000
+fc2.weight: min=-0.0000, max=0.0000, norm=0.0000
+fc2.bias: min=-0.0000, max=0.0000, norm=0.0001
+fc3.weight: min=-0.0000, max=0.0000, norm=0.0001
+fc3.bias: min=-0.0000, max=0.0000, norm=0.0002
+conv2d_1.weight: min=-0.0000, max=0.0000, norm=0.0002
+conv2d_1.bias: min=-0.0047, max=0.0027, norm=0.0103
+conv2d_2.weight: min=-0.0044, max=0.0031, norm=0.0812
+conv2d_2.bias: min=-0.0121, max=0.0087, norm=0.0225
+conv2d_3.weight: min=-0.0057, max=0.0045, norm=0.0921
+conv2d_3.bias: min=-0.0206, max=0.0168, norm=0.0442
+conv2d_4.weight: min=-0.0158, max=0.0010, norm=0.0802
+conv2d_4.bias: min=-0.0983, max=-0.0983, norm=0.0983
+==================================
+Job ended at: Tue Jun 16 13:59:48 IST 2026
+Total walltime (seconds): 79
+Total walltime (hh:mm:ss): 00:01:19
+==================================
