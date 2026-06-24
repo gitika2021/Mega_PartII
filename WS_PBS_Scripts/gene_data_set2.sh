@@ -20,7 +20,7 @@ if [ -n "$PBS_O_WORKDIR" ]; then
 else
     WORKDIR=$(pwd)
     JOBID=$(date +%Y%m%d_%H%M%S)
-    JOBNAME="local_gen_lc"
+    JOBNAME="gen_lc_set2_local"
 fi
 
 cd "$WORKDIR"

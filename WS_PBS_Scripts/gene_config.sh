@@ -72,6 +72,7 @@ SNR_MIN=${snr_min:-100}
 SNR_MAX=${snr_max:-500}
 NOISE=${noise:-gaussian}
 TRAIN_NETWROK=${train_network:-curriculam_noise} #"curriculam_noise", "fixed_noise"
+NPROC=${nproc:-32}
 # =========================
 # Python config generation (ROBUST PATH HANDLING)
 # =========================
@@ -102,6 +103,7 @@ snr_min = float("$SNR_MIN")
 snr_max = float("$SNR_MAX")
 noise = str("$NOISE")
 train_newtork = str("$TRAIN_NETWROK")
+nproc = int("$NPROC")
 
 #input_file = base_dir / "Config" / "train_config.json"
 input_file = base_dir / "Config" / "$config_file"
@@ -116,6 +118,7 @@ config["snr_min"] = snr_min
 config["snr_max"] = snr_max
 config["noise"] = noise
 config["train_newtork"] = train_newtork
+config["nproc"] = nproc
 
 config_out_dir = Path(Config_Dir)
 config_out_dir.mkdir(parents=True, exist_ok=True)

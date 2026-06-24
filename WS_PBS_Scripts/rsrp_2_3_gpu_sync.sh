@@ -3,6 +3,11 @@
 ratio1=2
 ratio2=3
 seed=3
+snr_min=200000
+snr_max=200001
+noise="gaussian"
+train_network="curriculam_noise"
+nproc=24
 
 queue="debug"
 walltime="00:20:00"
@@ -21,7 +26,7 @@ rsrp_dir="RsRp_${ratio1}_${ratio2}"
 base_dir="${log_dir}/${rsrp_dir}"
 mkdir -p "${base_dir}"
 
-export ratio1 ratio2 seed base_dir config_file
+export ratio1 ratio2 seed base_dir config_file snr_min snr_max noise train_network nproc
 
 PBS_JOBNAME0="gen_config_${ratio1}_${ratio2}"
 PBS_JOBNAME1="genlc_${ratio1}_${ratio2}_s1"
@@ -36,7 +41,7 @@ if command -v qsub >/dev/null 2>&1; then
     echo "Running on HPC (PBS mode)"
 
     jid0=$(qsub -S /bin/bash \
-        -v ratio1,ratio2,seed,base_dir,config_file \
+        -v ratio1,ratio2,seed,base_dir,config_file,snr_min,snr_max,noise,train_network \
         -q $queue \
         -N $PBS_JOBNAME0 \
         gene_config.sh)
