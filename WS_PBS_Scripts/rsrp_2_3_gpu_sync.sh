@@ -7,8 +7,8 @@ seed=3
 queue="debug"
 walltime="00:20:00"
 
-# queue="project"
-# walltime="01:00:00"
+queue="project"
+walltime="00:20:00"
 
 config_file="train_config_debug.json"
 log_dir="master_log_quick"
@@ -27,7 +27,7 @@ PBS_JOBNAME0="gen_config_${ratio1}_${ratio2}"
 PBS_JOBNAME1="genlc_${ratio1}_${ratio2}_s1"
 PBS_JOBNAME2="genlc_${ratio1}_${ratio2}_s2"
 PBS_JOBNAME3="genlc_${ratio1}_${ratio2}_s3"
-PBS_JOBNAME6="train_${ratio1}_${ratio2}"
+PBS_JOBNAME4="train_${ratio1}_${ratio2}"
 # =========================
 # Detect PBS availability
 # =========================
@@ -41,20 +41,36 @@ if command -v qsub >/dev/null 2>&1; then
         -N $PBS_JOBNAME0 \
         gene_config.sh)
 
-    # jid1=$(qsub -S /bin/bash \
-    #     -q $queue \
-    #     -l walltime=$walltime \
-    #     -W depend=afterok:${jid0} \
-    #     -v ratio1,ratio2,seed,base_dir \
-    #     -N $PBS_JOBNAME1 \
-    #     gene_data_set1.sh)
-
-    jid6=$(qsub -S /bin/bash \
+    jid1=$(qsub -S /bin/bash \
         -q $queue \
         -l walltime=$walltime \
         -W depend=afterok:${jid0} \
         -v ratio1,ratio2,seed,base_dir \
-        -N $PBS_JOBNAME6 \
+        -N $PBS_JOBNAME1 \
+        gene_data_set1.sh)
+
+    jid2=$(qsub -S /bin/bash \
+        -q $queue \
+        -l walltime=$walltime \
+        -W depend=afterok:${jid0} \
+        -v ratio1,ratio2,seed,base_dir \
+        -N $PBS_JOBNAME2 \
+        gene_data_set2.sh)
+
+    jid3=$(qsub -S /bin/bash \
+        -q $queue \
+        -l walltime=$walltime \
+        -W depend=afterok:${jid0} \
+        -v ratio1,ratio2,seed,base_dir \
+        -N $PBS_JOBNAME3 \
+        gene_data_set3.sh)
+    
+    jid4=$(qsub -S /bin/bash \
+        -q $queue \
+        -l walltime=$walltime \
+        -W depend=afterok:${jid0} \
+        -v ratio1,ratio2,seed,base_dir \
+        -N $PBS_JOBNAME4 \
         train_cpu.sh)
 
 else
@@ -63,5 +79,7 @@ else
     # run directly
     bash gene_config.sh
     bash gene_data_set1.sh
+    bash gene_data_set2.sh
+    bash gene_data_set3.sh
     bash train_cpu.sh
 fi

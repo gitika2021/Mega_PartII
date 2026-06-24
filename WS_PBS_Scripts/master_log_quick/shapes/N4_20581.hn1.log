@@ -1,13 +1,0 @@
-Updated filename to 4
-base_dir /mnt/home/project/cshukla.gitika/Mega_PartII/Mega_Runs_Pegasus/Data
-... initialization complete.
-Generating shapes only
-Generating 5 random closed Bezier shapes of size 38x38...
-  0%|          | 0/5 [00:00<?, ?it/s]100%|██████████| 5/5 [00:00<00:00, 637.80it/s]
-
---- Output Summary (Filled Shapes) ---
-Successfully generated and rasterized 5 FILLED shapes.
-Saved NumPy array 'randomshapes.npy' with shape: (5, 38, 38)
-This array now contains the binary masks of the SOLID Bezier shapes.
-
-----------------------------------

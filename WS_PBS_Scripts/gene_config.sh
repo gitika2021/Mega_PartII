@@ -58,7 +58,8 @@ echo "=================================="
 
 echo "rsrp1=$ratio1"
 echo "rsrp2=$ratio2"
-
+echo "SNR Range=$snr_min, $snr_max"
+echo "noise=$noise"
 # =========================
 # Inputs
 # =========================
@@ -67,6 +68,10 @@ RSRP1=${ratio1:-9}
 RSRP2=${ratio2:-10}
 SEED=${seed:-0}
 
+SNR_MIN=${snr_min:-100}
+SNR_MAX=${snr_max:-500}
+NOISE=${noise:-gaussian}
+TRAIN_NETWROK=${train_network:-curriculam_noise} #"curriculam_noise", "fixed_noise"
 # =========================
 # Python config generation (ROBUST PATH HANDLING)
 # =========================
@@ -93,6 +98,10 @@ from paths import *
 rsrp1 = int("$RSRP1")
 rsrp2 = int("$RSRP2")
 seed = int("$SEED")
+snr_min = float("$SNR_MIN")
+snr_max = float("$SNR_MAX")
+noise = str("$NOISE")
+train_newtork = str("$TRAIN_NETWROK")
 
 #input_file = base_dir / "Config" / "train_config.json"
 input_file = base_dir / "Config" / "$config_file"
@@ -103,6 +112,10 @@ with open(input_file, "r") as f:
 config["rsrp1"] = rsrp1
 config["rsrp2"] = rsrp2
 config["seed"] = seed
+config["snr_min"] = snr_min
+config["snr_max"] = snr_max
+config["noise"] = noise
+config["train_newtork"] = train_newtork
 
 config_out_dir = Path(Config_Dir)
 config_out_dir.mkdir(parents=True, exist_ok=True)
