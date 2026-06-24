@@ -3,24 +3,23 @@
 ratio1=2
 ratio2=3
 seed=3
-snr_min=200000
-snr_max=200001
+snr_min=100
+snr_max=500
 noise="gaussian"
 train_network="curriculam_noise"
-nproc=24
+nproc=24 # updated for local machine
 
 queue="debug"
 walltime="00:20:00"
 
-queue="project"
-walltime="00:20:00"
+# queue="project"
+# walltime="00:20:00"
 
 config_file="train_config_debug.json"
 log_dir="master_log_quick"
 
 # config_file="train_config.json"
 # log_dir="master_log"
-
 
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
 base_dir="${log_dir}/${rsrp_dir}"
@@ -55,28 +54,28 @@ if command -v qsub >/dev/null 2>&1; then
         gene_data_set1.sh)
 
     jid2=$(qsub -S /bin/bash \
-        -q $queue \
-        -l walltime=$walltime \
-        -W depend=afterok:${jid0} \
-        -v ratio1,ratio2,seed,base_dir \
-        -N $PBS_JOBNAME2 \
-        gene_data_set2.sh)
-
-    jid3=$(qsub -S /bin/bash \
-        -q $queue \
-        -l walltime=$walltime \
-        -W depend=afterok:${jid0} \
-        -v ratio1,ratio2,seed,base_dir \
-        -N $PBS_JOBNAME3 \
-        gene_data_set3.sh)
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid0} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME2 \
+            gene_data_set2.sh)
     
+    jid3=$(qsub -S /bin/bash \
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid0} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME3 \
+            gene_data_set3.sh)
+        
     jid4=$(qsub -S /bin/bash \
-        -q $queue \
-        -l walltime=$walltime \
-        -W depend=afterok:${jid0} \
-        -v ratio1,ratio2,seed,base_dir \
-        -N $PBS_JOBNAME4 \
-        train_cpu.sh)
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid0} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME4 \
+            train_cpu.sh)
 
 else
     echo "Running locally (no PBS detected)"
