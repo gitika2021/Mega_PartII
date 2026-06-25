@@ -139,27 +139,15 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     figure_dir = Path(Base_Dir + "Figures/Kepler")
     figure_dir.mkdir(parents=True, exist_ok=True)
     
-    #ldc_ratio_outfile_1 =f"{obj.koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
-    koi_table_folder = Kepler_Dir
-    koi_table_filename = KOI_Table_Filename
+    ldc_ratio_outfile_1 =f"{obj.koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
     
-    ldc_ratio_outfile_1 =f"{koi_table_folder}kepler_ldc_coeffs_conf_planets.npy"
-    
-    
-    # koi_conf_plans_tabl, ldc_ratio_outfile_2 = save_kepler_ldc_ratio(koi_table_folder =
-    #                                             obj.koi_table_folder,
-    #                       koi_table_filename = obj.koi_table_filename,
-    #                       ldc_ratio_outfile = ldc_ratio_outfile_1,
-    #                       snr_cut = snr_cut
-    #                      )
-
     koi_conf_plans_tabl, ldc_ratio_outfile_2 = save_kepler_ldc_ratio(koi_table_folder =
-                                                koi_table_folder,
-                          koi_table_filename = koi_table_filename,
+                                                obj.koi_table_folder,
+                          koi_table_filename = obj.koi_table_filename,
                           ldc_ratio_outfile = ldc_ratio_outfile_1,
                           snr_cut = snr_cut
                          )
-
+    
     ldcs_coeffs_1 = np.load(ldc_ratio_outfile_2) # all sample
     ldcs_coeffs_2 = np.load(ldc_ratio_outfile_1) # subsample
     
@@ -201,7 +189,7 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     rsrp_bins[:,0:2] = inverse_bins
     rsrp_bins[:,2] = counts
     rsrp_bins[:,3:6] = snr_ranges
-    np.save(koi_table_folder+f'koi_rsrp_bin_info_snr{snr_cut}.csv',rsrp_bins)
+    np.save(obj.koi_table_folder+f'koi_rsrp_bin_info_snr{snr_cut}.csv',rsrp_bins)
 
     array = rsrp_bins
     # Save the table as png
@@ -239,7 +227,7 @@ def main(snr_cut = 50, n_rsrp_bins=15):
     
     # create new table containing extra columns with bin index and bin ranges added
     table_subset = koi_conf_plans_tabl[koi_conf_plans_tabl['koi_model_snr']>= snr_cut]
-    table_subset_new_name = koi_table_folder + f'koi_cumulative_snr{snr_cut}.csv'
+    table_subset_new_name = obj.koi_table_folder + f'koi_cumulative_snr{snr_cut}.csv'
     add_inverse_bins_as_input(table_subset, inverse_bins_org, column='koi_ror',
                                   outfile= table_subset_new_name)
     

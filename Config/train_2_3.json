@@ -5,7 +5,7 @@
     "Num": 5,
     "N": 1,
     "maps_path": null,
-    "nproc": 32,
+    "nproc": 24,
     "rsrp1": 2,
     "rsrp2": 3,
     "train_frac": 0.8,
@@ -16,8 +16,8 @@
     "n_scale": 2,
     "resume": true,
     "checkpoint_freq": 10,
-    "snr_min": 200000.0,
-    "snr_max": 200001.0,
+    "snr_min": 100.0,
+    "snr_max": 500.0,
     "noise": "gaussian",
     "train_newtork": "curriculam_noise"
 }

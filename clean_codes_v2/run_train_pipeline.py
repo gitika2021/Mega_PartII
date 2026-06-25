@@ -48,8 +48,7 @@ if __name__ == "__main__":
         fresh_run = bool(args.fresh_run) if args.fresh_run is not None else config['fresh_run']
     else:
         fresh_run = args.fresh_run if args.fresh_run is not None else config['fresh_run']
-
-    
+        
     N = 1 if N==99 else N
     prcolor(f"[bold green]Updated filename to {N}")
     
@@ -62,8 +61,12 @@ if __name__ == "__main__":
     seed = config.get('seed',None) + N
     maps_folder_str = config.get('maps_folder_str',10)
     n_scale = config.get('n_scale',2)
-
-    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, maps_folder_str = maps_folder_str, test=test, fresh_run = fresh_run)
+    snr_min = config.get('snr_min',100)
+    snr_max = config.get('snr_max',500)
+    noise = config.get('noise','real')
+    train_network = config.get('train_network','fixed_noise')
+    print(f"SNR Range: [{snr_min}:{snr_max}], noise: {noise}, train_network: {train_network}")
+    obj = MLPreProcessing(Num=Num,N=N,maps_path=maps_path,nproc=nproc,rsrp1=rsrp1,rsrp2=rsrp2,train_frac=train_frac,seed=seed, maps_folder_str = maps_folder_str, test=test, fresh_run = fresh_run, snr_min=snr_min,snr_max=snr_max,noise=noise)
     if train:
         import torch
         epochs = config.get('epochs',3)
@@ -73,9 +76,9 @@ if __name__ == "__main__":
         resume = config.get('resume',False)
         checkpoint_freq = config.get('checkpoint_freq',3)
         print(f"For training device used is: {device}")
-        print(f"Loaded training parameters from config file")
         train_on_kepler_noise.main(obj.train_dir,obj.model_dir,
-                                   epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir))
+                                   epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=str(obj.figure_dir),
+                                  train_network=train_network)
         
     elif fresh_run==2:
         print("Generating shapes only")

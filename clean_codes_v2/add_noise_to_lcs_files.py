@@ -127,32 +127,53 @@ def init_worker(kepler_file,figure_path):
 
 
 # -------- WORKER FUNCTION --------
-def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real', seed=None):
+def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real', seed=None,
+                   snr_min=100,snr_max=500):
 
     train_lcs = np.load(lc_file)
 
     depths = 1 - np.min(train_lcs, axis=1)
 
     rng = np.random.default_rng(seed)
-    snr = rng.uniform(100, 500, size=len(train_lcs))
+    snr = rng.uniform(snr_min, snr_max, size=len(train_lcs))
     #print('snr[0:10]',snr[0:10])
     sigma_vals = depths / snr
-    #print('sigma_vals[0:10]',sigma_vals[0:10])
+    print('sigma_vals[0:10]',sigma_vals[0:10])
     
-    errors, noise_multigauss, noise_gaussian = get_err_array(
-        sigma_vals, median_error, kepler_lcs_error, bins, show=False, seed=seed
-    )
+    # errors, noise_multigauss, noise_gaussian = get_err_array(
+    #     sigma_vals, median_error, kepler_lcs_error, bins, show=False, seed=seed
+    # )
     # print('noise_multigauss[0,0:5]',noise_multigauss[0,0:5])
     # print('noise_multigauss[1,0:5]',noise_multigauss[1,0:5])
     if noise_flag == "real":
+        errors, noise_multigauss, noise_gaussian = get_err_array(sigma_vals,
+                                                                 median_error,
+                                                                 kepler_lcs_error, bins,
+                                                                 show=False, seed=seed
+                                                                )
         lcs_noisy_multi = train_lcs + noise_multigauss
     elif noise_flag == "gaussian":
+        noise_gaussian = np.zeros(train_lcs.shape)
+        errors = np.zeros(train_lcs.shape)
+        # errors = np.array([errors[i,:] = sigma_vals[i] for in range(train_lcs.shape[0]) )
+        # noise_singlgauss = np.zeros((len(sigma_val),train_lcs.shape[1]))
+        
+        rng = np.random.default_rng(seed)
+        noise = rng.standard_normal(train_lcs.shape[1]) 
+        for i in range(train_lcs.shape[0]):
+            noise_gaussian[i,:] = noise * sigma_vals[i]
+            errors[i,:] = sigma_vals[i]
+                
         lcs_noisy_multi = train_lcs + noise_gaussian
-    
+        noise_multigauss = noise_gaussian
+    print(f"Added {noise_flag} noise")    
     original_path = Path(lc_file)
     stem = original_path.stem
     new_folder = original_path.parent
 
+    np.save(new_folder / f"{stem}_noise.npy",noise_multigauss)
+    np.save(new_folder / f"{stem}_snr_added.npy",snr)
+    
     time_gen = np.linspace(-1, 1, train_lcs.shape[1])
     time_gen_ext = np.linspace(-1, 1, train_lcs.shape[1] + 40)
 
@@ -200,7 +221,7 @@ def process_lc_file(lc_file, N_dummy, org_lc_path, noise_flag ='real', seed=None
 
 # -------- DRIVER --------
 def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path=None,
-                random_seed=None):
+                random_seed=None, snr_min=100,snr_max=500):
 
     with ProcessPoolExecutor(
         max_workers=max_workers,
@@ -217,6 +238,8 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path
                     repeat(None),
                     repeat(noise),
                     repeat(random_seed),
+                    repeat(snr_min),
+                    repeat(snr_max),
                     chunksize=1
                 ),
                 total=len(lc_files)
@@ -225,9 +248,12 @@ def run_parallel(lc_files, kepler_file, max_workers=32, noise='real',figure_path
 
     return results
 
-def main(lc_file,kepler_error_file,figure_path,random_seed=None):
-    run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1,figure_path=figure_path,
-                random_seed=random_seed)
+def main(lc_file,kepler_error_file,figure_path,random_seed=None, snr_min=100,snr_max=500,noise='gaussian'):
+    # run_parallel([lc_file],kepler_error_file,noise='real',max_workers=1,figure_path=figure_path,
+    #             random_seed=random_seed)
+
+    run_parallel([lc_file],kepler_error_file,max_workers=1,figure_path=figure_path,
+                random_seed=random_seed, snr_min=snr_min,snr_max=snr_max,noise=noise)
     return
 
 

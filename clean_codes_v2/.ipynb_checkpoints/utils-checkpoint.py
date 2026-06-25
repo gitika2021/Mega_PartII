@@ -30,6 +30,9 @@ def add_noise_to_batch(lc_batch: torch.Tensor, snr: float):
     return lc_batch + noise
 
 def symmetry_aware_bce(y_true, y_pred):
+    # print("y_true:", y_true.shape)
+    # print("y_pred:", y_pred.shape)
+
     if isinstance(y_true, np.ndarray):
         y_true = torch.tensor(y_true, dtype=torch.float32)
     if isinstance(y_pred, np.ndarray):
