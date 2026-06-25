@@ -17,3 +17,4 @@
 **/PBS_Scripts_*
 **/WS_PBS_Scripts/*.o*
 **/WS_PBS_Scripts/*.e*
+**/WS_PBS_Scripts/master_log*

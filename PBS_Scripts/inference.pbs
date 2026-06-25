@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Run your script
+#PBS -l select=1:ncpus=32
+#PBS -l walltime=00:20:00
+#PBS -q project
+#PBS -P hpc2601012
+#PBS -N gen_lc
+
+
+# redirect stdout/stderr immediately
+
+
+cd $PBS_O_WORKDIR
+
+LOGDIR="$base_dir"
+
+LOGFILE="$LOGDIR/${PBS_JOBNAME}.o${PBS_JOBID}"
+ERRFILE="$LOGDIR/${PBS_JOBNAME}.e${PBS_JOBID}"
+
+exec > "$LOGFILE"
+exec 2> "$ERRFILE"
+
+# Initialize conda (IMPORTANT)
+source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
+
+# Activate your environment
+conda activate genenv_gitika
+
+start_time=$(date +%s)
+
+echo "==================================" 
+echo "Pipeline started at: $(date)" 
+echo "==================================" 
+
+echo "rsrp1=$ratio1"
+echo "rsrp2=$ratio2"
+
+# use them like:
+#ratio1=$ratio1
+#ratio2=$ratio2
+#base_dir=$base_dir
+
+# Pass these using qsub -v or define here
+RSRP1=$ratio1
+RSRP2=$ratio2
+SEED=$seed
+
+more ../Config_gitika/train_${ratio1}_${ratio2}.json
+
+python ../clean_codes_v2/run_inference_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 1 --N 99 --Num 130 --fresh_run 0 > ${base_dir}/N99_infer_${PBS_JOBID}.log 2>&1 && \
+
+python ../clean_codes_v2/run_inference_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 0 > ${base_dir}/kepler_infer_${PBS_JOBID}.log 2>&1  
+
+end_time=$(date +%s)
+elapsed=$((end_time - start_time))
+echo "Job ended at: $(date)"
+echo "Total walltime (seconds): $elapsed"
+echo "Total walltime (hh:mm:ss): $(printf '%02d:%02d:%02d\n' $((elapsed/3600)) $((elapsed%3600/60)) $((elapsed%60)))"
+

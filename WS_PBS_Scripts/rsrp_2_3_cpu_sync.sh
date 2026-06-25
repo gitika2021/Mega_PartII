@@ -12,8 +12,8 @@ nproc=24 # updated for local machine
 queue="debug"
 walltime="00:20:00"
 
-# queue="project"
-# walltime="00:20:00"
+queue="project"
+walltime="00:20:00"
 
 config_file="train_config_debug.json"
 log_dir="master_log_quick"
@@ -72,7 +72,7 @@ if command -v qsub >/dev/null 2>&1; then
     jid4=$(qsub -S /bin/bash \
             -q $queue \
             -l walltime=$walltime \
-            -W depend=afterok:${jid0} \
+            -W depend=afterok:${jid1}:${jid2}:${jid3} \
             -v ratio1,ratio2,seed,base_dir \
             -N $PBS_JOBNAME4 \
             train_cpu.sh)

@@ -1,71 +1,0 @@
-Updated filename to 3
-base_dir /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data
-... initialization complete.
-Running full excute pipeline
-If testing pipeline set: --fresh_run = 1
-Running pipeline afresh
-a.min(),a.max() 0.2291 0.6914
-b.min(),b.max() 0.0628 0.4418
-rprs.min(),rprs.max() 0.008919 0.415349
-loc_cut_rprs =0.0833, high_cut_rprs = 0.1
-pairs.shape (5711, 4)
-rprs_grid (5711,) 5711
-Number of LDC & Rp/Rs points is 5711
-radius ratio (Rs/Rp) [11. 11. 10. ... 10. 11. 11.] 10.0 12.0
-False
-pairs[0:3,:] [[ 0.2291      0.37695833  0.09323028 11.        ]
- [ 0.23282823  0.37456125  0.0898946  11.        ]
- [ 0.23655645  0.37216417  0.09964241 10.        ]]
-LDC giving negative intesnity (array([], dtype=int64),)
-Generating 10 random closed Bezier shapes of size 38x38...
-  0%|          | 0/10 [00:00<?, ?it/s]100%|██████████| 10/10 [00:00<00:00, 981.74it/s]
-
---- Output Summary (Filled Shapes) ---
-Successfully generated and rasterized 10 FILLED shapes.
-Saved NumPy array 'randomshapes.npy' with shape: (10, 38, 38)
-This array now contains the binary masks of the SOLID Bezier shapes.
-
-----------------------------------
-Generated Bezier shapes
-Detected 10 masks in /home/iit-t/Gitika/Github-Repositories/Abraham_Mega/Reanalysis_Git/Mega_PartII_Kepler/Mega_PartII/Test/Data/OM_Demo/3.npy
-Generating parameter sets for 10 masks x 1 sims...
-Starting batched simulation...
-  0%|          | 0/10 [00:00<?, ?it/s]/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
-  amR = (1. - am)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
-  bmR = (1. - bm)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
-  amR = (1. - am)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
-  bmR = (1. - bm)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
-  amR = (1. - am)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
-  bmR = (1. - bm)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:168: RuntimeWarning: invalid value encountered in scalar power
-  amR = (1. - am)**0.25
-/home/iit-t/anaconda3/envs/genenv_gitika/lib/python3.10/site-packages/EightBitTransit/cGridFunctions.py:169: RuntimeWarning: invalid value encountered in scalar power
-  bmR = (1. - bm)**0.25
- 10%|█         | 1/10 [00:10<01:35, 10.63s/it] 50%|█████     | 5/10 [00:18<00:16,  3.25s/it] 70%|███████   | 7/10 [00:19<00:06,  2.28s/it] 90%|█████████ | 9/10 [00:26<00:02,  2.69s/it]100%|██████████| 10/10 [00:26<00:00,  2.67s/it]
-⏱️ Time taken: 26.82 seconds
-⏱️ Time taken: 26.82 seconds
-Interpolating final results...
-✅ Saved LCs and Meta.
-processed_lightcurves[0,0:10] [1.         0.99999714 0.99987614 0.99954844 0.9989956  0.99836296
- 0.99769974 0.99701613 0.9963256  0.9956712 ]
-Generated light curves
-  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 75.60it/s]
-Added noise
-Number of *_binned.npz files found is 30
-Using 4 CPU cores
-Total time (minutes): 0.0017295082410176594
-Found 10 files
-Final shape: (10, 120)
-Saved to 3LC_hscaled.npy
-Selected transit region
-ver scaled
-Processed tensor shape: torch.Size([10, 120])
-Final processed light curves generated
-Split dataset into train and val
-Saved train samples: 8
-Saved vald samples:  2

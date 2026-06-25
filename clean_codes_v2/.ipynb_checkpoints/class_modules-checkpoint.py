@@ -17,7 +17,8 @@ import shutil
 import pandas as pd
 ###################################
 class MLPreProcessing():
-    def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None,fresh_run=False):
+    # def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None,fresh_run=False):
+    def __init__(self,Num=None,N=None,maps_path=None, rsrp1=2, rsrp2=3,nproc=4,train_frac=0.8,seed=None,maps_folder_str="_testing", test=None,fresh_run=False):
         self.Num = Num
         self.N = N
         self.nproc = nproc

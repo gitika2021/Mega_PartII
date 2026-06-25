@@ -1,16 +1,0 @@
-Updated filename to 2
-base_dir /mnt/home/project/cshukla.gitika/Mega_PartII/Test_Runs_Pegasus/Data
-... initialization complete.
-Running full excute pipeline
-If testing pipeline set: --fresh_run = 1
-Running pipeline
- fresh_run = False: Num arg on command line ignored in case shape and light 
-curve files pre-exist. 
-Adding noise to light curves
-  0%|          | 0/1 [00:00<?, ?it/s]100%|██████████| 1/1 [00:00<00:00, 36.43it/s]
-Preprocess light curves
-ver scaled
-Processed tensor shape: torch.Size([5, 120])
-Split dataset into train and val
-Saved train samples: 4
-Saved vald samples:  1
