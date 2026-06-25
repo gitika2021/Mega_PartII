@@ -86,16 +86,16 @@ echo "Running shape generation pipeline"
 # Shape generation (unchained version for safety in both local + HPC)
 # =========================
 
-# for N in $(seq 1 12); do
-#     echo "Running N=$N"
+for N in $(seq 1 12); do
+    echo "Running N=$N"
 
-#     python ../clean_codes_v2/run_train_pipeline.py \
-#         --config-file $config_file \
-#         --train 0 \
-#         --N $N \
-#         --fresh_run 2 \
-#         > "${base_dir}/N${N}_${JOBID}.log" 2>&1
-# done
+    python ../clean_codes_v2/run_train_pipeline.py \
+        --config-file $config_file \
+        --train 0 \
+        --N $N \
+        --fresh_run 2 \
+        > "${base_dir}/N${N}_${JOBID}.log" 2>&1
+done
 
 # =========================
 # End timing

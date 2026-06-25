@@ -18,3 +18,4 @@
 **/WS_PBS_Scripts/*.o*
 **/WS_PBS_Scripts/*.e*
 **/WS_PBS_Scripts/master_log*
+**/Pipeline_Runs*

@@ -6,13 +6,16 @@ seed=3
 
 queue="debug"
 walltime="00:05:00"
-config_file="train_config_debug.json"
 
 # queue="project"
 # walltime="01:00:00"
-# config_file="train_config.json"
 
+config_file="train_config_debug.json"
 log_dir="master_log_quick"
+
+# config_file="train_config.json"
+#log_dir="master_log"
+
 shape_dir="shapes"
 base_dir="${log_dir}/${shape_dir}"
 

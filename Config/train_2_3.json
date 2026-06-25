@@ -5,7 +5,7 @@
     "Num": 5,
     "N": 1,
     "maps_path": null,
-    "nproc": 24,
+    "nproc": 32,
     "rsrp1": 2,
     "rsrp2": 3,
     "train_frac": 0.8,
