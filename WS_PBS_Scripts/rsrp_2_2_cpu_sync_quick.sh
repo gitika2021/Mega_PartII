@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ratio1=2
-ratio2=3
+ratio2=2
 seed=3
 snr_min=100
 snr_max=500
@@ -9,17 +9,20 @@ noise="gaussian"
 train_network="curriculam_noise"
 nproc=24 # updated for local machine
 
-# queue="debug"
+queue="debug"
+walltime="00:20:00"
+
+# queue="regular"
 # walltime="00:20:00"
 
-# config_file="train_config_debug.json"
-# log_dir="master_log_quick"
+# queue="project"
+# walltime="00:20:00"
 
-queue="project"
-walltime="30:00:00"
+config_file="train_config_debug.json"
+log_dir="master_log_quick"
 
-config_file="train_config.json"
-log_dir="master_log"
+# config_file="train_config.json"
+# log_dir="master_log"
 
 rsrp_dir="RsRp_${ratio1}_${ratio2}"
 base_dir="${log_dir}/${rsrp_dir}"
@@ -43,7 +46,7 @@ if command -v qsub >/dev/null 2>&1; then
         -v ratio1,ratio2,seed,base_dir,config_file,snr_min,snr_max,noise,train_network \
         -q $queue \
         -N $PBS_JOBNAME0 \
-        gene_config.sh)
+        gene_config_reg.sh)
 
     # jid1=$(qsub -S /bin/bash \
     #     -q $queue \
@@ -76,14 +79,7 @@ if command -v qsub >/dev/null 2>&1; then
     #         -v ratio1,ratio2,seed,base_dir \
     #         -N $PBS_JOBNAME4 \
     #         train_cpu.sh)
-    walltime="96:00:00"
-    jid4=$(qsub -S /bin/bash \
-            -q $queue \
-            -l walltime=$walltime \
-            -W depend=afterok:${jid0} \
-            -v ratio1,ratio2,seed,base_dir \
-            -N $PBS_JOBNAME4 \
-            train_cpu.sh)
+
 else
     echo "Running locally (no PBS detected)"
 

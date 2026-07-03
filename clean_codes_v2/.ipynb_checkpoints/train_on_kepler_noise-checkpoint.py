@@ -32,8 +32,11 @@ def save_checkpoint(epoch, generator, optimizer_G, scheduler, best_val_loss, val
 
 
 def load_checkpoint(checkpoint_path, generator, optimizer_G, scheduler, device):
+    #prcolor('Resuming checkpoint ...')
     #ckpt = torch.load(checkpoint_path, map_location=device, weights_only=True)
     ckpt = torch.load(checkpoint_path,map_location=device, weights_only=False) # use this for proper reloading of checkpoint and retraining
+
+    #prcolor('Checkpoint loaded ...')
     
     generator.load_state_dict(ckpt['model_state_dict'])
     optimizer_G.load_state_dict(ckpt['optimizer_state_dict'])
@@ -41,7 +44,7 @@ def load_checkpoint(checkpoint_path, generator, optimizer_G, scheduler, device):
     start_epoch       = ckpt['epoch'] + 1
     best_val_loss     = ckpt['best_val_loss']
     val_loss_counter  = ckpt['val_loss_counter']
-    print(f"✔ Resumed from checkpoint at epoch {ckpt['epoch']+1}, best_val_loss={best_val_loss:.4f}")
+    prcolor(f"Resumed from checkpoint at epoch {ckpt['epoch']+1}, best_val_loss={best_val_loss:.4f}")
     return start_epoch, best_val_loss, val_loss_counter
 
 
@@ -60,13 +63,23 @@ def train_gan(generator, traindataloader, valdataloader, snr,
     best_model_path  = modelpath                                      # best weights only
     checkpoint_path  = modelpath.replace('.pth', '_checkpoint.pth')  # full resumable checkpoint
 
+    checkpoint_path = Path(checkpoint_path)
     # ── Resume from checkpoint if requested ────────────────────────────────────
-    if resume and os.path.exists(checkpoint_path):
+    if resume ==True and checkpoint_path.exists():
+        prcolor(f"Checkpoint found at {checkpoint_path}. Starting from last saved checkpoint")
         start_epoch, best_val_loss, val_loss_counter = load_checkpoint(
             checkpoint_path, generator, optimizer_G, scheduler, device
         )
     elif resume:
-        print(f"⚠ No checkpoint found at {checkpoint_path}. Starting from scratch.")
+        prcolor(f"No checkpoint found at {checkpoint_path}. Starting from scratch.")
+
+    # if resume and os.path.exists(checkpoint_path):
+    #     print(f"⚠ Checkpoint found at {checkpoint_path}. Starting from last saved checkpoint")
+    #     start_epoch, best_val_loss, val_loss_counter = load_checkpoint(
+    #         checkpoint_path, generator, optimizer_G, scheduler, device
+    #     )
+    # elif resume:
+    #     print(f"⚠ No checkpoint found at {checkpoint_path}. Starting from scratch.")
 
     train_loss_bce = []
     train_loss_mse = []
@@ -102,8 +115,8 @@ def train_gan(generator, traindataloader, valdataloader, snr,
             gbce_total += g_loss_bce.detach()
 
             genlos.backward()
-            if i == 1 and epoch % 10 == 0:
-                print_grad_stats(generator, i)
+            # if i == 1 and epoch % 10 == 0:
+            #     print_grad_stats(generator, i)
             optimizer_G.step()
 
             # ── Debug plots every 10 epochs ─────────────────────────────────────
@@ -171,7 +184,7 @@ def train_gan(generator, traindataloader, valdataloader, snr,
         new_lr = optimizer_G.param_groups[0]['lr']
 
         if new_lr < old_lr:
-            print(f"✨ LR reduced to {new_lr}. Loading best model weights from {best_model_path}.")
+            prcolor(f"LR reduced to {new_lr}. Loading best model weights from {best_model_path}.")
             generator.load_state_dict(torch.load(best_model_path, weights_only=True))
 
         # ── Save best weights ────────────────────────────────────────────────────
@@ -179,7 +192,7 @@ def train_gan(generator, traindataloader, valdataloader, snr,
             best_val_loss    = avg_val_loss
             val_loss_counter = 0
             torch.save(generator.state_dict(), best_model_path)
-            print(f"  ✔ New best model saved (val_loss={best_val_loss:.4f})")
+            prcolor(f"New best model saved (val_loss={best_val_loss:.4f})")
         else:
             val_loss_counter += 1
 
@@ -187,7 +200,7 @@ def train_gan(generator, traindataloader, valdataloader, snr,
         if (epoch + 1) % checkpoint_freq == 0 or (epoch + 1) == num_epochs:
             save_checkpoint(epoch, generator, optimizer_G, scheduler,
                             best_val_loss, val_loss_counter, checkpoint_path)
-            print(f"  💾 Checkpoint saved at epoch {epoch+1}")
+            prcolor(f"Checkpoint saved at epoch {epoch+1}")
 
         # ── Early stopping ───────────────────────────────────────────────────────
         if val_loss_counter > 80:
@@ -195,7 +208,7 @@ def train_gan(generator, traindataloader, valdataloader, snr,
             break
 
         if (epoch + 1) % 1 == 0 or epoch == 0:
-            print(f"[{epoch+1}/{num_epochs}] "
+            prcolor(f"[{epoch+1}/{num_epochs}] "
                   f"Train BCE: {avg_train_bce:.4f}, Train MSE: {avg_train_mse:.4f} | "
                   f"Val BCE: {avg_val_bce:.4f}, Val MSE: {avg_val_mse:.4f}")
 
@@ -231,32 +244,54 @@ def train_gan(generator, traindataloader, valdataloader, snr,
             plt.show()
         plt.close()
         
-    print(f"✔ Finished training for SNR={snr}, best val loss={best_val_loss:.4f}")
+    prcolor(f"Finished training for SNR={snr}, best val loss={best_val_loss:.4f}")
     return
 
 
 def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
               num_epochs=50, device="cuda", modelpath='Linear',
               n=1, resume=False, checkpoint_freq=1,figpath=None):
-
+    
+    prcolor(f"[bold green]Training started...")
+    #print('resume',resume)
     optimizer_G = optim.AdamW(generator.parameters(), lr=1e-3, weight_decay=1e-8)
+    #prcolor(f"[bold green]Adam Optimizer set1...")
     scheduler   = optim.lr_scheduler.ReduceLROnPlateau(optimizer_G, 'min', patience=15, factor=0.5)
 
+    #prcolor(f"[bold green]Adam Optimizer set2...")
     best_val_loss    = float("inf")
     val_loss_counter = 0
     start_epoch      = 0
-
+    
     # Derived paths
     best_model_path  = modelpath                                      # best weights only
     checkpoint_path  = modelpath.replace('.pth', '_checkpoint.pth')  # full resumable checkpoint
+    prcolor(f"[bold green] model path defined as {modelpath}")
 
+    checkpoint_path = Path(checkpoint_path)
+    #prcolor(f"[bold green]Checkpoint path defined as {checkpoint_path}")
+    #prcolor(f"[bold green]Testing")
+    #print('Testing')
+    # print("checkpoint_path.exists()",checkpoint_path.exists())
+    # print('resume',resume)
     # ── Resume from checkpoint if requested ────────────────────────────────────
-    if resume and os.path.exists(checkpoint_path):
+    if resume ==True and checkpoint_path.exists():
+        prcolor(f"Checkpoint found at {checkpoint_path}. Starting from last saved checkpoint")
         start_epoch, best_val_loss, val_loss_counter = load_checkpoint(
             checkpoint_path, generator, optimizer_G, scheduler, device
         )
     elif resume:
-        print(f"⚠ No checkpoint found at {checkpoint_path}. Starting from scratch.")
+        prcolor(f"No checkpoint found at {checkpoint_path}. Starting from scratch.")
+
+    #print('os.path.exists(checkpoint_path)',os.path.exists(checkpoint_path))
+    # ── Resume from checkpoint if requested ────────────────────────────────────
+    # if resume and os.path.exists(checkpoint_path):
+    #     print(f"Checkpoint found at {checkpoint_path}. Starting from last saved checkpoint")
+    #     start_epoch, best_val_loss, val_loss_counter = load_checkpoint(
+    #         checkpoint_path, generator, optimizer_G, scheduler, device
+    #     )
+    # elif resume:
+    #     print(f"No checkpoint found at {checkpoint_path}. Starting from scratch.")
 
     train_loss_bce = []
     train_loss_mse = []
@@ -294,8 +329,8 @@ def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
             gbce_total += g_loss_bce.detach()
 
             genlos.backward()
-            if i == 1 and epoch % 10 == 0:
-                print_grad_stats(generator, i)
+            # if i == 1 and epoch % 10 == 0:
+            #     print_grad_stats(generator, i)
             optimizer_G.step()
 
             # ── Debug plots every 10 epochs ─────────────────────────────────────
@@ -363,7 +398,7 @@ def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
         new_lr = optimizer_G.param_groups[0]['lr']
 
         if new_lr < old_lr:
-            print(f"✨ LR reduced to {new_lr}. Loading best model weights from {best_model_path}.")
+            prcolor(f"LR reduced to {new_lr}. Loading best model weights from {best_model_path}.")
             generator.load_state_dict(torch.load(best_model_path, weights_only=True))
 
         # ── Save best weights ────────────────────────────────────────────────────
@@ -371,7 +406,7 @@ def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
             best_val_loss    = avg_val_loss
             val_loss_counter = 0
             torch.save(generator.state_dict(), best_model_path)
-            print(f"  ✔ New best model saved (val_loss={best_val_loss:.4f})")
+            prcolor(f"New best model saved (val_loss={best_val_loss:.4f})")
         else:
             val_loss_counter += 1
 
@@ -379,15 +414,15 @@ def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
         if (epoch + 1) % checkpoint_freq == 0 or (epoch + 1) == num_epochs:
             save_checkpoint(epoch, generator, optimizer_G, scheduler,
                             best_val_loss, val_loss_counter, checkpoint_path)
-            print(f"  💾 Checkpoint saved at epoch {epoch+1}")
+            prcolor(f"Checkpoint saved at epoch {epoch+1}")
 
         # ── Early stopping ───────────────────────────────────────────────────────
         if val_loss_counter > 80:
-            print("Validation loss has not improved for 80 epochs. Early stopping.")
+            prcolor("Validation loss has not improved for 80 epochs. Early stopping.")
             break
 
         if (epoch + 1) % 1 == 0 or epoch == 0:
-            print(f"[{epoch+1}/{num_epochs}] "
+            prcolor(f"[{epoch+1}/{num_epochs}] "
                   f"Train BCE: {avg_train_bce:.4f}, Train MSE: {avg_train_mse:.4f} | "
                   f"Val BCE: {avg_val_bce:.4f}, Val MSE: {avg_val_mse:.4f}")
 
@@ -421,9 +456,8 @@ def train_gan_curriculam(generator, traindataloader, valdataloader, snr,
             plt.show()
         plt.close()
         
-    print(f"✔ Finished training for SNR={snr}, best val loss={best_val_loss:.4f}")
+    prcolor(f"Finished training for SNR={snr}, best val loss={best_val_loss:.4f}")
 
-    
     
 
 def main(data_dir,model_dir,epochs,batch_size,n_scale,device,resume,checkpoint_freq,figpath=None,
@@ -441,14 +475,16 @@ def main(data_dir,model_dir,epochs,batch_size,n_scale,device,resume,checkpoint_f
 
     modelpath = f"{model_dir}/model_n{n_scale}.pth" # change this
 
-    prcolor(f"[bold green]Training using {train_network}")
+    
     if train_network=="fixed_noise":
+        prcolor(f"[bold green]Training using {train_network}")
         train_gan(generator, traindataloader, valdataloader, 500,
                   num_epochs=epochs, device=device,
                   modelpath=modelpath, n=n_scale, resume=resume,
                   checkpoint_freq=checkpoint_freq,figpath=figpath)
         
     elif train_network=="curriculam_noise":
+        prcolor(f"[bold green]Training using {train_network}")
         train_gan_curriculam(generator, traindataloader, valdataloader, 500,
                   num_epochs=epochs, device=device,
                   modelpath=modelpath, n=n_scale, resume=resume,

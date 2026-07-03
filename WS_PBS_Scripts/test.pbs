@@ -1,0 +1,10 @@
+#!/bin/bash
+#PBS -l select=1:ncpus=32 	## Specify Number of nodes and processors
+#PBS -N job_name			## Specify the job name
+#PBS -k oed				## Enable direct-write (error and output) to working directory
+#PBS -o out_file.txt			## Specify the output file name
+#PBS -e err_file.txt			## Specify the error file name
+
+cd $PBS_O_WORKDIR			## Change path to current working directory
+mpirun -np 32 ./a.out
+

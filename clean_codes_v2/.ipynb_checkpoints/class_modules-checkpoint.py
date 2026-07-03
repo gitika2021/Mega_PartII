@@ -18,7 +18,7 @@ import pandas as pd
 ###################################
 class MLPreProcessing():
     def __init__(self,Num=1000,N=1,maps_path=None, rsrp1=5, rsrp2=10,nproc=4,train_frac=0.8,seed=None,maps_folder_str="10", test=None,fresh_run=False,
-                snr_min=1e6,snr_max=1e6):
+                snr_min=1e6,snr_max=1e6,noise='gaussian'):
         self.Num = Num
         self.N = N
         self.nproc = nproc
@@ -27,6 +27,7 @@ class MLPreProcessing():
         self.fresh_run = fresh_run
         self.snr_min=snr_min
         self.snr_max=snr_max
+        self.noise = noise
         
         # base_dir = Path(base_dir) if base_dir is not None else Path.cwd()
         base_dir = Path(Base_Dir) / "Data" # this is actually data directory
@@ -111,7 +112,7 @@ class MLPreProcessing():
 
     def add_noise(self,seed =None):
         add_noise_to_lcs_files.main(self.out_file_lc,self.kepler_error_file,self.figure_dir, 
-                                   random_seed=seed, snr_min=self.snr_min,snr_max=self.snr_max)
+                                   random_seed=seed, snr_min=self.snr_min,snr_max=self.snr_max, noise=self.noise)
         return
 
     def select_transit_region(self):
@@ -147,8 +148,9 @@ class MLPreProcessing():
             prcolor("[bold green]Generated Bezier shapes")
             if self.test == True:
                 SHAPE_SIZE = shape_utils.SHAPE_SIZE
-                shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
                 manual_shapes = np.load("weird_test_shapes_solid.npy")
+                Ncirc = self.Num + len(manual_shapes)
+                shape_circle = shape_utils.generate_circles(num_maps=Ncirc, size=SHAPE_SIZE)
                 test_shapes_all = np.concatenate((np.load(self.shape_file), 
                                                       shape_circle,manual_shapes))
                 self.Num = self.Num+len(shape_circle)+len(manual_shapes)
@@ -188,8 +190,9 @@ class MLPreProcessing():
                 self.gen_shapes()  
                 if self.test == True:
                     SHAPE_SIZE = shape_utils.SHAPE_SIZE
-                    shape_circle = shape_utils.generate_circles(num_maps=1, size=SHAPE_SIZE)
                     manual_shapes = np.load("weird_test_shapes_solid.npy")
+                    Ncirc = self.Num + len(manual_shapes)
+                    shape_circle = shape_utils.generate_circles(num_maps=Ncirc, size=SHAPE_SIZE)
                     test_shapes_all = np.concatenate((np.load(self.shape_file), 
                                                       shape_circle,manual_shapes))
                     self.Num = self.Num+len(shape_circle)+len(manual_shapes)

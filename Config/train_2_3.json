@@ -2,7 +2,7 @@
     "train": false,
     "test": false,
     "fresh_run": false,
-    "Num": 5,
+    "Num": 30000,
     "N": 1,
     "maps_path": null,
     "nproc": 32,
@@ -10,14 +10,14 @@
     "rsrp2": 3,
     "train_frac": 0.8,
     "seed": 3,
-    "maps_folder_str": "_testing",
-    "epochs": 70,
-    "batch_size": 5,
+    "maps_folder_str": "10",
+    "epochs": 500,
+    "batch_size": 256,
     "n_scale": 2,
     "resume": true,
     "checkpoint_freq": 10,
     "snr_min": 100.0,
     "snr_max": 500.0,
     "noise": "gaussian",
-    "train_newtork": "curriculam_noise"
+    "train_network": "curriculam_noise"
 }

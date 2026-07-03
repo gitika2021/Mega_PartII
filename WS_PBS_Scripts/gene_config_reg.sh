@@ -5,8 +5,7 @@
 # =========================
 #PBS -l select=1:ncpus=32
 #PBS -l walltime=00:05:00
-#PBS -q project
-#PBS -P hpc2601012
+#PBS -q regular
 #PBS -N gen_lc
 
 # =========================

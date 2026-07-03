@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ratio1=2
-ratio2=3
+ratio2=5
 seed=3
 snr_min=100
 snr_max=500
@@ -16,7 +16,7 @@ nproc=24 # updated for local machine
 # log_dir="master_log_quick"
 
 queue="project"
-walltime="30:00:00"
+walltime="14:00:00"
 
 config_file="train_config.json"
 log_dir="master_log"
@@ -76,7 +76,14 @@ if command -v qsub >/dev/null 2>&1; then
             -v ratio1,ratio2,seed,base_dir \
             -N $PBS_JOBNAME4 \
             train_cpu.sh)
-
+    # walltime="96:00:00"
+    # jid4=$(qsub -S /bin/bash \
+    #         -q $queue \
+    #         -l walltime=$walltime \
+    #         -W depend=afterok:${jid0} \
+    #         -v ratio1,ratio2,seed,base_dir \
+    #         -N $PBS_JOBNAME4 \
+    #         train_cpu.sh)
 else
     echo "Running locally (no PBS detected)"
 

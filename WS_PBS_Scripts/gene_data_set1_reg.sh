@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # =========================
-# PBS directives (HPC only)
+# PBS directives (used only on HPC)
 # =========================
 #PBS -l select=1:ncpus=32
 #PBS -l walltime=96:00:00
 #PBS -q project
 #PBS -P hpc2601012
-#PBS -N train
+#PBS -N gen_lc
 
 # =========================
 # Environment detection
@@ -20,32 +20,35 @@ if [ -n "$PBS_O_WORKDIR" ]; then
 else
     WORKDIR=$(pwd)
     JOBID=$(date +%Y%m%d_%H%M%S)
-    JOBNAME="train_cpu_local"
+    JOBNAME="gen_lc_s1_local"
 fi
 
 cd "$WORKDIR"
 
 # =========================
-# Logging
+# Inputs (PBS or local)
 # =========================
 
-LOGDIR="${base_dir:-./logs}"
-mkdir -p "$LOGDIR"
+ratio1=${ratio1:-9}
+ratio2=${ratio2:-10}
+seed=${seed:-0}
+base_dir=${base_dir:-"./logs"}
 
-LOGFILE="$LOGDIR/${JOBNAME}.o${JOBID}"
-ERRFILE="$LOGDIR/${JOBNAME}.e${JOBID}"
-
-# exec > "$LOGFILE"
-# exec 2> "$ERRFILE"
-
-# Duplicate stdout and stderr
-exec > >(tee -a "$LOGFILE")
-exec 2> >(tee -a "$ERRFILE" >&2)
+mkdir -p "$base_dir"
 
 # =========================
-# Conda setup (HPC + Local safe)
+# Logging (same for both)
 # =========================
 
+LOGFILE="$base_dir/${JOBNAME}.o${JOBID}"
+ERRFILE="$base_dir/${JOBNAME}.e${JOBID}"
+
+exec > "$LOGFILE"
+exec 2> "$ERRFILE"
+
+# =========================
+# Conda setup
+# =========================
 if [ -f "/mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh" ]; then
     source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh
 elif command -v conda >/dev/null 2>&1; then
@@ -55,6 +58,7 @@ else
     exit 1
 fi
 
+#source /mnt/home/project/cshukla.gitika/anaconda3/etc/profile.d/conda.sh 2>/dev/null
 conda activate genenv_gitika
 
 # =========================
@@ -64,30 +68,36 @@ conda activate genenv_gitika
 start_time=$(date +%s)
 
 echo "=================================="
-echo "Pipeline started at: $(date)"
+echo "Job started at: $(date)"
 echo "JOBNAME=$JOBNAME"
 echo "JOBID=$JOBID"
+echo "ratio1=$ratio1 ratio2=$ratio2 seed=$seed"
+echo "base_dir=$base_dir"
 echo "=================================="
 
 # =========================
-# Inputs
-# =========================
-
-RSRP1=${ratio1:-9}
-RSRP2=${ratio2:-10}
-SEED=${seed:-123}
-
-echo "rsrp1=$RSRP1"
-echo "rsrp2=$RSRP2"
-echo "seed=$SEED"
-
-# =========================
-# Run training
+# Work
 # =========================
 
 python ../clean_codes_v2/run_train_pipeline.py \
     --config-file train_${ratio1}_${ratio2}.json \
-    --train 1
+    --train 0 --N 1 --fresh_run 0 \
+    > "${base_dir}/N1_${JOBID}.log" 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py \
+    --config-file train_${ratio1}_${ratio2}.json \
+    --train 0 --N 2 --fresh_run 0 \
+    > "${base_dir}/N2_${JOBID}.log" 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py \
+    --config-file train_${ratio1}_${ratio2}.json \
+    --train 0 --N 3 --fresh_run 0 \
+    > "${base_dir}/N3_${JOBID}.log" 2>&1 && \
+
+python ../clean_codes_v2/run_train_pipeline.py \
+    --config-file train_${ratio1}_${ratio2}.json \
+    --train 0 --N 4 --fresh_run 0 \
+    > "${base_dir}/N4_${JOBID}.log" 2>&1
 
 # =========================
 # End timing
@@ -98,9 +108,7 @@ elapsed=$((end_time - start_time))
 
 echo "=================================="
 echo "Job ended at: $(date)"
-echo "Total walltime (seconds): $elapsed"
-
-printf "Total walltime (hh:mm:ss): %02d:%02d:%02d\n" \
+printf "Walltime: %02d:%02d:%02d\n" \
     $((elapsed/3600)) \
     $((elapsed%3600/60)) \
     $((elapsed%60))
