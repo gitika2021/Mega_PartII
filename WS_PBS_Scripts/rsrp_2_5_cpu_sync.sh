@@ -3,8 +3,8 @@
 ratio1=2
 ratio2=5
 seed=3
-snr_min=100
-snr_max=500
+snr_min=2e8
+snr_max=2e8
 noise="gaussian"
 train_network="curriculam_noise"
 nproc=24 # updated for local machine

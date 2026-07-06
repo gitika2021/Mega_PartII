@@ -3,8 +3,8 @@
 ratio1=2
 ratio2=2
 seed=3
-snr_min=100
-snr_max=500
+snr_min=2e8
+snr_max=2e8
 noise="gaussian"
 train_network="curriculam_noise"
 nproc=24 # updated for local machine
@@ -15,8 +15,8 @@ walltime="00:20:00"
 # queue="regular"
 # walltime="00:20:00"
 
-# queue="project"
-# walltime="00:20:00"
+queue="project"
+walltime="00:20:00"
 
 config_file="train_config_debug.json"
 log_dir="master_log_quick"
@@ -48,38 +48,45 @@ if command -v qsub >/dev/null 2>&1; then
         -N $PBS_JOBNAME0 \
         gene_config_reg.sh)
 
-    # jid1=$(qsub -S /bin/bash \
-    #     -q $queue \
-    #     -l walltime=$walltime \
-    #     -W depend=afterok:${jid0} \
-    #     -v ratio1,ratio2,seed,base_dir \
-    #     -N $PBS_JOBNAME1 \
-    #     gene_data_set1.sh)
+    jid1=$(qsub -S /bin/bash \
+        -q $queue \
+        -l walltime=$walltime \
+        -W depend=afterok:${jid0} \
+        -v ratio1,ratio2,seed,base_dir \
+        -N $PBS_JOBNAME1 \
+        gene_data_set1.sh)
 
-    # jid2=$(qsub -S /bin/bash \
-    #         -q $queue \
-    #         -l walltime=$walltime \
-    #         -W depend=afterok:${jid0} \
-    #         -v ratio1,ratio2,seed,base_dir \
-    #         -N $PBS_JOBNAME2 \
-    #         gene_data_set2.sh)
+    jid2=$(qsub -S /bin/bash \
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid0} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME2 \
+            gene_data_set2.sh)
     
-    # jid3=$(qsub -S /bin/bash \
-    #         -q $queue \
-    #         -l walltime=$walltime \
-    #         -W depend=afterok:${jid0} \
-    #         -v ratio1,ratio2,seed,base_dir \
-    #         -N $PBS_JOBNAME3 \
-    #         gene_data_set3.sh)
+    jid3=$(qsub -S /bin/bash \
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid0} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME3 \
+            gene_data_set3.sh)
         
+    jid4=$(qsub -S /bin/bash \
+            -q $queue \
+            -l walltime=$walltime \
+            -W depend=afterok:${jid1}:${jid2}:${jid3} \
+            -v ratio1,ratio2,seed,base_dir \
+            -N $PBS_JOBNAME4 \
+            train_cpu.sh)
+    # walltime="00:30:00"
     # jid4=$(qsub -S /bin/bash \
     #         -q $queue \
     #         -l walltime=$walltime \
-    #         -W depend=afterok:${jid1}:${jid2}:${jid3} \
     #         -v ratio1,ratio2,seed,base_dir \
     #         -N $PBS_JOBNAME4 \
     #         train_cpu.sh)
-
+            
 else
     echo "Running locally (no PBS detected)"
 

@@ -79,9 +79,9 @@ echo "=================================="
 # Work
 # =========================
 
-python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 1 --N 99 --Num 130 --fresh_run 0 > ${base_dir}/N99_gene_${PBS_JOBID}.log 2>&1 && \
+# python ../clean_codes_v2/run_train_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 1 --N 99 --Num 2 --fresh_run 1 > ${base_dir}/N99_gene_${PBS_JOBID}.log 2>&1 && \
 
-python ../clean_codes_v2/run_inference_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 1 --N 99 --Num 130 --fresh_run 0 > ${base_dir}/N99_infer_${PBS_JOBID}.log 2>&1 && \
+python ../clean_codes_v2/run_inference_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 1 --N 99 --Num 2 --fresh_run 1 > ${base_dir}/N99_infer_${PBS_JOBID}.log 2>&1 && \
 
 # python ../clean_codes_v2/run_inference_pipeline.py --config-file train_${ratio1}_${ratio2}.json --test 0 > ${base_dir}/kepler_infer_${PBS_JOBID}.log 2>&1  
 

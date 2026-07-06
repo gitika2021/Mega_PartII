@@ -148,7 +148,7 @@ class MLPreProcessing():
             prcolor("[bold green]Generated Bezier shapes")
             if self.test == True:
                 SHAPE_SIZE = shape_utils.SHAPE_SIZE
-                manual_shapes = np.load("weird_test_shapes_solid.npy")
+                manual_shapes = np.load(Home + "weird_test_shapes_solid.npy")
                 Ncirc = self.Num + len(manual_shapes)
                 shape_circle = shape_utils.generate_circles(num_maps=Ncirc, size=SHAPE_SIZE)
                 test_shapes_all = np.concatenate((np.load(self.shape_file), 
@@ -190,7 +190,7 @@ class MLPreProcessing():
                 self.gen_shapes()  
                 if self.test == True:
                     SHAPE_SIZE = shape_utils.SHAPE_SIZE
-                    manual_shapes = np.load("weird_test_shapes_solid.npy")
+                    manual_shapes = np.load(Home+"weird_test_shapes_solid.npy")
                     Ncirc = self.Num + len(manual_shapes)
                     shape_circle = shape_utils.generate_circles(num_maps=Ncirc, size=SHAPE_SIZE)
                     test_shapes_all = np.concatenate((np.load(self.shape_file), 
@@ -293,6 +293,8 @@ class MLInference():
             #     file.unlink()
             ltcrv_npz_files = list(self.lc_dir_pthobj.glob(f"{self.N}*_binned_transit_interp.npz"))
             print(f'Number of Test shapes is {len(ltcrv_npz_files)}')
+            # hscaled_processed_file = obj.preprocess_ltcrvs()
+            # print(f"Final processed file: {hscaled_processed_file}")
             orig_shapes_file = self.mlprep.shape_file
             orig_shapes = np.load(orig_shapes_file)
             np.save(self.map_filename,orig_shapes)
@@ -312,8 +314,14 @@ class MLInference():
             data = np.load(f)
             lc_sorted[i,:] =data['flux']
 
+        #np.save(self.lcs_filename,lc_sorted)
         np.save(self.lcs_filename,lc_sorted)
-        np.save(self.key_filename,keys_sorted)     
+        np.save(self.key_filename,keys_sorted)  
+
+        print(f"self.lcs_filename: {self.lcs_filename}")
+        print('str(self.lcs_filename)[:4]',str(self.lcs_filename)[:-4])
+        self.hscaled_processed_file = preproclc_hscaled.main(lc_hscaled_path=str(self.lcs_filename)[:-4])
+        print(f"final processed file: {self.hscaled_processed_file}")
         return
         
     def read_processed_ltcrvs(self,pattern="kplr*"):
@@ -328,7 +336,7 @@ class MLInference():
         generator.load_state_dict(torch.load(self.model,weights_only=True, 
                                              map_location='cpu'))
    
-        lc=torch.tensor(np.load(self.lcs_filename))
+        lc=torch.tensor(np.load(self.hscaled_processed_file))
         out=[]
         #print(lc.shape)
         generator.eval()
@@ -417,12 +425,12 @@ class MLInference():
         
         else:
             # for simulated test data              
-            binclas_orig,acc,CI,CII,flags_str,self.rad_fit, self.fmaps = batch_predict_shape(images=self.orig_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False) 
+            self.binclas_orig,acc,CI,CII,flags_str,self.rad_fit, self.fmaps = batch_predict_shape(images=self.orig_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False) 
     
             self.binclas_pred,acc_pred,self.CI_pred,self.CII_pred,flags_str_pred,self.rad_fit_pred, self.fmaps_pred = batch_predict_shape(images=self.pred_shapes,deviation_estimator=self.deviation_estimator,cut1=self.flux_cutI, cut2=self.dist_cutII,num_cpus=self.nproc, show= False)
             
             savefigname = self.figure_dir/ f'confusion_met_{self.N}.png'
-            results = estimate_ml_metrics(binclas_orig, binclas_pred, 
+            results = estimate_ml_metrics(self.binclas_orig, self.binclas_pred, 
                             savefig=savefigname)
             
 

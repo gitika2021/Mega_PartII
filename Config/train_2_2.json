@@ -16,8 +16,8 @@
     "n_scale": 2,
     "resume": true,
     "checkpoint_freq": 10,
-    "snr_min": 100.0,
-    "snr_max": 500.0,
+    "snr_min": 200000000.0,
+    "snr_max": 200000000.0,
     "noise": "gaussian",
     "train_network": "curriculam_noise"
 }

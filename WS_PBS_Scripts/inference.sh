@@ -1,8 +1,8 @@
 #!/bin/bash
 
-ratio1=10
-ratio2=12
-seed=11
+ratio1=2
+ratio2=3
+seed=3
 snr_min=100
 snr_max=500
 noise="gaussian"
@@ -15,7 +15,7 @@ nproc=24 # updated for local machine
 
 
 queue="debug"
-walltime="00:55:00"
+walltime="00:15:00"
 
 # queue="project"
 # walltime="01:00:00"
@@ -40,15 +40,10 @@ PBS_JOBNAME0="inference_${ratio1}_${ratio2}"
 if command -v qsub >/dev/null 2>&1; then
     echo "Running on HPC (PBS mode)"
 
-    # jid0=$(qsub -S /bin/bash \
-    #     -v ratio1,ratio2,seed,base_dir,config_file \
-    #     -q $queue \
-    #     -N $PBS_JOBNAME0 \
-    #     gene_shapes.sh)
-    
     jid0=$(qsub -S /bin/bash \
-        -v ratio1,ratio2,seed,base_dir,config_file,snr_min,snr_max,noise,train_network \
         -q $queue \
+        -l walltime=$walltime \
+        -v ratio1,ratio2,seed,base_dir,config_file,snr_min,snr_max,noise,train_network \
         -N $PBS_JOBNAME0 \
         gene_inference.sh)
 else
